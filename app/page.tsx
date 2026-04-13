@@ -3,6 +3,7 @@ import React from "react";
 import Hero from "./landingpage/hero/page";
 import FeatureScroller from "./landingpage/features/page";
 import BestSelling from "./landingpage/bestselling/page";
+import Footer from '@/components/footer'
 
 function page() {
   return (
@@ -11,6 +12,9 @@ function page() {
       <Hero />
       <FeatureScroller />
       <BestSelling />
+      <br />
+      <Footer />
+
     </div>
   );
 }
