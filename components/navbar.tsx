@@ -225,9 +225,9 @@ const Navbar = () => {
           <div className="overflow-y-auto h-full pb-32">
             <div className="p-4 grid grid-cols-2 gap-2">
                 <MobileQuickLink href="/" label="Home" icon={<Home size={18}/>} />
-                <MobileQuickLink label="ABOUT" href="/about" icon={<Info size={16}/>} />
+                <MobileQuickLink label="ABOUT" href="/aboutpage" icon={<Info size={16}/>} />
                 <MobileQuickLink href="/shop" label="Shop" icon={<ShoppingBag size={18}/>} />
-                <MobileQuickLink href="/blog" label="Blog" icon={<BookOpen size={18}/>} />
+                <MobileQuickLink href="/blogpage/bloghero" label="Blog" icon={<BookOpen size={18}/>} />
                 <MobileQuickLink href="/checkout" label="Buy Now" icon={<CreditCard size={18}/>} isSpecial />
             </div>
             <div className="px-4 py-2 border-t border-gray-50">
