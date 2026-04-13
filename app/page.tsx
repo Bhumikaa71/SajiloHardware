@@ -3,7 +3,9 @@ import React from "react";
 import Hero from "./landingpage/hero/page";
 import FeatureScroller from "./landingpage/features/page";
 import BestSelling from "./landingpage/bestselling/page";
-import Footer from '@/components/footer'
+import Footer from "@/components/footer";
+import FeaturedCategories from "./landingpage/FeaturedCategories/page";
+import Brand from "./landingpage/Brand/page";
 
 function page() {
   return (
@@ -12,9 +14,9 @@ function page() {
       <Hero />
       <FeatureScroller />
       <BestSelling />
-      <br />
+      <FeaturedCategories />
+      <Brand />
       <Footer />
-
     </div>
   );
 }
