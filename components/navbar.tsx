@@ -19,16 +19,36 @@ const Navbar = () => {
   // Sticky navbar effect
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const categories = [
-    { name: "Power Tools", icon: <Zap size={18}/>, items: ["Drills", "Angle Grinders", "Circular Saws", "Impact Drivers"] },
-    { name: "Hand Tools", icon: <Hammer size={18}/>, items: ["Wrenches", "Pliers", "Screwdrivers", "Measuring Tapes"] },
-    { name: "Plumbing", icon: <Droplets size={18}/>, items: ["PVC Pipes", "CPVC Fittings", "Faucets", "Water Pumps"] },
-    { name: "Electrical", icon: <Lightbulb size={18}/>, items: ["MCBs", "LED Bulbs", "Modular Switches", "Wires"] },
-    { name: "Safety Gear", icon: <ShieldCheck size={18}/>, items: ["Helmets", "Gloves", "Safety Shoes", "Vests"] },
+    {
+      name: "Power Tools",
+      icon: <Zap size={18} />,
+      items: ["Drills", "Angle Grinders", "Circular Saws", "Impact Drivers"],
+    },
+    {
+      name: "Hand Tools",
+      icon: <Hammer size={18} />,
+      items: ["Wrenches", "Pliers", "Screwdrivers", "Measuring Tapes"],
+    },
+    {
+      name: "Plumbing",
+      icon: <Droplets size={18} />,
+      items: ["PVC Pipes", "CPVC Fittings", "Faucets", "Water Pumps"],
+    },
+    {
+      name: "Electrical",
+      icon: <Lightbulb size={18} />,
+      items: ["MCBs", "LED Bulbs", "Modular Switches", "Wires"],
+    },
+    {
+      name: "Safety Gear",
+      icon: <ShieldCheck size={18} />,
+      items: ["Helmets", "Gloves", "Safety Shoes", "Vests"],
+    },
   ];
 
   return (
@@ -37,9 +57,8 @@ const Navbar = () => {
       {/* --- Top Header (Logo & Search) --- */}
       <div className="bg-white border-b border-gray-100">
         <div className="mx-auto max-w-7xl px-4 lg:px-8 py-3 flex items-center justify-between gap-4 lg:gap-8">
-          
           {/* Mobile Menu Toggle */}
-          <button 
+          <button
             onClick={() => setIsMobileMenuOpen(true)}
             className="lg:hidden p-2 hover:bg-gray-100 rounded-xl text-texts-dark transition-colors"
           >
@@ -49,9 +68,9 @@ const Navbar = () => {
           {/* Logo Section */}
           <Link href="/" className="shrink-0 group flex items-center">
             <div className="relative h-10 w-32 md:h-14 md:w-48 transition-transform group-hover:scale-105">
-              <Image 
-                src="/images/logo.png" 
-                alt="Sajilo Hardware Logo" 
+              <Image
+                src="/images/logo.png"
+                alt="Sajilo Hardware Logo"
                 fill
                 className="object-contain object-left"
                 priority
@@ -75,14 +94,21 @@ const Navbar = () => {
 
           {/* Desktop User Actions */}
           <div className="flex items-center gap-2 md:gap-5">
-            <Link href="https://wa.me/9800000000" className="flex items-center gap-2 bg-[#25D366] text-white p-2.5 md:px-5 md:py-2.5 rounded-2xl hover:shadow-lg hover:shadow-green-100 transition-all active:scale-95">
+            <Link
+              href="https://wa.me/9800000000"
+              className="flex items-center gap-2 bg-[#25D366] text-white p-2.5 md:px-5 md:py-2.5 rounded-2xl hover:shadow-lg hover:shadow-green-100 transition-all active:scale-95"
+            >
               <MessageCircle size={22} fill="white" />
-              <span className="hidden md:inline font-bold text-sm">WhatsApp</span>
+              <span className="hidden md:inline font-bold text-sm">
+                WhatsApp
+              </span>
             </Link>
 
             <button className="relative p-2.5 rounded-xl text-texts-secondary hover:text-primarys hover:bg-orange-50 transition-all">
               <Heart size={24} />
-              <span className="absolute top-1 right-1 bg-primarys text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-white font-bold">0</span>
+              <span className="absolute top-1 right-1 bg-primarys text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-white font-bold">
+                0
+              </span>
             </button>
           </div>
         </div>
@@ -102,7 +128,10 @@ const Navbar = () => {
               <button className="bg-black/10 text-white px-8 h-full flex items-center gap-4 font-black text-sm tracking-wider group transition-all">
                 <Menu size={20} className="group-hover:rotate-90 transition-transform duration-300" />
                 ALL CATEGORIES
-                <ChevronDown size={16} className={`transition-transform duration-300 ${isCategoriesOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown
+                  size={16}
+                  className={`transition-transform duration-300 ${isCategoriesOpen ? "rotate-180" : ""}`}
+                />
               </button>
 
               {/* Mega Dropdown Content */}
@@ -115,7 +144,10 @@ const Navbar = () => {
                           <span className="text-primarys group-hover/item:text-white transition-colors">{cat.icon}</span>
                           {cat.name}
                         </div>
-                        <ChevronRight size={16} className="opacity-0 group-hover/item:opacity-100 -translate-x-2 group-hover/item:translate-x-0 transition-all" />
+                        <ChevronRight
+                          size={16}
+                          className="opacity-0 group-hover/item:opacity-100 -translate-x-2 group-hover/item:translate-x-0 transition-all"
+                        />
                       </div>
                       
                       {/* Sub-categories Flyout */}
@@ -192,7 +224,10 @@ const Navbar = () => {
                       <span className="text-primarys">{cat.icon}</span>
                       {cat.name}
                     </div>
-                    <ChevronDown size={18} className="text-gray-400 group-open:rotate-180 transition-transform" />
+                    <ChevronDown
+                      size={18}
+                      className="text-gray-400 group-open:rotate-180 transition-transform"
+                    />
                   </summary>
                   <div className="pl-14 pr-4 py-2 flex flex-col gap-3 border-l-2 border-orange-100 ml-8">
                     {cat.items.map((sub, j) => (
