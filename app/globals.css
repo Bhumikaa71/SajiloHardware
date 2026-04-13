@@ -1,21 +1,37 @@
 @import "tailwindcss";
 
 :root {
+  /* Brand Colors from your image */
+  --primarys: #EE7820;          /* Main Orange */
+  --primarys-dark: #D66A1A;     /* Darker Orange for hover */
+  
+  --texts-dark: #282D31;        /* Heading/Main Text color */
+  --texts-secondary: #727577;   /* Paragraph/Muted Text color */
+
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #282D31;        /* Set default text to your brand dark */
 }
 
 @theme inline {
+  /* Mapping the variables to Tailwind classes */
+  --color-primarys: var(--primarys);
+  --color-primarys-dark: var(--primarys-dark);
+  
+  --color-texts-dark: var(--texts-dark);
+  --color-texts-secondary: var(--texts-secondary);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #121212;
     --foreground: #ededed;
+    /* You can keep primarys orange even in dark mode */
   }
 }
 
