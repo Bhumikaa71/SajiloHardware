@@ -66,14 +66,19 @@ export default function ProductSection({
         {/* SCROLL AREA */}
         <div ref={scrollRef} className="flex gap-6 overflow-x-hidden">
           {products.map((product) => (
-            <Link
+            <div
               key={product.id}
-              href={`/product/${product.id}`}
-              className="min-w-[250px]"
+              onClick={() => (window.location.href = "/product")}
+              className="min-w-[250px] cursor-pointer"
             >
               <div className="group relative bg-white rounded-2xl p-4 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100">
                 {/* Wishlist */}
-                <button className="absolute top-3 right-3 z-10 p-2 rounded-full bg-primarys shadow">
+                <button
+                  className="absolute top-3 right-3 z-10 p-2 rounded-full bg-primarys shadow"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
                   <Heart size={18} />
                 </button>
 
@@ -84,22 +89,21 @@ export default function ProductSection({
                     alt={product.name}
                     width={160}
                     height={160}
-                    className="object-contain transition-transform duration-300 group-hover:scale-110"
+                    className="object-contain"
                   />
                 </div>
 
                 {/* Content */}
                 <div className="mt-4">
-                  <h3 className="text-lg font-semibold text-gray-800 group-hover:text-primarys transition">
+                  <h3 className="text-lg font-semibold text-gray-800">
                     {product.name}
                   </h3>
                   <p className="text-gray-500 mt-1">Rs. {product.price}</p>
                 </div>
 
-                {/* Add to Cart button (still clickable but DOES NOT navigate) */}
+                {/* Add to Cart */}
                 <button
                   onClick={(e) => {
-                    e.preventDefault(); // prevents navigation
                     e.stopPropagation();
                     console.log("Add to cart:", product.id);
                   }}
@@ -109,7 +113,7 @@ export default function ProductSection({
                   Add to Cart
                 </button>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </div>
