@@ -6,6 +6,11 @@ import BestSelling from "./landingpage/bestselling/page";
 import Footer from "@/components/footer";
 import FeaturedCategories from "./landingpage/FeaturedCategories/page";
 import Brand from "./landingpage/Brand/page";
+import FeaturedProducts from "./landingpage/FeaturedProducts/page";
+import PowerTools from "./landingpage/powertools/page";
+import GardeningTools from "./landingpage/gardening tools/page";
+import HandTools from "./landingpage/handtools/page";
+import SafetyGearTools from "./landingpage/safety gear/page";
 
 function page() {
   return (
@@ -16,6 +21,11 @@ function page() {
       <BestSelling />
       <FeaturedCategories />
       <Brand />
+      <FeaturedProducts />
+      <PowerTools />
+      <GardeningTools />
+      <HandTools />
+      <SafetyGearTools />
       <Footer />
     </div>
   );

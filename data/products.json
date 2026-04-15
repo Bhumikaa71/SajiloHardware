@@ -1,0 +1,301 @@
+{
+  "best_selling": [
+    {
+      "id": 1,
+      "name": "Heavy Duty Hammer",
+      "price": 250,
+      "image_url": "/products/hammer.png",
+      "best_selling": true
+    },
+    {
+      "id": 2,
+      "name": "Electric Drill Machine",
+      "price": 520,
+      "image_url": "/products/drill.png",
+      "best_selling": true
+    },
+    {
+      "id": 3,
+      "name": "Adjustable Wrench",
+      "price": 408,
+      "image_url": "/products/wrench.png",
+      "best_selling": true
+    },
+    {
+      "id": 4,
+      "name": "Tool Kit Set",
+      "price": 785,
+      "image_url": "/products/toolkit.png",
+      "best_selling": true
+    },
+    {
+      "id": 5,
+      "name": "Screwdriver Set",
+      "price": 300,
+      "image_url": "/products/screwdriver.png",
+      "best_selling": true
+    },
+    {
+      "id": 6,
+      "name": "Measuring Tape",
+      "price": 150,
+      "image_url": "/products/tape.png",
+      "best_selling": true
+    }
+  ],
+  "featured_products": [
+    {
+      "id": 1,
+      "name": "Cordless Drill Machine",
+      "brand": "Bosch",
+      "category": "Power Tools",
+      "price": 129.99,
+      "currency": "Rupees",
+      "rating": 4.6,
+      "stock": 25,
+      "featured": true,
+      "image_url": "/products/drill.jpg",
+      "description": "High-performance cordless drill with variable speed and long battery life."
+    },
+    {
+      "id": 2,
+      "name": "Claw Hammer",
+      "brand": "Stanley",
+      "category": "Hand Tools",
+      "price": 19.99,
+      "currency": "Rupees",
+      "rating": 4.5,
+      "stock": 100,
+      "featured": true,
+      "image_url": "/products/hammer.jpg",
+      "description": "Durable steel claw hammer with ergonomic grip."
+    },
+    {
+      "id": 3,
+      "name": "Circular Saw",
+      "brand": "Makita",
+      "category": "Power Tools",
+      "price": 159.99,
+      "currency": "Rupees",
+      "rating": 4.7,
+      "stock": 15,
+      "featured": true,
+      "image_url": "/products/circular-saw.jpg",
+      "description": "Precision circular saw ideal for wood cutting with high-speed motor."
+    },
+    {
+      "id": 4,
+      "name": "Adjustable Wrench",
+      "brand": "DeWalt",
+      "category": "Hand Tools",
+      "price": 24.99,
+      "currency": "Rupees",
+      "rating": 4.4,
+      "stock": 60,
+      "featured": true,
+      "image_url": "/products/wrench.jpg",
+      "description": "Heavy-duty adjustable wrench with corrosion-resistant finish."
+    },
+    {
+      "id": 5,
+      "name": "Angle Grinder",
+      "brand": "Black+Decker",
+      "category": "Power Tools",
+      "price": 89.99,
+      "currency": "Rupees",
+      "rating": 4.3,
+      "stock": 30,
+      "featured": true,
+      "image_url": "/products/angle-grinder.jpg",
+      "description": "Compact angle grinder suitable for cutting, grinding, and polishing."
+    },
+    {
+      "id": 6,
+      "name": "Toolbox Storage Set",
+      "brand": "Craftsman",
+      "category": "Storage",
+      "price": 79.99,
+      "currency": "Rupees",
+      "rating": 4.6,
+      "stock": 40,
+      "featured": true,
+      "image_url": "/products/toolbox.jpg",
+      "description": "Spacious and durable toolbox set with multiple compartments."
+    }
+  ],
+  "power_tools": [
+    {
+      "id": 7,
+      "name": "Cordless Power Drill 20V",
+      "brand": "DeWalt",
+      "category": "Power Tools",
+      "price": 129.99,
+      "currency": "Rupees",
+      "rating": 4.7,
+      "stock": 35,
+      "powertools": true,
+      "image_url": "/products/power-drill.jpg",
+      "description": "High-performance cordless drill with long-lasting battery and variable speed control."
+    },
+    {
+      "id": 8,
+      "name": "Angle Grinder 900W",
+      "brand": "Bosch",
+      "category": "Power Tools",
+      "price": 89.99,
+      "currency": "Rupees",
+      "rating": 4.5,
+      "stock": 50,
+      "powertools": true,
+      "image_url": "/products/angle-grinder.jpg",
+      "description": "Compact and powerful angle grinder ideal for cutting, grinding, and polishing tasks."
+    },
+    {
+      "id": 9,
+      "name": "Circular Saw 1400W",
+      "brand": "Makita",
+      "category": "Power Tools",
+      "price": 149.99,
+      "currency": "Rupees",
+      "rating": 4.8,
+      "stock": 28,
+      "powertools": true,
+      "image_url": "/products/circular-saw.jpg",
+      "description": "Heavy-duty circular saw designed for precise and fast wood cutting."
+    },
+    {
+      "id": 10,
+      "name": "Impact Driver Kit",
+      "brand": "Milwaukee",
+      "category": "Power Tools",
+      "price": 119.99,
+      "currency": "Rupees",
+      "rating": 4.6,
+      "stock": 42,
+      "powertools": false,
+      "image_url": "/products/impact-driver.jpg",
+      "description": "Compact impact driver kit with high torque for tough fastening jobs."
+    }
+  ],
+  "gardening_tools": [
+    {
+      "id": 11,
+      "name": "Pruning Shears",
+      "brand": "Fiskars",
+      "category": "Gardening Tools",
+      "price": 19.99,
+      "currency": "Rupees",
+      "rating": 4.6,
+      "stock": 80,
+      "gardening": true,
+      "image_url": "/products/pruning-shears.jpg",
+      "description": "Sharp and durable pruning shears for precise trimming of plants and small branches."
+    },
+    {
+      "id": 12,
+      "name": "Garden Trowel",
+      "brand": "Gardena",
+      "category": "Gardening Tools",
+      "price": 9.99,
+      "currency": "Rupees",
+      "rating": 4.5,
+      "stock": 120,
+      "gardening": true,
+      "image_url": "/products/garden-trowel.jpg",
+      "description": "Ergonomic hand trowel perfect for digging, planting, and soil mixing."
+    },
+    {
+      "id": 13,
+      "name": "Watering Can 5L",
+      "brand": "Haws",
+      "category": "Gardening Tools",
+      "price": 14.99,
+      "currency": "Rupees",
+      "rating": 4.7,
+      "stock": 60,
+      "gardening": true,
+      "image_url": "/products/watering-can.jpg",
+      "description": "Lightweight 5-liter watering can with a balanced handle for easy watering."
+    },
+    {
+      "id": 14,
+      "name": "Garden Rake",
+      "brand": "Wolf-Garten",
+      "category": "Gardening Tools",
+      "price": 24.99,
+      "currency": "Rupees",
+      "rating": 4.4,
+      "stock": 45,
+      "gardening": true,
+      "image_url": "/products/garden-rake.jpg",
+      "description": "Strong steel rake ideal for leveling soil and clearing garden debris."
+    }
+  ],
+  "hand_tools": [
+    {
+      "id": 15,
+      "name": "Claw Hammer",
+      "brand": "Stanley",
+      "category": "Hand Tools",
+      "price": 12.99,
+      "currency": "Rupees",
+      "rating": 4.6,
+      "stock": 100,
+      "handtools": true,
+      "image_url": "/products/claw-hammer.jpg",
+      "description": "Durable steel claw hammer with anti-slip ergonomic grip for everyday use."
+    },
+    {
+      "id": 16,
+      "name": "Adjustable Wrench",
+      "brand": "DeWalt",
+      "category": "Hand Tools",
+      "price": 18.99,
+      "currency": "Rupees",
+      "rating": 4.5,
+      "stock": 85,
+      "handtools": true,
+      "image_url": "/products/adjustable-wrench.jpg",
+      "description": "Heavy-duty adjustable wrench with smooth jaw adjustment for versatile use."
+    },
+    {
+      "id": 17,
+      "name": "Screwdriver Set (6 pcs)",
+      "brand": "Bosch",
+      "category": "Hand Tools",
+      "price": 14.99,
+      "currency": "Rupees",
+      "rating": 4.7,
+      "stock": 120,
+      "handtools": true,
+      "image_url": "/products/screwdriver-set.jpg",
+      "description": "Precision screwdriver set with multiple sizes for home and professional use."
+    },
+    {
+      "id": 18,
+      "name": "Measuring Tape 5m",
+      "brand": "Makita",
+      "category": "Hand Tools",
+      "price": 7.99,
+      "currency": "Rupees",
+      "rating": 4.4,
+      "stock": 150,
+      "handtools": true,
+      "image_url": "/products/measuring-tape.jpg",
+      "description": "Compact 5-meter measuring tape with lock feature for accurate measurements."
+    },
+    {
+      "id": 19,
+      "name": "Utility Knife",
+      "brand": "Irwin",
+      "category": "Hand Tools",
+      "price": 9.99,
+      "currency": "Rupees",
+      "rating": 4.5,
+      "stock": 90,
+      "handtools": true,
+      "image_url": "/products/utility-knife.jpg",
+      "description": "Sharp retractable utility knife ideal for cutting cardboard, plastic, and more."
+    }
+  ]
+}
