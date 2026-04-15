@@ -201,13 +201,13 @@ const Footer = () => {
           </p>
 
           {/* Trust Badges */}
-          <div className="flex items-center gap-6 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all cursor-crosshair">
+          <div className="flex items-center gap-6 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all cursor-crosshair text-gray-600">
             <Badge icon={<ShieldCheck size={14} />} label="Secure" />
             <Badge icon={<Star size={14} />} label="Top Rated" />
             <Badge icon={<Globe size={14} />} label="Nepal Wide" />
           </div>
 
-          <div className="flex gap-6 text-[11px] font-black uppercase tracking-tighter">
+          <div className="flex gap-6 text-[11px] font-black uppercase tracking-tighter text-gray-600">
             <Link
               href="/terms"
               className="hover:text-primarys transition-colors"
@@ -222,6 +222,17 @@ const Footer = () => {
             </Link>
           </div>
         </div>
+        {/* javtech links */}
+        <div className="text-center underline">
+          <a
+            href="https://javtechinfosys.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primarys text-lg italic font-semibold"
+          >
+            Developed by javtechinfosys
+          </a>
+          </div>
       </div>
     </footer>
   );
