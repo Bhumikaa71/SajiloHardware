@@ -32,7 +32,7 @@ export default function InfiniteFeatureScroll() {
                   <p className="text-sm font-semibold text-gray-800">
                     {item.title}
                   </p>
-                  <p className="text-xs text-gray-500">Explore more →</p>
+                  {/* <p className="text-xs text-gray-500">Explore more →</p> */}
                 </div>
               </div>
             </div>
