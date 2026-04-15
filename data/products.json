@@ -4,42 +4,42 @@
       "id": 1,
       "name": "Heavy Duty Hammer",
       "price": 250,
-      "image_url": "/products/hammer.png",
+      "image_url": "/images/addtocart.jpg",
       "best_selling": true
     },
     {
       "id": 2,
       "name": "Electric Drill Machine",
       "price": 520,
-      "image_url": "/products/drill.png",
+      "image_url": "/images/1.jpg",
       "best_selling": true
     },
     {
       "id": 3,
       "name": "Adjustable Wrench",
       "price": 408,
-      "image_url": "/products/wrench.png",
+      "image_url": "/images/2.jpg",
       "best_selling": true
     },
     {
       "id": 4,
       "name": "Tool Kit Set",
       "price": 785,
-      "image_url": "/products/toolkit.png",
+      "image_url": "/images/addtocart.jpg",
       "best_selling": true
     },
     {
       "id": 5,
       "name": "Screwdriver Set",
       "price": 300,
-      "image_url": "/products/screwdriver.png",
+      "image_url": "/images/website1.jpeg",
       "best_selling": true
     },
     {
       "id": 6,
       "name": "Measuring Tape",
       "price": 150,
-      "image_url": "/products/tape.png",
+      "image_url": "/images/addtocart.jpg",
       "best_selling": true
     }
   ],
@@ -54,7 +54,7 @@
       "rating": 4.6,
       "stock": 25,
       "featured": true,
-      "image_url": "/products/drill.jpg",
+      "image_url": "/images/2.jpg",
       "description": "High-performance cordless drill with variable speed and long battery life."
     },
     {
@@ -67,7 +67,7 @@
       "rating": 4.5,
       "stock": 100,
       "featured": true,
-      "image_url": "/products/hammer.jpg",
+      "image_url": "/images/1.jpg",
       "description": "Durable steel claw hammer with ergonomic grip."
     },
     {
@@ -80,7 +80,7 @@
       "rating": 4.7,
       "stock": 15,
       "featured": true,
-      "image_url": "/products/circular-saw.jpg",
+      "image_url": "/images/website2.avif",
       "description": "Precision circular saw ideal for wood cutting with high-speed motor."
     },
     {
@@ -93,7 +93,7 @@
       "rating": 4.4,
       "stock": 60,
       "featured": true,
-      "image_url": "/products/wrench.jpg",
+      "image_url": "/images/addtocart.jpg",
       "description": "Heavy-duty adjustable wrench with corrosion-resistant finish."
     },
     {
@@ -106,7 +106,7 @@
       "rating": 4.3,
       "stock": 30,
       "featured": true,
-      "image_url": "/products/angle-grinder.jpg",
+      "image_url": "/images/website5.avif",
       "description": "Compact angle grinder suitable for cutting, grinding, and polishing."
     },
     {
@@ -119,7 +119,7 @@
       "rating": 4.6,
       "stock": 40,
       "featured": true,
-      "image_url": "/products/toolbox.jpg",
+      "image_url": "/images/addtocart.jpg",
       "description": "Spacious and durable toolbox set with multiple compartments."
     }
   ],
@@ -134,7 +134,7 @@
       "rating": 4.7,
       "stock": 35,
       "powertools": true,
-      "image_url": "/products/power-drill.jpg",
+      "image_url": "/images/addtocart.jpg",
       "description": "High-performance cordless drill with long-lasting battery and variable speed control."
     },
     {
@@ -147,7 +147,7 @@
       "rating": 4.5,
       "stock": 50,
       "powertools": true,
-      "image_url": "/products/angle-grinder.jpg",
+      "image_url": "/images/website5.avif",
       "description": "Compact and powerful angle grinder ideal for cutting, grinding, and polishing tasks."
     },
     {
@@ -160,7 +160,7 @@
       "rating": 4.8,
       "stock": 28,
       "powertools": true,
-      "image_url": "/products/circular-saw.jpg",
+      "image_url": "/images/website2.avif",
       "description": "Heavy-duty circular saw designed for precise and fast wood cutting."
     },
     {
@@ -173,7 +173,7 @@
       "rating": 4.6,
       "stock": 42,
       "powertools": false,
-      "image_url": "/products/impact-driver.jpg",
+      "image_url": "/images/website5.avif",
       "description": "Compact impact driver kit with high torque for tough fastening jobs."
     }
   ],
@@ -242,7 +242,7 @@
       "rating": 4.6,
       "stock": 100,
       "handtools": true,
-      "image_url": "/products/claw-hammer.jpg",
+      "image_url": "/images/website5.avif",
       "description": "Durable steel claw hammer with anti-slip ergonomic grip for everyday use."
     },
     {
@@ -255,7 +255,7 @@
       "rating": 4.5,
       "stock": 85,
       "handtools": true,
-      "image_url": "/products/adjustable-wrench.jpg",
+      "image_url": "/images/website2.avif",
       "description": "Heavy-duty adjustable wrench with smooth jaw adjustment for versatile use."
     },
     {
@@ -268,7 +268,7 @@
       "rating": 4.7,
       "stock": 120,
       "handtools": true,
-      "image_url": "/products/screwdriver-set.jpg",
+      "image_url": "/images/website1.jpeg",
       "description": "Precision screwdriver set with multiple sizes for home and professional use."
     },
     {
@@ -281,7 +281,7 @@
       "rating": 4.4,
       "stock": 150,
       "handtools": true,
-      "image_url": "/products/measuring-tape.jpg",
+      "image_url": "/images/addtocart.jpg",
       "description": "Compact 5-meter measuring tape with lock feature for accurate measurements."
     },
     {
@@ -294,7 +294,7 @@
       "rating": 4.5,
       "stock": 90,
       "handtools": true,
-      "image_url": "/products/utility-knife.jpg",
+      "image_url": "/images/2.jpg",
       "description": "Sharp retractable utility knife ideal for cutting cardboard, plastic, and more."
     }
   ]
