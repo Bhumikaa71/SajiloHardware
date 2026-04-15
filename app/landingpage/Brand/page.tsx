@@ -24,7 +24,7 @@ const brands: Brand[] = [
 
 export default function Brand() {
   return (
-    <section className="relative bg-gray-50 py-12 px-4 md:px-10 overflow-hidden max-w-7xl mx-auto">
+    <section className="relative  py-12 px-4 md:px-10 overflow-hidden max-w-7xl mx-auto">
       {/* Decorative Orange Shapes
       <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-orange-500 to-orange-400 rounded-bl-[80px] opacity-90" />
       <div className="absolute bottom-0 left-0 w-40 h-40 bg-gradient-to-tr from-orange-500 to-orange-400 rounded-tr-[80px] opacity-90" /> */}
