@@ -188,7 +188,7 @@
       "rating": 4.6,
       "stock": 80,
       "gardening": true,
-      "image_url": "/products/pruning-shears.jpg",
+      "image_url": "/images/website1.jpeg",
       "description": "Sharp and durable pruning shears for precise trimming of plants and small branches."
     },
     {
@@ -201,7 +201,7 @@
       "rating": 4.5,
       "stock": 120,
       "gardening": true,
-      "image_url": "/products/garden-trowel.jpg",
+      "image_url": "/images/addtocart.jpg",
       "description": "Ergonomic hand trowel perfect for digging, planting, and soil mixing."
     },
     {
@@ -214,7 +214,7 @@
       "rating": 4.7,
       "stock": 60,
       "gardening": true,
-      "image_url": "/products/watering-can.jpg",
+      "image_url": "/images/2.jpg",
       "description": "Lightweight 5-liter watering can with a balanced handle for easy watering."
     },
     {
@@ -227,7 +227,7 @@
       "rating": 4.4,
       "stock": 45,
       "gardening": true,
-      "image_url": "/products/garden-rake.jpg",
+      "image_url": "/images/website5.avif",
       "description": "Strong steel rake ideal for leveling soil and clearing garden debris."
     }
   ],

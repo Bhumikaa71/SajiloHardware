@@ -83,13 +83,12 @@ export default function ProductSection({
                 </button>
 
                 {/* Image */}
-                <div className="relative h-48 w-full flex items-center justify-center overflow-hidden">
+                <div className="relative h-48 w-full overflow-hidden rounded-xl">
                   <Image
                     src={product.image_url}
                     alt={product.name}
-                    width={160}
-                    height={160}
-                    className="object-contain"
+                    fill
+                    className="object-cover"
                   />
                 </div>
 
