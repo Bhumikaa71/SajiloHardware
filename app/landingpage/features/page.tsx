@@ -14,7 +14,7 @@ export default function InfiniteFeatureScroll() {
   const loopItems = [...items, ...items];
 
   return (
-    <div className="w-full py-8 bg-gradient-to-r from-gray-50 to-orange-50 overflow-hidden">
+    <div className="w-full py-8 overflow-hidden">
       <div className="flex w-max animate-[var(--animate-scroll)] hover:[animation-play-state:paused] gap-4 px-4">
         {loopItems.map((item, index) => {
           const Icon = item.icon;
