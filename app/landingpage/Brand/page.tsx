@@ -9,17 +9,17 @@ type Brand = {
 
 const brands: Brand[] = [
   { name: "Bosch", logo: "/images/brand1.png" },
-  { name: "Ingco", logo: "/images/brand1.png" },
-  { name: "Dingqi", logo: "/images/brand1.png" },
-  { name: "UNI-T", logo: "/images/brand1.png" },
-  { name: "Karcher", logo: "/images/brand1.png" },
-  { name: "Taparia", logo: "/images/brand1.png" },
-  { name: "Deli Tools", logo: "/images/brand1.png" },
-  { name: "Rhinowalk", logo: "/images/brand1.png" },
-  { name: "Assur", logo: "/images/brand1.png" },
-  { name: "Jadever", logo: "/images/brand1.png" },
-  { name: "Moto Torque", logo: "/images/brand1.png" },
-  { name: "Petzl", logo: "/images/brand1.png" },
+  { name: "Ingco", logo: "/images/brand2.png" },
+  { name: "Dingqi", logo: "/images/brand3.png" },
+  { name: "UNI-T", logo: "/images/brand4.png" },
+  { name: "Karcher", logo: "/images/brand5.jpg" },
+  { name: "Taparia", logo: "/images/brand6.png" },
+  { name: "Deli Tools", logo: "/images/brand7.png" },
+  { name: "Rhinowalk", logo: "/images/brand8.jpg" },
+  { name: "Assur", logo: "/images/brand9.png" },
+  { name: "Jadever", logo: "/images/brand10.png" },
+  { name: "Moto Torque", logo: "/images/brand11.png" },
+  { name: "Petzl", logo: "/images/brand12.png" },
 ];
 
 export default function Brand() {
