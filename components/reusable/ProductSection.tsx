@@ -4,6 +4,9 @@ import { useRef } from "react";
 import { ChevronLeft, ChevronRight, Heart, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useWishlist } from "@/context/WishlistContext";
+import { useCart } from "@/context/CartContext";
+import toast from "react-hot-toast";
 
 type Product = {
   id: number;
@@ -20,6 +23,9 @@ export default function ProductSection({
   products: Product[];
 }) {
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
+  const { cart, addToCart } = useCart();
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -40,7 +46,7 @@ export default function ProductSection({
 
         <Link
           href="/products"
-          className="text-primarys px-4 py-2 rounded-lg font-medium hover:underline hover:text-texts-dark hover:opacity-90 transition duration-300"
+          className="text-primarys px-4 py-2 rounded-lg font-medium hover:underline"
         >
           See all
         </Link>
@@ -63,57 +69,95 @@ export default function ProductSection({
           <ChevronRight size={22} />
         </button>
 
-        {/* SCROLL AREA */}
+        {/* PRODUCTS */}
         <div ref={scrollRef} className="flex gap-6 overflow-x-hidden">
-          {products.map((product) => (
-            <div
-              key={product.id}
-              onClick={() => (window.location.href = "/product")}
-              className="min-w-[250px] cursor-pointer"
-            >
-              <div className="group relative bg-white rounded-2xl p-4 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100">
-                {/* Wishlist */}
-                <button
-                  className="absolute top-3 right-3 z-10 p-2 rounded-full bg-primarys shadow"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                >
-                  <Heart size={18} />
-                </button>
+          {products.map((product) => {
+            const isInWishlist = wishlist.some(
+              (item) => item.id === product.id,
+            );
 
-                {/* Image */}
-                <div className="relative h-48 w-full overflow-hidden rounded-xl">
-                  <Image
-                    src={product.image_url}
-                    alt={product.name}
-                    fill
-                    className="object-cover"
-                  />
+            const isInCart = cart.some((item) => item.id === product.id);
+
+            return (
+              <div
+                key={product.id}
+                onClick={() => (window.location.href = "/product")}
+                className="min-w-[250px] cursor-pointer"
+              >
+                <div className="group relative bg-white rounded-2xl p-4 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100">
+                  {/* ❤️ Wishlist Button */}
+                  <button
+                    className="absolute top-3 right-3 z-10 p-2 rounded-full bg-primarys shadow"
+                    onClick={(e) => {
+                      e.stopPropagation();
+
+                      if (isInWishlist) {
+                        removeFromWishlist(product.id);
+                        toast("Removed from wishlist ❌");
+                      } else {
+                        addToWishlist(product);
+                        toast.success("Added to wishlist ❤️");
+                      }
+                    }}
+                  >
+                    <Heart
+                      size={18}
+                      className={isInWishlist ? "fill-white" : "text-white"}
+                    />
+                  </button>
+
+                  {/* Image */}
+                  <div className="relative h-48 w-full overflow-hidden rounded-xl">
+                    <Image
+                      src={product.image_url}
+                      alt={product.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+
+                  {/* Content */}
+                  <div className="mt-4">
+                    <h3 className="text-lg font-semibold text-gray-800">
+                      {product.name}
+                    </h3>
+                    <p className="text-gray-500 mt-1">Rs. {product.price}</p>
+                  </div>
+
+                  {/* Add to Cart */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+
+                      const isInCart = cart.some(
+                        (item) => item.id === product.id,
+                      );
+
+                      if (isInCart) return;
+
+                      addToCart({
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        image_url: product.image_url,
+                      });
+
+                      toast.success("Added to cart 🛒");
+                    }}
+                    disabled={isInCart}
+                    className={`mt-4 w-full flex items-center cursor-pointer justify-center gap-2 py-2 rounded-xl transition duration-300 ${
+                      isInCart
+                        ? "bg-primarys hover:bg-gray-900 text-white"
+                        : "bg-gray-900 hover:bg-primarys text-white"
+                    }`}
+                  >
+                    <ShoppingCart size={18} />
+                    {isInCart ? "In Cart" : "Add to Cart"}
+                  </button>
                 </div>
-
-                {/* Content */}
-                <div className="mt-4">
-                  <h3 className="text-lg font-semibold text-gray-800">
-                    {product.name}
-                  </h3>
-                  <p className="text-gray-500 mt-1">Rs. {product.price}</p>
-                </div>
-
-                {/* Add to Cart */}
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    console.log("Add to cart:", product.id);
-                  }}
-                  className="mt-4 w-full flex items-center justify-center gap-2 bg-gray-900 text-white py-2 rounded-xl hover:bg-primarys transition duration-300"
-                >
-                  <ShoppingCart size={18} />
-                  Add to Cart
-                </button>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
