@@ -3,19 +3,16 @@
 import { useState } from "react";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
-import AllProducts from "@/components/reusable/AllProducts";
-import ShopSidebar from "@/components/reusable/AllProductSidebar";
-import HotDeals from "@/components/reusable/HotDeals";
+import CategorySidebar from "@/components/reusable/CategorySidebar";
+import CategoryProducts from "@/components/reusable/CategoryProducts";
 
-function Shop() {
+function Category() {
   const [priceRange, setPriceRange] = useState("all");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <>
       <Navbar />
-
-      <HotDeals />
 
       {/* PAGE WRAPPER */}
       <div className="bg-gray-50 text-primarys">
@@ -47,13 +44,22 @@ function Shop() {
                 w-72 h-[calc(100vh-64px)] md:h-auto
                 bg-white md:bg-transparent
                 transform transition-transform duration-300
-                ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+                ${
+                  sidebarOpen
+                    ? "translate-x-0"
+                    : "-translate-x-full md:translate-x-0"
+                }
               `}
             >
-              <ShopSidebar
+              <CategorySidebar
                 priceRange={priceRange}
-                setPriceRange={setPriceRange}
+                setPriceRange={(value) => {
+                  setPriceRange(value);
+                  setSidebarOpen(false); // ✅ close sidebar on selection (mobile UX)
+                }}
               />
+
+              {/* CLOSE BUTTON (mobile) */}
               <button
                 className="md:hidden absolute top-3 right-3 border px-2 py-1 text-sm rounded"
                 onClick={() => setSidebarOpen(false)}
@@ -64,7 +70,10 @@ function Shop() {
 
             {/* PRODUCTS */}
             <div className="flex-1 min-w-0 w-full">
-              <AllProducts priceRange={priceRange} />
+              <CategoryProducts
+                priceRange={priceRange} // ✅ FIXED (dynamic now)
+                category="power_tools"
+              />
             </div>
           </div>
         </div>
@@ -75,4 +84,4 @@ function Shop() {
   );
 }
 
-export default Shop;
+export default Category;

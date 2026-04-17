@@ -44,28 +44,70 @@ const Navbar = () => {
   const categories = [
     {
       name: "Power Tools",
+      href: "/category",
       icon: <Zap size={18} />,
-      items: ["Drills", "Angle Grinders", "Circular Saws", "Impact Drivers"],
+      items: [
+        { name: "Drills", href: "/category/subcategory" },
+        {
+          name: "Angle Grinders",
+          href: "/category/subcategory",
+        },
+        { name: "Circular Saws", href: "/category/subcategory" },
+        {
+          name: "Impact Drivers",
+          href: "/category/subcategory",
+        },
+      ],
     },
     {
       name: "Hand Tools",
+      href: "/category",
       icon: <Hammer size={18} />,
-      items: ["Wrenches", "Pliers", "Screwdrivers", "Measuring Tapes"],
+      items: [
+        { name: "Wrenches", href: "/category/subcategory" },
+        { name: "Pliers", href: "/category/subcategory" },
+        { name: "Screwdrivers", href: "/category/subcategory" },
+        {
+          name: "Measuring Tapes",
+          href: "/category/subcategory",
+        },
+      ],
     },
     {
       name: "Plumbing",
+      href: "/category",
       icon: <Droplets size={18} />,
-      items: ["PVC Pipes", "CPVC Fittings", "Faucets", "Water Pumps"],
+      items: [
+        { name: "PVC Pipes", href: "/category/subcategory" },
+        { name: "CPVC Fittings", href: "/category/subcategory" },
+        { name: "Faucets", href: "/category/subcategory" },
+        { name: "Water Pumps", href: "/category/subcategory" },
+      ],
     },
     {
       name: "Electrical",
+      href: "/category",
       icon: <Lightbulb size={18} />,
-      items: ["MCBs", "LED Bulbs", "Modular Switches", "Wires"],
+      items: [
+        { name: "MCBs", href: "/category/subcategory" },
+        { name: "LED Bulbs", href: "/category/subcategory" },
+        {
+          name: "Modular Switches",
+          href: "/category/subcategory",
+        },
+        { name: "Wires", href: "/category/subcategory" },
+      ],
     },
     {
       name: "Safety Gear",
+      href: "/category",
       icon: <ShieldCheck size={18} />,
-      items: ["Helmets", "Gloves", "Safety Shoes", "Vests"],
+      items: [
+        { name: "Helmets", href: "/category/subcategory" },
+        { name: "Gloves", href: "/category/subcategory" },
+        { name: "Safety Shoes", href: "/category/subcategory" },
+        { name: "Vests", href: "/category/subcategory" },
+      ],
     },
   ];
 
@@ -195,7 +237,10 @@ const Navbar = () => {
                 <div className="absolute top-full left-0 w-80 bg-white text-texts-dark shadow-[0_20px_50px_rgba(0,0,0,0.2)] rounded-b-3xl py-4 border-x border-b border-gray-100 animate-in fade-in slide-in-from-top-4 duration-300">
                   {categories.map((cat, idx) => (
                     <div key={idx} className="group/item px-4 relative">
-                      <div className="flex items-center justify-between py-3 px-4 rounded-xl hover:bg-primarys hover:text-white transition-all cursor-pointer">
+                      <Link
+                        href={cat.href}
+                        className="flex items-center justify-between py-3 px-4 rounded-xl hover:bg-primarys hover:text-white transition-all cursor-pointer"
+                      >
                         <div className="flex items-center gap-4 font-bold">
                           <span className="text-primarys group-hover/item:text-white transition-colors">
                             {cat.icon}
@@ -206,7 +251,7 @@ const Navbar = () => {
                           size={16}
                           className="opacity-0 group-hover/item:opacity-100 -translate-x-2 group-hover/item:translate-x-0 transition-all"
                         />
-                      </div>
+                      </Link>
 
                       {/* Sub-categories Flyout */}
                       <div className="invisible opacity-0 group-hover/item:visible group-hover/item:opacity-100 absolute left-[95%] top-0 w-64 bg-white shadow-2xl rounded-3xl py-6 border border-gray-100 transition-all duration-300 scale-95 group-hover/item:scale-100">
@@ -216,10 +261,10 @@ const Navbar = () => {
                         {cat.items.map((sub, i) => (
                           <Link
                             key={i}
-                            href={`/shop/${sub.toLowerCase().replace(/ /g, "-")}`}
+                            href={sub.href}
                             className="block px-8 py-2 text-sm text-texts-dark hover:text-primarys hover:pl-10 transition-all font-medium border-l-4 border-transparent hover:border-primarys"
                           >
-                            {sub}
+                            {sub.name}
                           </Link>
                         ))}
                       </div>
@@ -363,11 +408,11 @@ const Navbar = () => {
                     {cat.items.map((sub, j) => (
                       <Link
                         key={j}
-                        href={`/shop/${sub.toLowerCase()}`}
+                        href={sub.href}
                         onClick={() => setIsMobileMenuOpen(false)}
                         className="text-sm text-texts-secondary hover:text-primarys font-medium"
                       >
-                        {sub}
+                        {sub.name}
                       </Link>
                     ))}
                   </div>

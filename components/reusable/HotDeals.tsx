@@ -4,6 +4,7 @@
 
 import { useRef, useEffect, useCallback } from "react";
 import products from "@/data/products.json";
+import Link from "next/link";
 import { ChevronLeft, ChevronRight, Flame, Tag } from "lucide-react";
 
 export default function HotDeals() {
@@ -25,14 +26,12 @@ export default function HotDeals() {
             : 2);
 
     if (direction === "right") {
-      // If at the end, jump back to start
       if (el.scrollLeft + el.offsetWidth >= el.scrollWidth - 10) {
         el.scrollTo({ left: 0, behavior: "smooth" });
       } else {
         el.scrollBy({ left: scrollAmount, behavior: "smooth" });
       }
     } else {
-      // If at the start, jump to end
       if (el.scrollLeft <= 10) {
         el.scrollTo({ left: el.scrollWidth, behavior: "smooth" });
       } else {
@@ -63,7 +62,6 @@ export default function HotDeals() {
   const handleManualScroll = (direction: "left" | "right") => {
     stopAutoScroll();
     scroll(direction);
-    // Resume auto-scroll after 5s of inactivity
     setTimeout(() => startAutoScroll(), 5000);
   };
 
@@ -82,8 +80,19 @@ export default function HotDeals() {
               <Flame size={12} className="animate-pulse" />
               Limited Time Offers
             </div>
-            <h2 className="text-4xl sm:text-5xl font-black text-[#282D31] leading-none tracking-tight">
-              Hot <span className="text-[#EE7820]">Deals</span>
+            <h2 className="text-4xl sm:text-5xl font-black text-[#282D31] leading-none tracking-tight flex items-center gap-1">
+              H
+              <span className="inline-flex items-center justify-center w-8 sm:w-10">
+                <video
+                  src="/images/firee.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-8 sm:w-10 h-8 sm:h-10 object-contain"
+                />
+              </span>
+              T <span className="text-[#EE7820] ml-2">Deals</span>
             </h2>
           </div>
         </div>
@@ -116,10 +125,10 @@ export default function HotDeals() {
             className="flex gap-4 overflow-x-hidden scroll-smooth"
           >
             {hotDeals.map((item: any) => (
-              <div
+              <Link
+                href="/product"
                 key={item.id}
-                className="
-                  flex-shrink-0
+                className="flex-shrink-0
                   w-[calc(50%-8px)]
                   sm:w-[calc(33.333%-11px)]
                   md:w-[calc(25%-12px)]
@@ -134,8 +143,7 @@ export default function HotDeals() {
                   transition-all duration-300
                   hover:-translate-y-2
                   hover:shadow-[0_16px_40px_rgba(238,120,32,0.15),0_0_0_1px_rgba(238,120,32,0.2)]
-                  hover:border-[#EE7820]/20
-                "
+                  hover:border-[#EE7820]/20"
               >
                 {/* Image */}
                 <div className="relative w-full aspect-[3/2] overflow-hidden bg-gray-50">
@@ -163,7 +171,7 @@ export default function HotDeals() {
                     {item.name}
                   </p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
