@@ -45,7 +45,7 @@ export default function ProductSection({
         </h2>
 
         <Link
-          href="/products"
+          href="/shop"
           className="text-primarys px-4 py-2 rounded-lg font-medium hover:underline"
         >
           See all
