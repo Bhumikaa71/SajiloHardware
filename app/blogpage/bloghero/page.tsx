@@ -3,12 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  Calendar,
-  ArrowRight,
-  Clock,
-  Search,
-} from "lucide-react";
+import { Calendar, ArrowRight, Clock, Search } from "lucide-react";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 
@@ -40,8 +35,7 @@ const BlogPage = () => {
       id: 3,
       category: "Innovation",
       title: "Why Brushless Motors are Changing the Industry",
-      excerpt:
-        "Understand why brushless tools last longer and perform better.",
+      excerpt: "Understand why brushless tools last longer and perform better.",
       author: "Admin",
       date: "April 05, 2026",
       readTime: "8 min read",
@@ -53,13 +47,10 @@ const BlogPage = () => {
   return (
     <div className="bg-white min-h-screen">
       <Navbar />
-
       <main className="mx-auto max-w-7xl">
-
         {/* ================= HERO ================= */}
         <section className="relative px-4 sm:px-6 lg:px-8 pt-16 pb-20">
           <div className="relative rounded-4xl overflow-hidden bg-texts-dark">
-
             <div className="absolute inset-0">
               <Image
                 src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?q=80&w=2000&auto=format&fit=crop"
@@ -91,7 +82,6 @@ const BlogPage = () => {
         {/* ================= FEATURED ================= */}
         <section className="px-4 sm:px-6 lg:px-8 mb-16">
           <div className="grid lg:grid-cols-2 bg-white rounded-4xl shadow-xl overflow-hidden border text-gray-400">
-
             {/* Image */}
             <div className="relative h-64 md:h-96">
               <Image
@@ -186,7 +176,6 @@ const BlogPage = () => {
         {/* ================= NEWSLETTER ================= */}
         <section className="px-4 sm:px-6 lg:px-8 pb-20">
           <div className="bg-texts-dark rounded-4xl p-8 md:p-14 text-center text-white">
-
             <h3 className="text-2xl md:text-4xl font-black mb-4">
               Join Our Newsletter
             </h3>
@@ -208,9 +197,7 @@ const BlogPage = () => {
             </div>
           </div>
         </section>
-
       </main>
-
       <Footer />
     </div>
   );

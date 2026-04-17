@@ -297,5 +297,85 @@
       "image_url": "/images/2.jpg",
       "description": "Sharp retractable utility knife ideal for cutting cardboard, plastic, and more."
     }
+  ],
+  "hot-deals": [
+    {
+      "id": 20,
+      "name": "Hot Deal 1",
+      "brand": "Irwin",
+      "category": "Hand Tools",
+      "price": 9.99,
+      "currency": "Rupees",
+      "rating": 4.5,
+      "stock": 90,
+      "hot-deals": true,
+      "image_url": "/images/2.jpg",
+      "description": "Sharp retractable utility knife ideal for cutting cardboard, plastic, and more."
+    },
+    {
+      "id": 21,
+      "name": "Hot Deal 2",
+      "brand": "Irwin",
+      "category": "Hand Tools",
+      "price": 9.99,
+      "currency": "Rupees",
+      "rating": 4.5,
+      "stock": 90,
+      "hot-deals": true,
+      "image_url": "/images/2.jpg",
+      "description": "Sharp retractable utility knife ideal for cutting cardboard, plastic, and more."
+    },
+    {
+      "id": 22,
+      "name": "Hot Deal 3",
+      "brand": "Irwin",
+      "category": "Hand Tools",
+      "price": 9.99,
+      "currency": "Rupees",
+      "rating": 4.5,
+      "stock": 90,
+      "hot-deals": true,
+      "image_url": "/images/2.jpg",
+      "description": "Sharp retractable utility knife ideal for cutting cardboard, plastic, and more."
+    },
+    {
+      "id": 23,
+      "name": "Hot Deal 4",
+      "brand": "Irwin",
+      "category": "Hand Tools",
+      "price": 9.99,
+      "currency": "Rupees",
+      "rating": 4.5,
+      "stock": 90,
+      "hot-deals": true,
+      "image_url": "/images/2.jpg",
+      "description": "Sharp retractable utility knife ideal for cutting cardboard, plastic, and more."
+    },
+    {
+      "id": 24,
+      "name": "Hot Deal 5",
+      "brand": "Irwin",
+      "category": "Hand Tools",
+      "price": 9.99,
+      "currency": "Rupees",
+      "rating": 4.5,
+      "stock": 90,
+      "hot-deals": true,
+      "image_url": "/images/2.jpg",
+      "description": "Sharp retractable utility knife ideal for cutting cardboard, plastic, and more."
+    },
+    {
+      "id": 25,
+      "name": "Hot Deal 6",
+      "brand": "Irwin",
+      "category": "Hand Tools",
+      "price": 9.99,
+      "currency": "Rupees",
+      "rating": 4.5,
+      "stock": 90,
+      "hot-deals": true,
+      "image_url": "/images/2.jpg",
+      "description": "Sharp retractable utility knife ideal for cutting cardboard, plastic, and more."
+    }
   ]
 }
