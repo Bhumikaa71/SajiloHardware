@@ -92,9 +92,9 @@ const Footer = () => {
             <ul className="space-y-3">
               <FooterLink label="Return to Home" href="/" />
               <FooterLink label="Hardware Shop" href="/shop" />
-              <FooterLink label="About Our Team" href="/about" />
-              <FooterLink label="Read Our Blog" href="/blog" />
-              <FooterLink label="Buy Now (Checkout)" href="/checkout" />
+              <FooterLink label="About Our Team" href="/aboutpage" />
+              <FooterLink label="Read Our Blog" href="/blogpage/bloghero" />
+              <FooterLink label="Buy Now (Checkout)" href="/addtocart" />
             </ul>
           </div>
 
@@ -232,7 +232,7 @@ const Footer = () => {
           >
             Developed by javtechinfosys
           </a>
-          </div>
+        </div>
       </div>
     </footer>
   );

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -34,7 +35,6 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // Sticky navbar effect
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
@@ -44,56 +44,82 @@ const Navbar = () => {
   const categories = [
     {
       name: "Power Tools",
+      href: "/category",
       icon: <Zap size={18} />,
-      items: ["Drills", "Angle Grinders", "Circular Saws", "Impact Drivers"],
+      items: [
+        { name: "Drills", href: "/category/subcategory" },
+        { name: "Angle Grinders", href: "/category/subcategory" },
+        { name: "Circular Saws", href: "/category/subcategory" },
+        { name: "Impact Drivers", href: "/category/subcategory" },
+      ],
     },
     {
       name: "Hand Tools",
+      href: "/category",
       icon: <Hammer size={18} />,
-      items: ["Wrenches", "Pliers", "Screwdrivers", "Measuring Tapes"],
+      items: [
+        { name: "Wrenches", href: "/category/subcategory" },
+        { name: "Pliers", href: "/category/subcategory" },
+        { name: "Screwdrivers", href: "/category/subcategory" },
+        { name: "Measuring Tapes", href: "/category/subcategory" },
+      ],
     },
     {
       name: "Plumbing",
+      href: "/category",
       icon: <Droplets size={18} />,
-      items: ["PVC Pipes", "CPVC Fittings", "Faucets", "Water Pumps"],
+      items: [
+        { name: "PVC Pipes", href: "/category/subcategory" },
+        { name: "CPVC Fittings", href: "/category/subcategory" },
+        { name: "Faucets", href: "/category/subcategory" },
+        { name: "Water Pumps", href: "/category/subcategory" },
+      ],
     },
     {
       name: "Electrical",
+      href: "/category",
       icon: <Lightbulb size={18} />,
-      items: ["MCBs", "LED Bulbs", "Modular Switches", "Wires"],
+      items: [
+        { name: "MCBs", href: "/category/subcategory" },
+        { name: "LED Bulbs", href: "/category/subcategory" },
+        { name: "Modular Switches", href: "/category/subcategory" },
+        { name: "Wires", href: "/category/subcategory" },
+      ],
     },
     {
       name: "Safety Gear",
+      href: "/category",
       icon: <ShieldCheck size={18} />,
-      items: ["Helmets", "Gloves", "Safety Shoes", "Vests"],
+      items: [
+        { name: "Helmets", href: "/category/subcategory" },
+        { name: "Gloves", href: "/category/subcategory" },
+        { name: "Safety Shoes", href: "/category/subcategory" },
+        { name: "Vests", href: "/category/subcategory" },
+      ],
     },
   ];
 
   return (
-    <header
-      className={`w-full sticky top-0 z-50 transition-all duration-500 bg-white`}
-    >
-      {/* --- Top Header (Logo & Search) - Hidden on Scroll --- */}
+    <header className="w-full sticky top-0 z-50 bg-white">
+      {/* TOP HEADER */}
       <div
         className={`bg-white border-b border-gray-100 transition-all duration-500 overflow-hidden ${
           scrolled ? "max-h-0 opacity-0 -mt-20" : "max-h-25 opacity-100 py-3"
         }`}
       >
         <div className="mx-auto max-w-7xl px-4 lg:px-8 flex items-center justify-between gap-4 lg:gap-8">
-          {/* Mobile Menu Toggle */}
           <button
             onClick={() => setIsMobileMenuOpen(true)}
-            className="lg:hidden p-2 hover:bg-gray-100 rounded-xl text-texts-dark transition-colors"
+            className="lg:hidden p-2 hover:bg-gray-100 rounded-xl"
           >
             <Menu size={28} />
           </button>
 
-          {/* Logo Section */}
-          <Link href="/" className="shrink-0 group flex items-center">
-            <div className="relative h-10 w-32 md:h-14 md:w-48 transition-transform group-hover:scale-105">
+          <Link href="/" className="shrink-0 flex items-center">
+            <div className="relative h-10 w-32 md:h-14 md:w-48">
               <Image
                 src="/images/logo.png"
-                alt="Sajilo Hardware Logo"
+                alt="Logo"
                 fill
                 className="object-contain object-left"
                 priority
@@ -101,38 +127,28 @@ const Navbar = () => {
             </div>
           </Link>
 
-          {/* Search Bar (Desktop) */}
           <div className="hidden lg:flex grow max-w-xl">
-            <div className="relative w-full group">
-              <input
-                type="text"
-                placeholder="Search for tools, hardware..."
-                className="w-full bg-gray-50 border-2 border-transparent rounded-2xl py-2.5 pl-6 pr-14 focus:bg-white focus:border-primarys focus:ring-4 focus:ring-orange-50 transition-all outline-none text-texts-dark"
-              />
-              <button className="absolute right-1.5 top-1/2 -translate-y-1/2 bg-primarys text-white p-2 rounded-xl hover:bg-primarys-dark transition-all hover:rotate-12 shadow-lg shadow-orange-200">
-                <Search size={20} />
-              </button>
-            </div>
+            <input
+              type="text"
+              placeholder="Search for tools..."
+              className="w-full bg-gray-50 border rounded-2xl py-2.5 px-6"
+            />
           </div>
 
-          {/* Desktop User Actions */}
-          <div className="flex items-center gap-2 md:gap-5">
+          <div className="flex items-center gap-4">
             <Link
               href="https://wa.me/9800000000"
-              className="flex items-center gap-2 bg-[#25D366] text-white p-2.5 md:px-5 md:py-2.5 rounded-2xl hover:shadow-lg hover:shadow-green-100 transition-all active:scale-95"
+              className="flex items-center gap-2 bg-[#25D366] text-white px-5 py-2.5 rounded-2xl"
             >
-              <MessageCircle size={22} fill="white" />
-              <span className="hidden md:inline font-bold text-sm">
-                WhatsApp
-              </span>
+              <MessageCircle size={22} />
+              WhatsApp
             </Link>
 
             <Link href="/addtocart">
-              <button className="relative p-2.5 rounded-xl text-texts-secondary cursor-pointer">
+              <button className="relative p-2.5 text-primarys">
                 <ShoppingCart size={24} />
-
                 {cartCount > 0 && (
-                  <span className="absolute top-1 right-1 bg-primarys text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-white font-bold">
+                  <span className="absolute top-1 right-1 bg-primarys text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
                     {cartCount}
                   </span>
                 )}
@@ -140,9 +156,9 @@ const Navbar = () => {
             </Link>
 
             <Link href="/wishlistpage">
-              <button className="relative p-2.5 rounded-xl text-texts-secondary hover:text-primarys hover:bg-orange-50 transition-all">
+              <button className="relative p-2.5 text-primarys">
                 <Heart size={24} />
-                <span className="absolute top-1 right-1 bg-primarys text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-white font-bold">
+                <span className="absolute top-1 right-1 bg-primarys text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
                   {wishlist.length}
                 </span>
               </button>
@@ -151,229 +167,59 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* --- Main Navigation (Always Visible or Sticky) --- */}
-      <div
-        className={`hidden lg:block bg-primarys text-white shadow-lg transition-all duration-300 ${scrolled ? "h-16" : "h-14"}`}
-      >
-        <div className="mx-auto max-w-7xl flex items-center justify-between h-full px-8">
-          <div className="flex items-center h-full">
-            {/* Scrolled Logo (Only shows when top header is hidden) */}
-            <Link
-              href="/"
-              className={`mr-6 transition-all duration-500 overflow-hidden flex items-center ${scrolled ? "w-32 opacity-100" : "w-0 opacity-0"}`}
-            >
-              <div className="relative h-8 w-32 invert brightness-0">
-                <Image
-                  src="/images/logo.png"
-                  alt="Logo"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-            </Link>
-
-            {/* Mega Menu Toggle */}
+      {/* MAIN NAV */}
+      <div className="hidden lg:block bg-primarys text-white">
+        <div className="max-w-7xl mx-auto flex items-center justify-between h-14 px-8">
+          <div className="flex items-center">
+            {/* Categories */}
             <div
               className="relative h-full"
               onMouseEnter={() => setIsCategoriesOpen(true)}
               onMouseLeave={() => setIsCategoriesOpen(false)}
             >
-              <button className="bg-black/10 text-white px-8 h-full flex items-center gap-4 font-black text-sm tracking-wider group transition-all">
-                <Menu
-                  size={20}
-                  className="group-hover:rotate-90 transition-transform duration-300"
-                />
+              <button className="bg-black/10 px-6 h-full flex items-center gap-3 font-bold">
+                <Menu size={18} />
                 ALL CATEGORIES
-                <ChevronDown
-                  size={16}
-                  className={`transition-transform duration-300 ${isCategoriesOpen ? "rotate-180" : ""}`}
-                />
+                <ChevronDown size={14} />
               </button>
-
-              {/* Mega Dropdown Content */}
-              {isCategoriesOpen && (
-                <div className="absolute top-full left-0 w-80 bg-white text-texts-dark shadow-[0_20px_50px_rgba(0,0,0,0.2)] rounded-b-3xl py-4 border-x border-b border-gray-100 animate-in fade-in slide-in-from-top-4 duration-300">
-                  {categories.map((cat, idx) => (
-                    <div key={idx} className="group/item px-4 relative">
-                      <div className="flex items-center justify-between py-3 px-4 rounded-xl hover:bg-primarys hover:text-white transition-all cursor-pointer">
-                        <div className="flex items-center gap-4 font-bold">
-                          <span className="text-primarys group-hover/item:text-white transition-colors">
-                            {cat.icon}
-                          </span>
-                          {cat.name}
-                        </div>
-                        <ChevronRight
-                          size={16}
-                          className="opacity-0 group-hover/item:opacity-100 -translate-x-2 group-hover/item:translate-x-0 transition-all"
-                        />
-                      </div>
-
-                      {/* Sub-categories Flyout */}
-                      <div className="invisible opacity-0 group-hover/item:visible group-hover/item:opacity-100 absolute left-[95%] top-0 w-64 bg-white shadow-2xl rounded-3xl py-6 border border-gray-100 transition-all duration-300 scale-95 group-hover/item:scale-100">
-                        <h4 className="px-8 text-[10px] font-black text-primarys uppercase tracking-widest mb-4">
-                          Popular Choices
-                        </h4>
-                        {cat.items.map((sub, i) => (
-                          <Link
-                            key={i}
-                            href={`/shop/${sub.toLowerCase().replace(/ /g, "-")}`}
-                            className="block px-8 py-2 text-sm text-texts-dark hover:text-primarys hover:pl-10 transition-all font-medium border-l-4 border-transparent hover:border-primarys"
-                          >
-                            {sub}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
 
-            {/* Standard Nav Links */}
-            <div className="flex items-center h-full ml-4">
-              <NavItem label="HOME" href="/" icon={<Home size={16} />} />
-              <NavItem
-                label="ABOUT"
-                href="/aboutpage"
-                icon={<Info size={16} />}
-              />
-              <NavItem
-                label="SHOP"
-                href="/shop"
-                icon={<ShoppingBag size={16} />}
-                hasSub
-              />
-              <NavItem
-                label="BLOG"
-                href="/blogpage/bloghero"
-                icon={<BookOpen size={16} />}
-              />
-            </div>
+            {/* Nav links */}
+            <NavItem label="HOME" href="/" icon={<Home size={16} />} />
+            <NavItem
+              label="ABOUT"
+              href="/aboutpage"
+              icon={<Info size={16} />}
+            />
+            <NavItem
+              label="SHOP"
+              href="/shop"
+              icon={<ShoppingBag size={16} />}
+            />
+            <NavItem
+              label="BLOG"
+              href="/blogpage/bloghero"
+              icon={<BookOpen size={16} />}
+            />
           </div>
 
-          {/* Right-aligned Quick Actions */}
+          {/* RIGHT SIDE */}
           <div className="flex items-center gap-4">
+            {/* ✅ FIXED HOT DEALS */}
             <Link
-              href="/hot-deals"
-              className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white px-5 py-2 rounded-xl text-xs font-black tracking-widest transition-all"
+              href="/shop"
+              className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white px-5 py-2 rounded-xl text-xs font-bold"
             >
-              <Flame size={16} className="text-yellow-300 animate-pulse" /> HOT
-              DEALS
+              <Flame size={16} className="text-yellow-300 animate-pulse" />
+              HOT DEALS
             </Link>
 
             <Link
-              href="/checkout"
-              className="flex items-center gap-2 bg-white hover:bg-orange-200 text-primarys px-6 py-2 rounded-xl text-xs font-black tracking-widest transition-all shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+              href="/addtocart"
+              className="bg-white text-primarys px-6 py-2 rounded-xl font-bold"
             >
-              <CreditCard size={16} className="text-primarys" /> BUY NOW
+              BUY NOW
             </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* --- Mobile Fixed Header (Simplified for Scroll) --- */}
-      <div
-        className={`lg:hidden flex items-center justify-between px-4 bg-white border-b transition-all duration-300 ${scrolled ? "h-14 shadow-md" : "h-0 opacity-0 overflow-hidden"}`}
-      >
-        <button
-          onClick={() => setIsMobileMenuOpen(true)}
-          className="p-2 text-texts-dark"
-        >
-          <Menu size={24} />
-        </button>
-        <div className="relative h-8 w-24">
-          <Image
-            src="/images/logo.png"
-            alt="Logo"
-            fill
-            className="object-contain"
-          />
-        </div>
-        <button className="p-2 text-primarys">
-          <Search size={24} />
-        </button>
-      </div>
-
-      {/* --- Mobile Menu Drawer --- */}
-      <div
-        className={`fixed inset-0 z-100 lg:hidden transition-all duration-500 ${isMobileMenuOpen ? "visible" : "invisible"}`}
-      >
-        <div
-          className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-500 ${isMobileMenuOpen ? "opacity-100" : "opacity-0"}`}
-          onClick={() => setIsMobileMenuOpen(false)}
-        />
-        <div
-          className={`absolute left-0 top-0 bottom-0 w-[85%] max-w-sm bg-white shadow-2xl transition-transform duration-500 ease-out ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
-        >
-          <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-primarys text-white">
-            <h2 className="font-black tracking-widest">NAVIGATE</h2>
-            <button
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="p-2 hover:bg-white/20 rounded-full transition-colors"
-            >
-              <X size={24} />
-            </button>
-          </div>
-          <div className="overflow-y-auto h-full pb-32">
-            <div className="p-4 grid grid-cols-2 gap-2">
-              <MobileQuickLink
-                href="/"
-                label="Home"
-                icon={<Home size={18} />}
-              />
-              <MobileQuickLink
-                label="ABOUT"
-                href="/aboutpage"
-                icon={<Info size={16} />}
-              />
-              <MobileQuickLink
-                href="/shop"
-                label="Shop"
-                icon={<ShoppingBag size={18} />}
-              />
-              <MobileQuickLink
-                href="/blogpage/bloghero"
-                label="Blog"
-                icon={<BookOpen size={18} />}
-              />
-              <MobileQuickLink
-                href="/checkout"
-                label="Buy Now"
-                icon={<CreditCard size={18} />}
-                isSpecial
-              />
-            </div>
-            <div className="px-4 py-2 border-t border-gray-50">
-              <h3 className="text-[10px] font-black text-texts-secondary uppercase tracking-widest px-4 mb-2">
-                Shop Categories
-              </h3>
-              {categories.map((cat, i) => (
-                <details key={i} className="group mb-1">
-                  <summary className="list-none flex items-center justify-between p-4 rounded-2xl hover:bg-orange-50 cursor-pointer transition-colors">
-                    <div className="flex items-center gap-4 font-bold text-texts-dark">
-                      <span className="text-primarys">{cat.icon}</span>
-                      {cat.name}
-                    </div>
-                    <ChevronDown
-                      size={18}
-                      className="text-gray-400 group-open:rotate-180 transition-transform"
-                    />
-                  </summary>
-                  <div className="pl-14 pr-4 py-2 flex flex-col gap-3 border-l-2 border-orange-100 ml-8">
-                    {cat.items.map((sub, j) => (
-                      <Link
-                        key={j}
-                        href={`/shop/${sub.toLowerCase()}`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="text-sm text-texts-secondary hover:text-primarys font-medium"
-                      >
-                        {sub}
-                      </Link>
-                    ))}
-                  </div>
-                </details>
-              ))}
-            </div>
           </div>
         </div>
       </div>
@@ -381,76 +227,10 @@ const Navbar = () => {
   );
 };
 
-const NavItem = ({
-  label,
-  href,
-  icon,
-  hasSub = false,
-}: {
-  label: string;
-  href: string;
-  icon?: React.ReactNode;
-  hasSub?: boolean;
-}) => (
-  <div className="relative group px-5 h-full flex items-center cursor-pointer">
-    <Link
-      href={href}
-      className="text-white font-black text-[11px] xl:text-[12px] tracking-widest flex items-center gap-2 group-hover:opacity-80 transition-opacity"
-    >
-      {icon}
-      {label}
-      {hasSub && (
-        <ChevronDown
-          size={14}
-          className="group-hover:rotate-180 transition-transform duration-300"
-        />
-      )}
-    </Link>
-    <div className="absolute bottom-0 left-5 right-5 h-1 bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-t-full" />
-    {hasSub && (
-      <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 absolute top-full left-0 w-52 bg-white shadow-2xl rounded-b-2xl py-4 border-t-4 border-primarys transition-all duration-300 translate-y-2 group-hover:translate-y-0 text-texts-dark">
-        <Link
-          href="/shop/new"
-          className="block px-6 py-2.5 text-sm hover:bg-orange-50 hover:text-primarys font-bold"
-        >
-          New Arrivals
-        </Link>
-        <Link
-          href="/shop/trending"
-          className="block px-6 py-2.5 text-sm hover:bg-orange-50 hover:text-primarys font-bold"
-        >
-          Best Sellers
-        </Link>
-        <Link
-          href="/shop/clearance"
-          className="block px-6 py-2.5 text-sm hover:bg-orange-50 hover:text-primarys font-bold"
-        >
-          Clearance
-        </Link>
-      </div>
-    )}
-  </div>
-);
-
-const MobileQuickLink = ({
-  href,
-  label,
-  icon,
-  isSpecial = false,
-}: {
-  href: string;
-  label: string;
-  icon: React.ReactNode;
-  isSpecial?: boolean;
-}) => (
-  <Link
-    href={href}
-    className={`flex flex-col items-center justify-center p-4 rounded-2xl gap-2 transition-all active:scale-95 ${isSpecial ? "bg-primarys text-white shadow-lg" : "bg-gray-50 text-texts-dark hover:bg-orange-50"}`}
-  >
+const NavItem = ({ label, href, icon }: any) => (
+  <Link href={href} className="px-5 h-full flex items-center gap-2">
     {icon}
-    <span className="text-[10px] font-black uppercase tracking-widest">
-      {label}
-    </span>
+    {label}
   </Link>
 );
 
