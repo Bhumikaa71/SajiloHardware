@@ -11,11 +11,12 @@ import PowerTools from "./landingpage/powertools/page";
 import GardeningTools from "./landingpage/gardening tools/page";
 import HandTools from "./landingpage/handtools/page";
 import SafetyGearTools from "./landingpage/safety gear/page";
+import Navbar from "@/components/navbar";
 
 function page() {
   return (
     <div className="min-h-screen bg-white">
-      <NavBar />
+      <Navbar />
       <Hero />
       <FeatureScroller />
       <BestSelling />

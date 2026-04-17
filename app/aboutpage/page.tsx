@@ -46,13 +46,10 @@ const AboutPage = () => {
   return (
     <div className="bg-linear-to-b from-white to-gray-50 min-h-screen">
       <Navbar />
-
       <main className="mx-auto max-w-7xl">
-
         {/* ================= HERO ================= */}
         <section className="relative pt-16 md:pt-24 pb-20 md:pb-28 px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-10 md:gap-16 items-center">
-
             {/* TEXT */}
             <div>
               <div className="flex items-center gap-3 mb-5">
@@ -161,7 +158,6 @@ const AboutPage = () => {
         {/* ================= STORY ================= */}
         <section className="px-4 sm:px-6 lg:px-8 pb-20">
           <div className="bg-primarys rounded-4xl md:rounded-[3rem] p-8 md:p-14 flex flex-col lg:flex-row gap-10 items-center shadow-xl">
-
             {/* TEXT */}
             <div className="lg:w-1/2 text-white">
               <h3 className="text-3xl md:text-4xl font-black mb-6">
@@ -181,16 +177,25 @@ const AboutPage = () => {
             {/* IMAGES */}
             <div className="lg:w-1/2 grid grid-cols-2 gap-3 w-full">
               <div className="relative h-40 md:h-56 rounded-2xl overflow-hidden">
-                <Image src="/images/2.jpg" alt="" fill className="object-cover" />
+                <Image
+                  src="/images/2.jpg"
+                  alt=""
+                  fill
+                  className="object-cover"
+                />
               </div>
               <div className="relative h-40 md:h-56 rounded-2xl overflow-hidden">
-                <Image src="/images/2.jpg" alt="" fill className="object-cover" />
+                <Image
+                  src="/images/2.jpg"
+                  alt=""
+                  fill
+                  className="object-cover"
+                />
               </div>
             </div>
           </div>
         </section>
       </main>
-
       <Footer />
     </div>
   );

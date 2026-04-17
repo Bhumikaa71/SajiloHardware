@@ -11,7 +11,6 @@ export default function Page() {
   return (
     <div className="bg-gray-50">
       <Navbar />
-
       <div className="min-h-screen max-w-7xl mx-auto">
         {/* HEADER */}
         <header className="bg-white border-b px-6 py-4 flex justify-between items-center">
@@ -213,9 +212,8 @@ export default function Page() {
           <span className="cursor-pointer">📘</span>
           <span className="cursor-pointer">🐦</span>
         </div>
-
-        <Footer />
       </div>
+      <Footer />
     </div>
   );
 }
