@@ -6,6 +6,8 @@ import { Toaster } from "react-hot-toast";
 import { CartProvider } from "@/context/CartContext";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import ScrollToTop from "@/components/scrolltotop";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,6 +32,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="min-h-full flex flex-col">
+        <ScrollToTop />
+        
         <WishlistProvider>
           <CartProvider>
             {/* ✅ FIXED NAVBAR */}
