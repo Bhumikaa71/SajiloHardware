@@ -46,6 +46,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("sh-token");
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (storedToken) setToken(storedToken);
 
     const handleStorage = () => {
@@ -87,7 +88,7 @@ const Navbar = () => {
   const profileRef = React.useRef<HTMLDivElement>(null);
 
   return (
-    <header className="w-full sticky top-0 z-[100] transition-all duration-500 bg-white">
+    <header className="w-full sticky top-0 z-100 transition-all duration-500 bg-white">
       {/* ================= TOP HEADER ================= */}
       <div
         className={`bg-white border-b border-gray-100 transition-all duration-500 ${
