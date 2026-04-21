@@ -23,6 +23,7 @@ import {
   CreditCard,
   Info,
   ShoppingCart,
+  User,
 } from "lucide-react";
 import { useWishlist } from "@/context/WishlistContext";
 import { useCart } from "@/context/CartContext";
@@ -33,11 +34,27 @@ const Navbar = () => {
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("sh-token");
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (storedToken) setToken(storedToken);
+
+    const handleStorage = () => {
+      setToken(localStorage.getItem("sh-token"));
+    };
+
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
   const categories = [
@@ -67,6 +84,8 @@ const Navbar = () => {
       items: ["Helmets", "Gloves", "Safety Shoes", "Vests"],
     },
   ];
+
+  const profileRef = React.useRef<HTMLDivElement>(null);
 
   return (
     <header className="w-full sticky top-0 z-50 transition-all duration-500 bg-white">
@@ -111,12 +130,19 @@ const Navbar = () => {
                 )}
               </button>
             </Link>
+
             <Link href="/wishlistpage">
               <button className="relative p-2 text-primarys">
                 <Heart size={22} />
                 <span className="absolute top-0.5 right-0.5 bg-primarys text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center border border-white font-bold">
                   {wishlist.length}
                 </span>
+              </button>
+            </Link>
+
+            <Link href={token ? "/profile" : "/login"}>
+              <button className="p-2 text-primarys">
+                <User size={22} />
               </button>
             </Link>
           </div>
@@ -136,8 +162,9 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* ---- DESKTOP TOP BAR (unchanged) ---- */}
+        {/* ---- DESKTOP TOP BAR ---- */}
         <div className="hidden lg:flex mx-auto max-w-7xl px-4 lg:px-8 items-center justify-between gap-4 lg:gap-8 py-3">
+          {/* LOGO ONLY */}
           <Link href="/" className="shrink-0 group flex items-center">
             <div className="relative h-10 w-32 md:h-14 md:w-48 transition-transform group-hover:scale-105">
               <Image
@@ -150,7 +177,7 @@ const Navbar = () => {
             </div>
           </Link>
 
-          {/* Search */}
+          {/* SEARCH */}
           <div className="flex grow max-w-xl">
             <div className="relative w-full group">
               <input
@@ -158,14 +185,15 @@ const Navbar = () => {
                 placeholder="Search for tools, hardware..."
                 className="w-full bg-gray-50 border-2 border-transparent rounded-2xl py-2.5 pl-6 pr-14 focus:bg-white focus:border-primarys focus:ring-4 focus:ring-orange-50 transition-all outline-none text-texts-dark"
               />
-              <button className="absolute right-1.5 top-1/2 -translate-y-1/2 bg-primarys text-white p-2 rounded-xl hover:bg-primarys-dark transition-all hover:rotate-12 shadow-lg shadow-orange-200">
+              <button className="absolute right-1.5 top-1/2 -translate-y-1/2 bg-primarys text-white p-2 rounded-xl">
                 <Search size={20} />
               </button>
             </div>
           </div>
 
-          {/* Actions */}
+          {/* ACTIONS */}
           <div className="flex items-center gap-2 md:gap-5">
+            {/* WhatsApp */}
             <Link href="https://wa.me/9800000000">
               <div className="flex items-center gap-2 bg-[#25D366] text-white p-2.5 md:px-5 md:py-2.5 rounded-2xl">
                 <MessageCircle size={22} fill="white" />
@@ -175,6 +203,7 @@ const Navbar = () => {
               </div>
             </Link>
 
+            {/* Cart */}
             <Link href="/addtocart">
               <button className="relative p-2.5 text-primarys">
                 <ShoppingCart size={24} />
@@ -186,6 +215,7 @@ const Navbar = () => {
               </button>
             </Link>
 
+            {/* Wishlist */}
             <Link href="/wishlistpage">
               <button className="relative p-2.5 text-primarys">
                 <Heart size={24} />
@@ -194,11 +224,69 @@ const Navbar = () => {
                 </span>
               </button>
             </Link>
+
+            {/* PROFILE DROPDOWN — hover triggered */}
+            <div
+              className="relative"
+              ref={profileRef}
+              onMouseEnter={() => setIsProfileOpen(true)}
+              onMouseLeave={() => setIsProfileOpen(false)}
+            >
+              <button className="p-2 text-primarys">
+                <User size={22} />
+              </button>
+
+              {/* Invisible bridge fills the gap so mouse doesn't leave the zone */}
+              {isProfileOpen && (
+                <div className="absolute right-0 top-full w-56 pt-2 z-50">
+                  <div className="bg-white shadow-xl rounded-lg border border-gray-200 py-2">
+                    {!token ? (
+                      <Link
+                        href="/login"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="block px-4 py-2 text-sm hover:bg-gray-100"
+                      >
+                        Login
+                      </Link>
+                    ) : (
+                      <>
+                        <Link
+                          href="/profile"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="block px-4 py-2 text-sm hover:bg-gray-100"
+                        >
+                          My Profile
+                        </Link>
+
+                        <Link
+                          href="/orders"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="block px-4 py-2 text-sm hover:bg-gray-100"
+                        >
+                          My Orders
+                        </Link>
+
+                        <button
+                          onClick={() => {
+                            localStorage.removeItem("sh-token");
+                            setToken(null);
+                            setIsProfileOpen(false);
+                          }}
+                          className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100"
+                        >
+                          Logout
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* ================= MAIN NAV (desktop only — unchanged) ================= */}
+      {/* ================= MAIN NAV (desktop only) ================= */}
       <div
         className={`hidden lg:block bg-primarys text-white shadow-lg transition-all duration-300 ${
           scrolled ? "h-16" : "h-14"
