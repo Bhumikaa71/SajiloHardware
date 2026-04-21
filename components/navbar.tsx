@@ -46,7 +46,6 @@ const Navbar = () => {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("sh-token");
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (storedToken) setToken(storedToken);
 
     const handleStorage = () => {
@@ -88,16 +87,16 @@ const Navbar = () => {
   const profileRef = React.useRef<HTMLDivElement>(null);
 
   return (
-    <header className="w-full sticky top-0 z-50 transition-all duration-500 bg-white">
+    <header className="w-full sticky top-0 z-[100] transition-all duration-500 bg-white">
       {/* ================= TOP HEADER ================= */}
       <div
-        className={`bg-white border-b border-gray-100 transition-all duration-500 overflow-hidden ${
-          scrolled ? "max-h-0 opacity-0 -mt-20" : "max-h-40 opacity-100"
+        className={`bg-white border-b border-gray-100 transition-all duration-500 ${
+          // Changed overflow-hidden to handle dropdown visibility
+          scrolled ? "max-h-0 opacity-0 -mt-20 overflow-hidden" : "max-h-40 opacity-100 overflow-visible"
         }`}
       >
         {/* ---- MOBILE TOP BAR ---- */}
         <div className="flex lg:hidden items-center justify-between px-4 py-3 gap-3">
-          {/* Hamburger */}
           <button
             onClick={() => setIsMobileMenuOpen(true)}
             className="p-2 bg-orange-50 hover:bg-orange-100 rounded-xl text-primarys transition-colors"
@@ -105,7 +104,6 @@ const Navbar = () => {
             <Menu size={22} />
           </button>
 
-          {/* Logo centered */}
           <Link href="/" className="flex-1 flex justify-center">
             <div className="relative h-9 w-32">
               <Image
@@ -118,7 +116,6 @@ const Navbar = () => {
             </div>
           </Link>
 
-          {/* Icon actions */}
           <div className="flex items-center gap-1">
             <Link href="/addtocart">
               <button className="relative p-2 text-primarys">
@@ -164,7 +161,6 @@ const Navbar = () => {
 
         {/* ---- DESKTOP TOP BAR ---- */}
         <div className="hidden lg:flex mx-auto max-w-7xl px-4 lg:px-8 items-center justify-between gap-4 lg:gap-8 py-3">
-          {/* LOGO ONLY */}
           <Link href="/" className="shrink-0 group flex items-center">
             <div className="relative h-10 w-32 md:h-14 md:w-48 transition-transform group-hover:scale-105">
               <Image
@@ -177,7 +173,6 @@ const Navbar = () => {
             </div>
           </Link>
 
-          {/* SEARCH */}
           <div className="flex grow max-w-xl">
             <div className="relative w-full group">
               <input
@@ -191,19 +186,14 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* ACTIONS */}
           <div className="flex items-center gap-2 md:gap-5">
-            {/* WhatsApp */}
             <Link href="https://wa.me/9800000000">
               <div className="flex items-center gap-2 bg-[#25D366] text-white p-2.5 md:px-5 md:py-2.5 rounded-2xl">
                 <MessageCircle size={22} fill="white" />
-                <span className="hidden md:inline font-bold text-sm">
-                  WhatsApp
-                </span>
+                <span className="hidden md:inline font-bold text-sm">WhatsApp</span>
               </div>
             </Link>
 
-            {/* Cart */}
             <Link href="/addtocart">
               <button className="relative p-2.5 text-primarys">
                 <ShoppingCart size={24} />
@@ -215,7 +205,6 @@ const Navbar = () => {
               </button>
             </Link>
 
-            {/* Wishlist */}
             <Link href="/wishlistpage">
               <button className="relative p-2.5 text-primarys">
                 <Heart size={24} />
@@ -225,62 +214,69 @@ const Navbar = () => {
               </button>
             </Link>
 
-            {/* PROFILE DROPDOWN — hover triggered */}
+            {/* PROFILE DROPDOWN */}
             <div
-              className="relative"
-              ref={profileRef}
+              className="relative z-[110]"
               onMouseEnter={() => setIsProfileOpen(true)}
               onMouseLeave={() => setIsProfileOpen(false)}
             >
-              <button className="p-2 text-primarys">
-                <User size={22} />
+              <button className="p-2.5 text-primarys hover:bg-orange-50 rounded-xl transition-colors">
+                <User size={24} />
               </button>
 
-              {/* Invisible bridge fills the gap so mouse doesn't leave the zone */}
-              {isProfileOpen && (
-                <div className="absolute right-0 top-full w-56 pt-2 z-50">
-                  <div className="bg-white shadow-xl rounded-lg border border-gray-200 py-2">
-                    {!token ? (
+              {/* Invisible bridge + Dropdown Content */}
+              <div 
+                className={`absolute right-0 top-full w-56 transition-all duration-300 ${
+                  isProfileOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-2"
+                }`}
+              >
+                {/* The Bridge (prevents mouse-out while moving to dropdown) */}
+                <div className="h-2 w-full" />
+                
+                <div className="bg-white shadow-[0_10px_40px_rgba(0,0,0,0.15)] rounded-2xl border border-gray-100 py-2 overflow-hidden">
+                  {!token ? (
+                    <Link
+                      href="/login"
+                      onClick={() => setIsProfileOpen(false)}
+                      className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
+                    >
+                      <User size={16} /> Login / Register
+                    </Link>
+                  ) : (
+                    <>
+                      <div className="px-4 py-2 border-b border-gray-50 mb-1">
+                        <p className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">Account</p>
+                      </div>
                       <Link
-                        href="/login"
+                        href="/profile"
                         onClick={() => setIsProfileOpen(false)}
-                        className="block px-4 py-2 text-sm hover:bg-gray-100"
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
                       >
-                        Login
+                        My Profile
                       </Link>
-                    ) : (
-                      <>
-                        <Link
-                          href="/profile"
-                          onClick={() => setIsProfileOpen(false)}
-                          className="block px-4 py-2 text-sm hover:bg-gray-100"
-                        >
-                          My Profile
-                        </Link>
 
-                        <Link
-                          href="/orders"
-                          onClick={() => setIsProfileOpen(false)}
-                          className="block px-4 py-2 text-sm hover:bg-gray-100"
-                        >
-                          My Orders
-                        </Link>
+                      <Link
+                        href="/orders"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
+                      >
+                        My Orders
+                      </Link>
 
-                        <button
-                          onClick={() => {
-                            localStorage.removeItem("sh-token");
-                            setToken(null);
-                            setIsProfileOpen(false);
-                          }}
-                          className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100"
-                        >
-                          Logout
-                        </button>
-                      </>
-                    )}
-                  </div>
+                      <button
+                        onClick={() => {
+                          localStorage.removeItem("sh-token");
+                          setToken(null);
+                          setIsProfileOpen(false);
+                        }}
+                        className="w-full flex items-center gap-3 text-left px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50 transition-colors border-t border-gray-50 mt-1"
+                      >
+                        Logout
+                      </button>
+                    </>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
           </div>
         </div>
@@ -288,7 +284,7 @@ const Navbar = () => {
 
       {/* ================= MAIN NAV (desktop only) ================= */}
       <div
-        className={`hidden lg:block bg-primarys text-white shadow-lg transition-all duration-300 ${
+        className={`hidden lg:block bg-primarys text-white shadow-lg transition-all duration-300 relative z-40 ${
           scrolled ? "h-16" : "h-14"
         }`}
       >
@@ -336,33 +332,23 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* NAV LINKS */}
           <div className="flex items-center h-full ml-4">
-            <Link href="/" className="px-5">
-              HOME
-            </Link>
-            <Link href="/aboutpage" className="px-5">
-              ABOUT
-            </Link>
-            <Link href="/shop" className="px-5">
-              SHOP
-            </Link>
-            <Link href="/blogpage/bloghero" className="px-5">
-              BLOG
-            </Link>
+            <Link href="/" className="px-5 text-sm font-bold tracking-wide hover:text-orange-200 transition-colors">HOME</Link>
+            <Link href="/aboutpage" className="px-5 text-sm font-bold tracking-wide hover:text-orange-200 transition-colors">ABOUT</Link>
+            <Link href="/shop" className="px-5 text-sm font-bold tracking-wide hover:text-orange-200 transition-colors">SHOP</Link>
+            <Link href="/blogpage/bloghero" className="px-5 text-sm font-bold tracking-wide hover:text-orange-200 transition-colors">BLOG</Link>
           </div>
 
-          {/* RIGHT ACTIONS */}
           <div className="flex items-center gap-4">
             <Link
               href="/hot-deals"
-              className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white px-5 py-2 rounded-xl text-xs font-black tracking-widest"
+              className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white px-5 py-2 rounded-xl text-xs font-black tracking-widest transition-all"
             >
               <Flame size={16} className="text-yellow-300" /> HOT DEALS
             </Link>
             <Link
               href="/checkout"
-              className="flex items-center gap-2 bg-white text-primarys px-6 py-2 rounded-xl text-xs font-black tracking-widest shadow-lg"
+              className="flex items-center gap-2 bg-white text-primarys px-6 py-2 rounded-xl text-xs font-black tracking-widest shadow-lg hover:bg-orange-50 transition-all"
             >
               <CreditCard size={16} /> BUY NOW
             </Link>
@@ -372,11 +358,10 @@ const Navbar = () => {
 
       {/* ================= MOBILE MENU ================= */}
       <div
-        className={`fixed inset-0 z-[100] lg:hidden transition-all duration-500 ${
+        className={`fixed inset-0 z-[200] lg:hidden transition-all duration-500 ${
           isMobileMenuOpen ? "visible" : "invisible"
         }`}
       >
-        {/* Backdrop */}
         <div
           className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-500 ${
             isMobileMenuOpen ? "opacity-100" : "opacity-0"
@@ -384,21 +369,15 @@ const Navbar = () => {
           onClick={() => setIsMobileMenuOpen(false)}
         />
 
-        {/* Drawer */}
         <div
           className={`absolute left-0 top-0 bottom-0 w-[82%] max-w-xs bg-white shadow-2xl transition-transform duration-500 ease-out flex flex-col ${
             isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
-          {/* Drawer Header */}
           <div className="flex items-center justify-between px-5 py-4 bg-primarys shrink-0">
             <div>
-              <p className="text-white font-black text-sm tracking-widest">
-                MENU
-              </p>
-              <p className="text-orange-200 text-[10px] mt-0.5">
-                Sajilo Hardware
-              </p>
+              <p className="text-white font-black text-sm tracking-widest">MENU</p>
+              <p className="text-orange-200 text-[10px] mt-0.5">Sajilo Hardware</p>
             </div>
             <button
               onClick={() => setIsMobileMenuOpen(false)}
@@ -408,9 +387,7 @@ const Navbar = () => {
             </button>
           </div>
 
-          {/* Scrollable Content */}
           <div className="overflow-y-auto flex-1">
-            {/* Quick Links Grid */}
             <div className="p-4 grid grid-cols-2 gap-2">
               {[
                 { label: "Home", href: "/", Icon: Home },
@@ -429,7 +406,6 @@ const Navbar = () => {
                 </Link>
               ))}
 
-              {/* Buy Now — full width */}
               <Link
                 href="/checkout"
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -437,22 +413,10 @@ const Navbar = () => {
               >
                 <CreditCard size={14} /> BUY NOW
               </Link>
-
-              {/* WhatsApp — full width */}
-              <Link
-                href="https://wa.me/9800000000"
-                className="col-span-2 flex items-center justify-center gap-2 p-3 bg-[#25D366] hover:bg-green-500 text-white rounded-xl text-sm font-bold transition-colors"
-              >
-                <MessageCircle size={14} fill="white" /> WhatsApp Us
-              </Link>
             </div>
 
-            {/* Divider + Categories label */}
             <div className="px-4 pb-4">
-              <p className="text-[10px] font-bold text-gray-400 tracking-widest mb-2 px-1">
-                CATEGORIES
-              </p>
-
+              <p className="text-[10px] font-bold text-gray-400 tracking-widest mb-2 px-1">CATEGORIES</p>
               <div className="flex flex-col gap-1.5">
                 {categories.map((cat, i) => (
                   <details key={i} className="group">
