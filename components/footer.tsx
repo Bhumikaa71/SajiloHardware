@@ -94,7 +94,7 @@ const Footer = () => {
               <FooterLink label="Hardware Shop" href="/shop" />
               <FooterLink label="About Our Team" href="/aboutpage" />
               <FooterLink label="Read Our Blog" href="/blogpage/bloghero" />
-              <FooterLink label="Buy Now (Checkout)" href="/addtocart" />
+              <FooterLink label="Buy Now" href="tel:9800123456" />
             </ul>
           </div>
 
@@ -105,11 +105,11 @@ const Footer = () => {
               Categories
             </h4>
             <ul className="space-y-3">
-              <FooterLink label="Heavy Power Tools" href="/shop/power-tools" />
-              <FooterLink label="Hand Tool Sets" href="/shop/hand-tools" />
-              <FooterLink label="Plumbing Systems" href="/shop/plumbing" />
-              <FooterLink label="Electrical Fittings" href="/shop/electrical" />
-              <FooterLink label="Construction Gear" href="/shop/safety" />
+              <FooterLink label="Heavy Power Tools" href="/shop" />
+              <FooterLink label="Hand Tool Sets" href="/shop" />
+              <FooterLink label="Plumbing Systems" href="/shop" />
+              <FooterLink label="Electrical Fittings" href="/shop" />
+              <FooterLink label="Construction Gear" href="/shop" />
             </ul>
           </div>
 
@@ -209,13 +209,13 @@ const Footer = () => {
 
           <div className="flex gap-6 text-[11px] font-black uppercase tracking-tighter text-gray-600">
             <Link
-              href="/terms"
+              href="/privacypage/termsandcondition"
               className="hover:text-primarys transition-colors"
             >
               Terms
             </Link>
             <Link
-              href="/privacy"
+              href="/privacypage/privacypolicy"
               className="hover:text-primarys transition-colors"
             >
               Privacy
