@@ -1,5 +1,6 @@
 // components/FeaturedCategories.tsx
 
+import Link from "next/link";
 import {
   Wrench,
   Zap,
@@ -11,7 +12,6 @@ import {
   Drill,
   Bike,
   Leaf,
-  Link,
 } from "lucide-react";
 
 type Category = {
@@ -42,18 +42,17 @@ export default function FeaturedCategories() {
         <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
           Featured Categories
         </h2>
-
-        <div className="flex items-center gap-3"></div>
       </div>
 
       {/* Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
         {categories.map((cat, index) => (
-          <div
+          <Link
             key={index}
+            href="/category"
             className="group relative overflow-hidden rounded-xl border border-gray-200 bg-white transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
           >
-            {/* subtle hover background sweep */}
+            {/* hover background sweep */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[var(--color-primarys)]/10 to-transparent opacity-0 group-hover:opacity-100 transition duration-500" />
 
             <div className="relative flex flex-col items-center justify-center text-center h-36 px-3">
@@ -63,11 +62,11 @@ export default function FeaturedCategories() {
               </div>
 
               {/* Text */}
-              <p className="text-sm font-medium text-[var(--color-texts-secondary)] transition-all duration-300 group-hover:text-[var(--color-texts-dark)] group-hover:translate-y-0.5">
+              <p className="text-sm font-medium text-[var(--color-texts-secondary)] group-hover:text-[var(--color-texts-dark)]">
                 {cat.name}
               </p>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </section>

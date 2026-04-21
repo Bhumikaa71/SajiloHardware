@@ -5,14 +5,21 @@ import { useState, useMemo } from "react";
 import products from "@/data/products.json";
 import ProductGrid from "./ProductGrid";
 
+// ✅ infer category keys from JSON
+type ProductCategory = keyof typeof products;
+
 type AllProductsProps = {
   priceRange: string;
+  category: ProductCategory;
 };
 
 const ITEMS_PER_PAGE = 6;
 
-function AllProducts({ priceRange }: AllProductsProps) {
-  const allProducts = Object.values(products).flat();
+function CategoryProducts({ priceRange, category }: AllProductsProps) {
+  // ✅ safely access category
+  const allProducts = useMemo(() => {
+    return products[category] || [];
+  }, [category]);
 
   const [sortType, setSortType] = useState("price-asc");
   const [currentPage, setCurrentPage] = useState(1);
@@ -71,8 +78,8 @@ function AllProducts({ priceRange }: AllProductsProps) {
       {/* HEADER */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
         {/* TITLE */}
-        <h1 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-800">
-          All Products
+        <h1 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-800 capitalize">
+          {category.replace(/_/g, " ")} Products
         </h1>
 
         {/* SORT */}
@@ -86,7 +93,7 @@ function AllProducts({ priceRange }: AllProductsProps) {
             value={sortType}
             onChange={(e) => {
               setSortType(e.target.value);
-              setCurrentPage(1);
+              setCurrentPage(1); // reset page
             }}
           >
             <option value="price-asc">Price: Low → High</option>
@@ -130,7 +137,7 @@ function AllProducts({ priceRange }: AllProductsProps) {
         <button
           className="px-3 py-1 text-sm sm:text-base border rounded disabled:opacity-50"
           onClick={() => setCurrentPage((p) => p + 1)}
-          disabled={currentPage === totalPages}
+          disabled={currentPage === totalPages || totalPages === 0}
         >
           Next
         </button>
@@ -139,4 +146,4 @@ function AllProducts({ priceRange }: AllProductsProps) {
   );
 }
 
-export default AllProducts;
+export default CategoryProducts;
