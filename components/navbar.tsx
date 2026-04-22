@@ -190,7 +190,7 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center gap-2 md:gap-5">
-            <Link href="https://wa.me/9800000000">
+            <Link href="https://wa.me/9845526696">
               <div className="flex items-center gap-2 bg-[#25D366] text-white p-2.5 md:px-5 md:py-2.5 rounded-2xl">
                 <MessageCircle size={22} fill="white" />
                 <span className="hidden md:inline font-bold text-sm">
@@ -367,13 +367,13 @@ const Navbar = () => {
 
           <div className="flex items-center gap-4">
             <Link
-              href="/hot-deals"
+              href="/shop"
               className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white px-5 py-2 rounded-xl text-xs font-black tracking-widest transition-all"
             >
               <Flame size={16} className="text-yellow-300" /> HOT DEALS
             </Link>
             <Link
-              href="/checkout"
+              href="https://wa.me/9845526696"
               className="flex items-center gap-2 bg-white text-primarys px-6 py-2 rounded-xl text-xs font-black tracking-widest shadow-lg hover:bg-orange-50 transition-all"
             >
               <CreditCard size={16} /> BUY NOW

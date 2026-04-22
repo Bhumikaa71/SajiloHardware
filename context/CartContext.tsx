@@ -13,7 +13,7 @@ type CartItem = {
 
 type CartContextType = {
   cart: CartItem[];
-  cartCount: number; // 👈 UNIQUE PRODUCT COUNT FOR NAVBAR
+  cartCount: number;
   addToCart: (item: Omit<CartItem, "quantity">) => void;
   removeFromCart: (id: number) => void;
   clearCart: () => void;
