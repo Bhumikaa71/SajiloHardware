@@ -93,7 +93,9 @@ const Navbar = () => {
       <div
         className={`bg-white border-b border-gray-100 transition-all duration-500 ${
           // Changed overflow-hidden to handle dropdown visibility
-          scrolled ? "max-h-0 opacity-0 -mt-20 overflow-hidden" : "max-h-40 opacity-100 overflow-visible"
+          scrolled
+            ? "max-h-0 opacity-0 -mt-20 overflow-hidden"
+            : "max-h-40 opacity-100 overflow-visible"
         }`}
       >
         {/* ---- MOBILE TOP BAR ---- */}
@@ -191,7 +193,9 @@ const Navbar = () => {
             <Link href="https://wa.me/9800000000">
               <div className="flex items-center gap-2 bg-[#25D366] text-white p-2.5 md:px-5 md:py-2.5 rounded-2xl">
                 <MessageCircle size={22} fill="white" />
-                <span className="hidden md:inline font-bold text-sm">WhatsApp</span>
+                <span className="hidden md:inline font-bold text-sm">
+                  WhatsApp
+                </span>
               </div>
             </Link>
 
@@ -226,56 +230,57 @@ const Navbar = () => {
               </button>
 
               {/* Invisible bridge + Dropdown Content */}
-              <div 
+              <div
                 className={`absolute right-0 top-full w-56 transition-all duration-300 ${
-                  isProfileOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-2"
+                  isProfileOpen
+                    ? "opacity-100 visible translate-y-0"
+                    : "opacity-0 invisible -translate-y-2"
                 }`}
               >
                 {/* The Bridge (prevents mouse-out while moving to dropdown) */}
                 <div className="h-2 w-full" />
-                
+
                 <div className="bg-white shadow-[0_10px_40px_rgba(0,0,0,0.15)] rounded-2xl border border-gray-100 py-2 overflow-hidden">
-                  {!token ? (
+                  <>
+                    <div className="px-4 py-2 border-b border-gray-50 mb-1">
+                      <p className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">
+                        Account
+                      </p>
+                    </div>
+
                     <Link
-                      href="/login"
+                      href="/vendor-profile"
                       onClick={() => setIsProfileOpen(false)}
-                      className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
                     >
-                      <User size={16} /> Login / Register
+                      My Profile
                     </Link>
-                  ) : (
-                    <>
-                      <div className="px-4 py-2 border-b border-gray-50 mb-1">
-                        <p className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">Account</p>
-                      </div>
-                      <Link
-                        href="/profile"
-                        onClick={() => setIsProfileOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
-                      >
-                        My Profile
-                      </Link>
+                    <Link
+                      href="/vendor-order-history"
+                      onClick={() => setIsProfileOpen(false)}
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
+                    >
+                      Order History
+                    </Link>
+                    <Link
+                      href="/vendor-orders"
+                      onClick={() => setIsProfileOpen(false)}
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
+                    >
+                      My Orders
+                    </Link>
 
-                      <Link
-                        href="/orders"
-                        onClick={() => setIsProfileOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
-                      >
-                        My Orders
-                      </Link>
-
-                      <button
-                        onClick={() => {
-                          localStorage.removeItem("sh-token");
-                          setToken(null);
-                          setIsProfileOpen(false);
-                        }}
-                        className="w-full flex items-center gap-3 text-left px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50 transition-colors border-t border-gray-50 mt-1"
-                      >
-                        Logout
-                      </button>
-                    </>
-                  )}
+                    <button
+                      onClick={() => {
+                        localStorage.removeItem("sh-token");
+                        setToken(null);
+                        setIsProfileOpen(false);
+                      }}
+                      className="w-full flex items-center gap-3 text-left px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50 transition-colors border-t border-gray-50 mt-1"
+                    >
+                      Logout
+                    </button>
+                  </>
                 </div>
               </div>
             </div>
@@ -334,10 +339,30 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center h-full ml-4">
-            <Link href="/" className="px-5 text-sm font-bold tracking-wide hover:text-orange-200 transition-colors">HOME</Link>
-            <Link href="/aboutpage" className="px-5 text-sm font-bold tracking-wide hover:text-orange-200 transition-colors">ABOUT</Link>
-            <Link href="/shop" className="px-5 text-sm font-bold tracking-wide hover:text-orange-200 transition-colors">SHOP</Link>
-            <Link href="/blogpage/bloghero" className="px-5 text-sm font-bold tracking-wide hover:text-orange-200 transition-colors">BLOG</Link>
+            <Link
+              href="/"
+              className="px-5 text-sm font-bold tracking-wide hover:text-orange-200 transition-colors"
+            >
+              HOME
+            </Link>
+            <Link
+              href="/aboutpage"
+              className="px-5 text-sm font-bold tracking-wide hover:text-orange-200 transition-colors"
+            >
+              ABOUT
+            </Link>
+            <Link
+              href="/shop"
+              className="px-5 text-sm font-bold tracking-wide hover:text-orange-200 transition-colors"
+            >
+              SHOP
+            </Link>
+            <Link
+              href="/blogpage/bloghero"
+              className="px-5 text-sm font-bold tracking-wide hover:text-orange-200 transition-colors"
+            >
+              BLOG
+            </Link>
           </div>
 
           <div className="flex items-center gap-4">
@@ -377,8 +402,12 @@ const Navbar = () => {
         >
           <div className="flex items-center justify-between px-5 py-4 bg-primarys shrink-0">
             <div>
-              <p className="text-white font-black text-sm tracking-widest">MENU</p>
-              <p className="text-orange-200 text-[10px] mt-0.5">Sajilo Hardware</p>
+              <p className="text-white font-black text-sm tracking-widest">
+                MENU
+              </p>
+              <p className="text-orange-200 text-[10px] mt-0.5">
+                Sajilo Hardware
+              </p>
             </div>
             <button
               onClick={() => setIsMobileMenuOpen(false)}
@@ -417,7 +446,9 @@ const Navbar = () => {
             </div>
 
             <div className="px-4 pb-4">
-              <p className="text-[10px] font-bold text-gray-400 tracking-widest mb-2 px-1">CATEGORIES</p>
+              <p className="text-[10px] font-bold text-gray-400 tracking-widest mb-2 px-1">
+                CATEGORIES
+              </p>
               <div className="flex flex-col gap-1.5">
                 {categories.map((cat, i) => (
                   <details key={i} className="group">
