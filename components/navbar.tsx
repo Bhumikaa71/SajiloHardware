@@ -97,7 +97,6 @@ const Navbar = () => {
       <div className="h-28.75 lg:hidden bg-transparent"></div>
 
       <header className="w-full sticky top-0 z-50 transition-all duration-500 bg-white">
-
         {/* ================= MOBILE FIXED HEADER ================= */}
         <div className="lg:hidden fixed top-0 left-0 right-0 z-100 bg-white shadow-sm transition-all duration-300">
           <div className="mx-auto max-w-7xl px-4">
@@ -230,70 +229,70 @@ const Navbar = () => {
               </Link>
 
               {/* PROFILE DROPDOWN */}
-             {token && (
-              <div
-                className="relative z-110"
-                onMouseEnter={() => setIsProfileOpen(true)}
-                onMouseLeave={() => setIsProfileOpen(false)}
-              >
-                <button className="p-2.5 text-primarys hover:bg-orange-50 rounded-xl transition-colors">
-                  <User size={24} />
-                </button>
-
+              {token && (
                 <div
-                  className={`absolute right-0 top-full w-56 transition-all duration-300 ${
-                    isProfileOpen
-                      ? "opacity-100 visible translate-y-0"
-                      : "opacity-0 invisible -translate-y-2"
-                  }`}
+                  className="relative z-110"
+                  onMouseEnter={() => setIsProfileOpen(true)}
+                  onMouseLeave={() => setIsProfileOpen(false)}
                 >
-                  <div className="h-2 w-full" />
+                  <button className="p-2.5 text-primarys hover:bg-orange-50 rounded-xl transition-colors">
+                    <User size={24} />
+                  </button>
 
-                  <div className="bg-white shadow-[0_10px_40px_rgba(0,0,0,0.15)] rounded-2xl border border-gray-100 py-2 overflow-hidden">
-                    <div className="px-4 py-2 border-b border-gray-50 mb-1">
-                      <p className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">
-                        Account
-                      </p>
+                  <div
+                    className={`absolute right-0 top-full w-56 transition-all duration-300 ${
+                      isProfileOpen
+                        ? "opacity-100 visible translate-y-0"
+                        : "opacity-0 invisible -translate-y-2"
+                    }`}
+                  >
+                    <div className="h-2 w-full" />
+
+                    <div className="bg-white shadow-[0_10px_40px_rgba(0,0,0,0.15)] rounded-2xl border border-gray-100 py-2 overflow-hidden">
+                      <div className="px-4 py-2 border-b border-gray-50 mb-1">
+                        <p className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">
+                          Account
+                        </p>
+                      </div>
+
+                      <Link
+                        href="/vendor-profile"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
+                      >
+                        My Profile
+                      </Link>
+
+                      <Link
+                        href="/vendor-order-history"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
+                      >
+                        Order History
+                      </Link>
+
+                      <Link
+                        href="/vendor-orders"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
+                      >
+                        My Orders
+                      </Link>
+
+                      <button
+                        onClick={() => {
+                          localStorage.removeItem("sh-token");
+                          setToken(null);
+                          setIsProfileOpen(false);
+                        }}
+                        className="w-full flex items-center gap-3 text-left px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50 transition-colors border-t border-gray-50 mt-1"
+                      >
+                        Logout
+                      </button>
                     </div>
-
-                    <Link
-                      href="/vendor-profile"
-                      onClick={() => setIsProfileOpen(false)}
-                      className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
-                    >
-                      My Profile
-                    </Link>
-
-                    <Link
-                      href="/vendor-order-history"
-                      onClick={() => setIsProfileOpen(false)}
-                      className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
-                    >
-                      Order History
-                    </Link>
-
-                    <Link
-                      href="/vendor-orders"
-                      onClick={() => setIsProfileOpen(false)}
-                      className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
-                    >
-                      My Orders
-                    </Link>
-
-                    <button
-                      onClick={() => {
-                        localStorage.removeItem("sh-token");
-                        setToken(null);
-                        setIsProfileOpen(false);
-                      }}
-                      className="w-full flex items-center gap-3 text-left px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50 transition-colors border-t border-gray-50 mt-1"
-                    >
-                      Logout
-                    </button>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
             </div>
           </div>
         </div>
@@ -305,7 +304,6 @@ const Navbar = () => {
           }`}
         >
           <div className="mx-auto max-w-7xl flex items-center justify-between h-full px-8 relative">
-
             {/* SCROLL LOGO (Appears when scrolled) */}
             <div
               className={`absolute left-8 transition-all duration-300 ${
@@ -371,7 +369,9 @@ const Navbar = () => {
             </div>
 
             {/* NAV LINKS */}
-            <div className={`flex items-center h-full transition-all duration-300 ${scrolled ? "ml-4" : ""}`}>
+            <div
+              className={`flex items-center h-full transition-all duration-300 ${scrolled ? "ml-4" : ""}`}
+            >
               <Link
                 href="/"
                 className={`px-5 text-sm font-bold tracking-wide transition-colors h-full flex items-center ${
@@ -451,8 +451,12 @@ const Navbar = () => {
           >
             <div className="flex items-center justify-between px-5 py-4 bg-primarys shrink-0">
               <div>
-                <p className="text-white font-black text-sm tracking-widest">MENU</p>
-                <p className="text-orange-200 text-[10px] mt-0.5">Sajilo Hardware</p>
+                <p className="text-white font-black text-sm tracking-widest">
+                  MENU
+                </p>
+                <p className="text-orange-200 text-[10px] mt-0.5">
+                  Sajilo Hardware
+                </p>
               </div>
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
