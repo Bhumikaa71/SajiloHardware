@@ -175,7 +175,8 @@ export default function Page() {
                     toast.error("Already in cart");
                     return;
                   }
-                  addToCart({ ...product, quantity: qty });
+                  // addToCart({ ...product, quantity: qty });
+                  addToCart(product);
                   toast.success("Added to cart 🛒");
                 }}
                 disabled={isInCart}
