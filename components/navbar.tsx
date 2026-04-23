@@ -376,7 +376,7 @@ const Navbar = () => {
                 href="/"
                 className={`px-5 text-sm font-bold tracking-wide transition-colors h-full flex items-center ${
                   isActive("/")
-                    ? "text-orange-300 border-b-2 border-orange-300"
+                    ? "text-white   border-b-2 border-orange-300"
                     : "hover:text-orange-900"
                 }`}
               >
