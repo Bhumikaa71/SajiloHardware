@@ -220,6 +220,7 @@ const Navbar = () => {
             </Link>
 
             {/* PROFILE DROPDOWN */}
+            {/* PROFILE DROPDOWN (only if logged in) */}
             {token && (
               <div
                 className="relative z-[110]"
