@@ -146,7 +146,7 @@ export default function HeroCarousel() {
       setProgress(0);
       setTimeout(() => setIsLocked(false), 1200);
     },
-    [index, isLocked]
+    [index, isLocked],
   );
 
   const next = useCallback(() => {
@@ -226,7 +226,7 @@ export default function HeroCarousel() {
 
             {/* ═══ CONTENT ═══ */}
             <div className="relative z-20 flex h-full items-center">
-              <div className="w-full max-w-7xl mx-auto px-5 sm:px-8 md:px-12 lg:px-20 xl:px-24">
+              <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-11">
                 <div className="max-w-3xl">
                   {/* Tag pill */}
                   <Reveal active={live} delay={150}>
@@ -245,7 +245,11 @@ export default function HeroCarousel() {
 
                   {/* Title */}
                   <h1 className="text-[2.5rem] sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-white leading-[0.95] tracking-tight mb-5">
-                    <AnimatedWords text={slide.title} active={live} delay={350} />
+                    <AnimatedWords
+                      text={slide.title}
+                      active={live}
+                      delay={350}
+                    />
                   </h1>
 
                   {/* Accent line */}
@@ -323,8 +327,18 @@ export default function HeroCarousel() {
           aria-label="Previous slide"
           className="w-12 h-12 rounded-full border border-white/10 bg-white/4 backdrop-blur-sm flex items-center justify-center text-white/40 hover:text-white hover:border-white/30 hover:bg-white/10 transition-all duration-300 active:scale-90"
         >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M5 15l7-7 7 7"
+            />
           </svg>
         </button>
         <button
@@ -332,8 +346,18 @@ export default function HeroCarousel() {
           aria-label="Next slide"
           className="w-12 h-12 rounded-full border border-white/10 bg-white/4 backdrop-blur-sm flex items-center justify-center text-white/40 hover:text-white hover:border-white/30 hover:bg-white/10 transition-all duration-300 active:scale-90"
         >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M19 9l-7 7-7-7"
+            />
           </svg>
         </button>
       </div>
@@ -395,7 +419,9 @@ export default function HeroCarousel() {
               <span className="text-white font-black text-2xl tabular-nums leading-none">
                 0{index + 1}
               </span>
-              <span className="text-white/15 font-extralight text-lg leading-none">/</span>
+              <span className="text-white/15 font-extralight text-lg leading-none">
+                /
+              </span>
               <span className="text-white/25 font-medium text-lg tabular-nums leading-none">
                 0{slides.length}
               </span>
@@ -406,11 +432,27 @@ export default function HeroCarousel() {
 
       {/* ═══════════ MOBILE SWIPE HINT ═══════════ */}
       <div className="absolute bottom-28 sm:bottom-32 left-1/2 -translate-x-1/2 z-30 flex md:hidden items-center gap-2 text-white/20">
-        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
-          <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H3" />
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={1.5}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M7 16l-4-4m0 0l4-4m-4 4h18"
+          />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M17 16l4-4m0 0l-4-4m4 4H3"
+          />
         </svg>
-        <span className="text-[10px] tracking-[0.2em] uppercase font-medium">Swipe or tap dots</span>
+        <span className="text-[10px] tracking-[0.2em] uppercase font-medium">
+          Swipe or tap dots
+        </span>
       </div>
     </section>
   );
