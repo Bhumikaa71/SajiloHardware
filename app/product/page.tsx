@@ -164,7 +164,7 @@ export default function Page() {
                 href="https://wa.me/9845526696"
                 className="w-full sm:w-auto"
               >
-                <button className="w-full px-22 py-3 bg-[var(--primarys)] text-white rounded-xl font-medium">
+                <button className="w-full px-22 py-3 bg-primarys text-white rounded-xl font-medium">
                   Buy Now
                 </button>
               </Link>
@@ -175,7 +175,8 @@ export default function Page() {
                     toast.error("Already in cart");
                     return;
                   }
-                  addToCart({ ...product, quantity: qty });
+                  // addToCart({ ...product, quantity: qty });
+                  addToCart(product);
                   toast.success("Added to cart 🛒");
                 }}
                 disabled={isInCart}
