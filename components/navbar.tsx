@@ -467,7 +467,7 @@ const Navbar = () => {
                       {cat.items.map((sub, j) => (
                         <Link
                           key={j}
-                          href="/subcategory"
+                          href="/category/subcategory"
                           onClick={() => setIsMobileMenuOpen(false)}
                           className="text-sm text-gray-600 hover:text-primarys font-medium transition-colors py-0.5"
                         >

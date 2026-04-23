@@ -5,7 +5,6 @@ import { useState, useMemo } from "react";
 import products from "@/data/products.json";
 import ProductGrid from "./ProductGrid";
 
-// ✅ infer category keys from JSON
 type ProductCategory = keyof typeof products;
 
 type AllProductsProps = {
@@ -16,7 +15,6 @@ type AllProductsProps = {
 const ITEMS_PER_PAGE = 6;
 
 function CategoryProducts({ priceRange, category }: AllProductsProps) {
-  // ✅ safely access category
   const allProducts = useMemo(() => {
     return products[category] || [];
   }, [category]);
@@ -27,7 +25,6 @@ function CategoryProducts({ priceRange, category }: AllProductsProps) {
   const filteredAndSortedProducts = useMemo(() => {
     let filtered = [...allProducts];
 
-    // FILTER
     if (priceRange !== "all") {
       const [min, max] = priceRange.split("-").map(Number);
 
@@ -36,7 +33,6 @@ function CategoryProducts({ priceRange, category }: AllProductsProps) {
       );
     }
 
-    // SORT
     switch (sortType) {
       case "price-asc":
         return filtered.sort((a: any, b: any) => a.price - b.price);
@@ -63,7 +59,6 @@ function CategoryProducts({ priceRange, category }: AllProductsProps) {
     }
   }, [priceRange, sortType, allProducts]);
 
-  // PAGINATION
   const totalPages = Math.ceil(
     filteredAndSortedProducts.length / ITEMS_PER_PAGE,
   );
@@ -74,44 +69,50 @@ function CategoryProducts({ priceRange, category }: AllProductsProps) {
   }, [filteredAndSortedProducts, currentPage]);
 
   return (
-    <div className="p-3 sm:p-4 md:p-6 max-w-7xl mx-auto w-full">
+    <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
       {/* HEADER */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+      {/* HEADER */}
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6">
         {/* TITLE */}
-        <h1 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-800 capitalize">
+        <h1 className="text-base sm:text-lg md:text-2xl font-semibold text-gray-800 capitalize">
           {category.replace(/_/g, " ")} Products
         </h1>
 
-        {/* SORT */}
-        <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
-          <span className="text-sm text-gray-600 hidden sm:block">
-            Sort By:
-          </span>
+        {/* CONTROLS (SORT + FILTER) */}
+        <div className="flex flex-row items-center gap-3 w-full md:w-auto justify-between md:justify-end">
+          {/* SORT */}
+          <div className="flex items-center gap-2 w-full md:w-auto">
+            <span className="text-sm text-gray-600 whitespace-nowrap">
+              Sort By:
+            </span>
 
-          <select
-            className="border px-3 py-2 rounded text-sm outline-none w-full sm:w-auto"
-            value={sortType}
-            onChange={(e) => {
-              setSortType(e.target.value);
-              setCurrentPage(1); // reset page
-            }}
-          >
-            <option value="price-asc">Price: Low → High</option>
-            <option value="price-desc">Price: High → Low</option>
-            <option value="name-asc">Name: A → Z</option>
-            <option value="name-desc">Name: Z → A</option>
-          </select>
+            <select
+              className="border px-3 py-2 rounded-md text-sm outline-none flex-1 md:flex-none min-w-0"
+              value={sortType}
+              onChange={(e) => {
+                setSortType(e.target.value);
+                setCurrentPage(1);
+              }}
+            >
+              <option value="price-asc">Price: Low → High</option>
+              <option value="price-desc">Price: High → Low</option>
+              <option value="name-asc">Name: A → Z</option>
+              <option value="name-desc">Name: Z → A</option>
+            </select>
+          </div>
         </div>
       </div>
 
       {/* GRID */}
-      <ProductGrid products={paginatedProducts} />
+      <div className="w-full">
+        <ProductGrid products={paginatedProducts} />
+      </div>
 
       {/* PAGINATION */}
-      <div className="flex flex-wrap justify-center items-center gap-2 mt-8">
+      <div className="flex items-center justify-center gap-2 mt-8 flex-nowrap">
         {/* PREV */}
         <button
-          className="px-3 py-1 text-sm sm:text-base border rounded disabled:opacity-50"
+          className="px-4 py-2 text-sm sm:text-base border rounded-md disabled:opacity-50 sm:w-auto"
           onClick={() => setCurrentPage((p) => p - 1)}
           disabled={currentPage === 1}
         >
@@ -119,12 +120,12 @@ function CategoryProducts({ priceRange, category }: AllProductsProps) {
         </button>
 
         {/* PAGE NUMBERS */}
-        <div className="flex flex-wrap gap-2 justify-center">
+        <div className="flex flex-wrap justify-center gap-2 max-w-full overflow-x-auto">
           {[...Array(totalPages)].map((_, i) => (
             <button
               key={i}
               onClick={() => setCurrentPage(i + 1)}
-              className={`px-3 py-1 text-sm sm:text-base border rounded ${
+              className={`px-3 py-1 text-sm sm:text-base border rounded-md whitespace-nowrap ${
                 currentPage === i + 1 ? "bg-black text-white" : ""
               }`}
             >
@@ -135,7 +136,7 @@ function CategoryProducts({ priceRange, category }: AllProductsProps) {
 
         {/* NEXT */}
         <button
-          className="px-3 py-1 text-sm sm:text-base border rounded disabled:opacity-50"
+          className="px-4 py-2 text-sm sm:text-base border rounded-md disabled:opacity-50 sm:w-auto"
           onClick={() => setCurrentPage((p) => p + 1)}
           disabled={currentPage === totalPages || totalPages === 0}
         >

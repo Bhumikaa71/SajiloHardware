@@ -124,13 +124,6 @@ export default function Page() {
               {product.name}
             </h1>
 
-            <div className="flex items-center gap-3 text-sm">
-              <div className="text-yellow-400">★★★★★</div>
-              <button className="text-[var(--primarys)] hover:underline">
-                Write a Review
-              </button>
-            </div>
-
             <p className="text-2xl sm:text-3xl font-bold text-[var(--primarys)]">
               Rs. {product.price}
             </p>

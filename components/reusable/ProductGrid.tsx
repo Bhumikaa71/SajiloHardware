@@ -20,7 +20,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
   return (
     <div className=" max-w-7xl mx-auto">
       {/* ✅ GRID layout */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
         {products.map((product, index) => {
           const isInWishlist = wishlist.some((item) => item.id === product.id);
 
