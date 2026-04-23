@@ -207,29 +207,10 @@ const Navbar = () => {
                 </div>
               </Link>
 
-              <Link href="/addtocart">
-                <button className="relative p-2.5 text-primarys hover:bg-orange-50 rounded-xl transition-colors">
-                  <ShoppingCart size={24} />
-                  {cartCount > 0 && (
-                    <span className="absolute top-1 right-1 bg-primarys text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-white font-bold">
-                      {cartCount}
-                    </span>
-                  )}
-                </button>
-              </Link>
-
-              <Link href="/wishlistpage">
-                <button className="relative p-2.5 text-primarys hover:bg-orange-50 rounded-xl transition-colors">
-                  <Heart size={24} />
-                  <span className="absolute top-1 right-1 bg-primarys text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-white font-bold">
-                    {wishlist.length}
-                  </span>
-                </button>
-              </Link>
-
-              {/* PROFILE DROPDOWN */}
+            {/* PROFILE DROPDOWN */}
+            {token && (
               <div
-                className="relative z-110"
+                className="relative z-[110]"
                 onMouseEnter={() => setIsProfileOpen(true)}
                 onMouseLeave={() => setIsProfileOpen(false)}
               >
@@ -259,6 +240,7 @@ const Navbar = () => {
                     >
                       My Profile
                     </Link>
+
                     <Link
                       href="/vendor-order-history"
                       onClick={() => setIsProfileOpen(false)}
@@ -266,6 +248,7 @@ const Navbar = () => {
                     >
                       Order History
                     </Link>
+
                     <Link
                       href="/vendor-orders"
                       onClick={() => setIsProfileOpen(false)}
@@ -287,7 +270,7 @@ const Navbar = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
