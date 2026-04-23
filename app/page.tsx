@@ -12,6 +12,7 @@ import GardeningTools from "./landingpage/gardening tools/page";
 import HandTools from "./landingpage/handtools/page";
 import SafetyGearTools from "./landingpage/safety gear/page";
 import Navbar from "@/components/navbar";
+import WhatsAppEnquiry from "@/components/reusable/WhatsappEnquiry";
 
 function page() {
   return (
@@ -27,6 +28,7 @@ function page() {
       <GardeningTools />
       <HandTools />
       <SafetyGearTools />
+      <WhatsAppEnquiry />
       <Footer />
     </div>
   );
