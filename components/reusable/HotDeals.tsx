@@ -12,18 +12,16 @@ export default function HotDeals() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const autoScrollRef = useRef<NodeJS.Timeout | null>(null);
 
+  // scroll per card width
   const scroll = useCallback((direction: "left" | "right") => {
     if (!scrollRef.current) return;
+
     const el = scrollRef.current;
-    const scrollAmount =
-      el.offsetWidth /
-      (window.innerWidth >= 1024
-        ? 5
-        : window.innerWidth >= 768
-          ? 4
-          : window.innerWidth >= 640
-            ? 3
-            : 2);
+    const card = el.firstElementChild as HTMLElement;
+    if (!card) return;
+
+    const gap = 16; // gap-4 = 16px
+    const scrollAmount = card.offsetWidth + gap;
 
     if (direction === "right") {
       if (el.scrollLeft + el.offsetWidth >= el.scrollWidth - 10) {
@@ -66,108 +64,110 @@ export default function HotDeals() {
   };
 
   return (
-    <section className="bg-gray-50 py-12 px-4 sm:px-8 relative overflow-hidden">
+    <section className="bg-gray-50 py-10 sm:py-12 px-4 sm:px-6 relative overflow-hidden">
+      {/* background glow */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-64 bg-[#EE7820]/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-64 h-48 bg-[#EE7820]/5 rounded-full blur-3xl" />
+        <div className="absolute top-0 left-1/4 w-72 sm:w-96 h-52 sm:h-64 bg-[#EE7820]/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-52 sm:w-64 h-40 sm:h-48 bg-[#EE7820]/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="max-w-7xl mx-auto relative px-8">
-        {/* Header */}
-        <div className="flex items-end justify-between mb-8">
+      <div className="max-w-7xl mx-auto relative">
+        {/* HEADER */}
+        <div className="flex items-end justify-between mb-6 sm:mb-8">
           <div>
-            <div className="flex items-center gap-2 text-[#EE7820] text-xs font-semibold uppercase tracking-widest mb-2">
+            <div className="flex items-center gap-2 text-[#EE7820] text-xs font-semibold uppercase tracking-widest mb-1 sm:mb-2">
               <Flame size={12} className="animate-pulse" />
               Limited Time Offers
             </div>
-            <h2 className="text-4xl sm:text-5xl font-black text-[#282D31] leading-none tracking-tight flex items-center gap-1">
+
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-[#282D31] flex items-center gap-1">
               H
-              <span className="inline-flex items-center justify-center w-8 sm:w-10">
+              <span className="inline-flex items-center justify-center w-6 sm:w-10">
                 <video
                   src="/images/firee.mp4"
                   autoPlay
                   loop
                   muted
                   playsInline
-                  className="w-8 sm:w-10 h-8 sm:h-10 object-contain"
+                  className="w-6 sm:w-10 h-6 sm:h-10 object-contain"
                 />
               </span>
-              T <span className="text-[#EE7820] ml-2">Deals</span>
+              T <span className="text-[#EE7820] ml-1 sm:ml-2">Deals</span>
             </h2>
           </div>
         </div>
 
-        {/* Carousel wrapper */}
+        {/* CAROUSEL */}
         <div
           className="relative"
           onMouseEnter={stopAutoScroll}
           onMouseLeave={startAutoScroll}
         >
-          {/* LEFT button */}
+          {/* LEFT BUTTON */}
           <button
             onClick={() => handleManualScroll("left")}
-            className="absolute left-0 top-[33%] -translate-y-1/2 z-20 w-9 h-9 bg-[#EE7820] text-white rounded-r-lg shadow-md flex items-center justify-center hover:bg-[#D66A1A] transition-all duration-200 active:scale-95"
+            className="flex absolute left-0 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 bg-[#EE7820] text-white rounded-r-lg items-center justify-center shadow-md hover:bg-[#d66a1a]"
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft size={18} />
           </button>
 
-          {/* RIGHT button */}
+          {/* RIGHT BUTTON */}
           <button
             onClick={() => handleManualScroll("right")}
-            className="absolute right-0 top-[33%] -translate-y-1/2 z-20 w-9 h-9 bg-[#EE7820] text-white rounded-l-lg shadow-md flex items-center justify-center hover:bg-[#D66A1A] transition-all duration-200 active:scale-95"
+            className="flex absolute right-0 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 bg-[#EE7820] text-white rounded-l-lg items-center justify-center shadow-md hover:bg-[#d66a1a]"
           >
-            <ChevronRight size={20} />
+            <ChevronRight size={18} />
           </button>
 
-          {/* Scrollable track */}
+          {/* TRACK (NO SCROLLBAR) */}
           <div
             ref={scrollRef}
-            className="flex gap-4 overflow-x-hidden scroll-smooth"
+            className="flex gap-4 overflow-hidden scroll-smooth"
           >
             {hotDeals.map((item: any) => (
               <Link
                 href="/product"
                 key={item.id}
-                className="flex-shrink-0
-                  w-[calc(50%-8px)]
-                  sm:w-[calc(33.333%-11px)]
-                  md:w-[calc(25%-12px)]
-                  lg:w-[calc(20%-13px)]
-                  group
+                className="
+                  flex-shrink-0
+                  w-full
+                  sm:w-[48%]
+                  md:w-[31%]
+                  lg:w-[23%]
+                  xl:w-[19%]
                   bg-white
                   border border-gray-100
                   rounded-2xl
                   overflow-hidden
-                  cursor-pointer
                   shadow-sm
                   transition-all duration-300
-                  hover:-translate-y-2
-                  hover:shadow-[0_16px_40px_rgba(238,120,32,0.15),0_0_0_1px_rgba(238,120,32,0.2)]
-                  hover:border-[#EE7820]/20"
+                  hover:-translate-y-2 hover:shadow-xl
+                  group
+                "
               >
-                {/* Image */}
-                <div className="relative w-full aspect-[3/2] overflow-hidden bg-gray-50">
+                {/* IMAGE */}
+                <div className="relative w-full aspect-[3/2] bg-gray-50 overflow-hidden">
                   <img
                     src={item.image_url}
                     alt={item.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#282D31]/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                  {/* Deal badge */}
-                  <div className="absolute top-2 left-2 flex items-center gap-1 bg-[#EE7820] text-white text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded-md shadow-[0_4px_12px_rgba(238,120,32,0.45)]">
+                  {/* badge */}
+                  <div className="absolute top-2 left-2 flex items-center gap-1 bg-[#EE7820] text-white text-[9px] px-2 py-1 rounded-md">
                     <Flame size={8} />
                     Deal
                   </div>
                 </div>
 
-                {/* Body */}
+                {/* BODY */}
                 <div className="p-3 flex flex-col gap-1.5">
-                  <div className="flex items-center gap-1 text-[#EE7820]/70 text-[10px] font-medium uppercase tracking-wider">
+                  <div className="flex items-center gap-1 text-[#EE7820]/70 text-[10px] uppercase">
                     <Tag size={9} />
                     {item.category || "Special Offer"}
                   </div>
-                  <p className="text-[#282D31] text-sm font-bold leading-snug line-clamp-2">
+
+                  <p className="text-[#282D31] text-sm font-bold line-clamp-2">
                     {item.name}
                   </p>
                 </div>

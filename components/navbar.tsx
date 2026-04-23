@@ -220,28 +220,26 @@ const Navbar = () => {
             </Link>
 
             {/* PROFILE DROPDOWN */}
-            <div
-              className="relative z-[110]"
-              onMouseEnter={() => setIsProfileOpen(true)}
-              onMouseLeave={() => setIsProfileOpen(false)}
-            >
-              <button className="p-2.5 text-primarys hover:bg-orange-50 rounded-xl transition-colors">
-                <User size={24} />
-              </button>
-
-              {/* Invisible bridge + Dropdown Content */}
+            {token && (
               <div
-                className={`absolute right-0 top-full w-56 transition-all duration-300 ${
-                  isProfileOpen
-                    ? "opacity-100 visible translate-y-0"
-                    : "opacity-0 invisible -translate-y-2"
-                }`}
+                className="relative z-[110]"
+                onMouseEnter={() => setIsProfileOpen(true)}
+                onMouseLeave={() => setIsProfileOpen(false)}
               >
-                {/* The Bridge (prevents mouse-out while moving to dropdown) */}
-                <div className="h-2 w-full" />
+                <button className="p-2.5 text-primarys hover:bg-orange-50 rounded-xl transition-colors">
+                  <User size={24} />
+                </button>
 
-                <div className="bg-white shadow-[0_10px_40px_rgba(0,0,0,0.15)] rounded-2xl border border-gray-100 py-2 overflow-hidden">
-                  <>
+                <div
+                  className={`absolute right-0 top-full w-56 transition-all duration-300 ${
+                    isProfileOpen
+                      ? "opacity-100 visible translate-y-0"
+                      : "opacity-0 invisible -translate-y-2"
+                  }`}
+                >
+                  <div className="h-2 w-full" />
+
+                  <div className="bg-white shadow-[0_10px_40px_rgba(0,0,0,0.15)] rounded-2xl border border-gray-100 py-2 overflow-hidden">
                     <div className="px-4 py-2 border-b border-gray-50 mb-1">
                       <p className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">
                         Account
@@ -255,6 +253,7 @@ const Navbar = () => {
                     >
                       My Profile
                     </Link>
+
                     <Link
                       href="/vendor-order-history"
                       onClick={() => setIsProfileOpen(false)}
@@ -262,6 +261,7 @@ const Navbar = () => {
                     >
                       Order History
                     </Link>
+
                     <Link
                       href="/vendor-orders"
                       onClick={() => setIsProfileOpen(false)}
@@ -280,10 +280,10 @@ const Navbar = () => {
                     >
                       Logout
                     </button>
-                  </>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
@@ -467,7 +467,7 @@ const Navbar = () => {
                       {cat.items.map((sub, j) => (
                         <Link
                           key={j}
-                          href="/category/subcategory"
+                          href="/subcategory"
                           onClick={() => setIsMobileMenuOpen(false)}
                           className="text-sm text-gray-600 hover:text-primarys font-medium transition-colors py-0.5"
                         >
