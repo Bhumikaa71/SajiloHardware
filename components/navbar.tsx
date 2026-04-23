@@ -97,80 +97,82 @@ const Navbar = () => {
       <div className="h-28.75 lg:hidden bg-transparent"></div>
 
       <header className="w-full sticky top-0 z-50 transition-all duration-500 bg-white">
-        
+
         {/* ================= MOBILE FIXED HEADER ================= */}
         <div className="lg:hidden fixed top-0 left-0 right-0 z-100 bg-white shadow-sm transition-all duration-300">
-            <div className="mx-auto max-w-7xl px-4">
-                {/* Top Row: Menu, Logo, Icons */}
-                <div className="flex items-center justify-between py-3 gap-3">
-                    <button
-                    onClick={() => setIsMobileMenuOpen(true)}
-                    className="p-2 bg-orange-50 hover:bg-orange-100 rounded-xl text-primarys transition-colors"
-                    >
-                    <Menu size={22} />
-                    </button>
+          <div className="mx-auto max-w-7xl px-4">
+            {/* Top Row: Menu, Logo, Icons */}
+            <div className="flex items-center justify-between py-3 gap-3">
+              <button
+                onClick={() => setIsMobileMenuOpen(true)}
+                className="p-2 bg-orange-50 hover:bg-orange-100 rounded-xl text-primarys transition-colors"
+              >
+                <Menu size={22} />
+              </button>
 
-                    <Link href="/" className="flex-1 flex justify-center">
-                    <div className="relative h-9 w-32">
-                        <Image
-                        src="/images/logo.png"
-                        alt="Sajilo Hardware Logo"
-                        fill
-                        className="object-contain object-center"
-                        priority
-                        />
-                    </div>
-                    </Link>
-
-                    <div className="flex items-center gap-1">
-                    <Link href="/addtocart">
-                        <button className="relative p-2 text-primarys hover:bg-orange-50 rounded-full transition-colors">
-                        <ShoppingCart size={22} />
-                        {cartCount > 0 && (
-                            <span className="absolute top-0.5 right-0.5 bg-primarys text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center border border-white font-bold">
-                            {cartCount}
-                            </span>
-                        )}
-                        </button>
-                    </Link>
-
-                    <Link href="/wishlistpage">
-                        <button className="relative p-2 text-primarys hover:bg-orange-50 rounded-full transition-colors">
-                        <Heart size={22} />
-                        <span className="absolute top-0.5 right-0.5 bg-primarys text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center border border-white font-bold">
-                            {wishlist.length}
-                        </span>
-                        </button>
-                    </Link>
-
-                    <Link href={token ? "/profile" : "/login"}>
-                        <button className="p-2 text-primarys hover:bg-orange-50 rounded-full transition-colors">
-                        <User size={22} />
-                        </button>
-                    </Link>
-                    </div>
+              <Link href="/" className="flex-1 flex justify-center">
+                <div className="relative h-9 w-32">
+                  <Image
+                    src="/images/logo.png"
+                    alt="Sajilo Hardware Logo"
+                    fill
+                    className="object-contain object-center"
+                    priority
+                  />
                 </div>
+              </Link>
 
-                {/* Bottom Row: Search */}
-                <div className="pb-3">
-                    <div className="relative w-full">
-                    <input
-                        type="text"
-                        placeholder="Search for tools, hardware..."
-                        className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2 pl-4 pr-10 text-sm focus:bg-white focus:border-primarys focus:ring-2 focus:ring-orange-50 outline-none transition-all text-texts-dark"
-                    />
-                    <button className="absolute right-2 top-1/2 -translate-y-1/2 text-primarys">
-                        <Search size={18} />
-                    </button>
-                    </div>
-                </div>
+              <div className="flex items-center gap-1">
+                <Link href="/addtocart">
+                  <button className="relative p-2 text-primarys hover:bg-orange-50 rounded-full transition-colors">
+                    <ShoppingCart size={22} />
+                    {cartCount > 0 && (
+                      <span className="absolute top-0.5 right-0.5 bg-primarys text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center border border-white font-bold">
+                        {cartCount}
+                      </span>
+                    )}
+                  </button>
+                </Link>
+
+                <Link href="/wishlistpage">
+                  <button className="relative p-2 text-primarys hover:bg-orange-50 rounded-full transition-colors">
+                    <Heart size={22} />
+                    <span className="absolute top-0.5 right-0.5 bg-primarys text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center border border-white font-bold">
+                      {wishlist.length}
+                    </span>
+                  </button>
+                </Link>
+
+                <Link href={token ? "/profile" : "/login"}>
+                  <button className="p-2 text-primarys hover:bg-orange-50 rounded-full transition-colors">
+                    <User size={22} />
+                  </button>
+                </Link>
+              </div>
             </div>
+
+            {/* Bottom Row: Search */}
+            <div className="pb-3">
+              <div className="relative w-full">
+                <input
+                  type="text"
+                  placeholder="Search for tools, hardware..."
+                  className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2 pl-4 pr-10 text-sm focus:bg-white focus:border-primarys focus:ring-2 focus:ring-orange-50 outline-none transition-all text-texts-dark"
+                />
+                <button className="absolute right-2 top-1/2 -translate-y-1/2 text-primarys">
+                  <Search size={18} />
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* ================= DESKTOP TOP HEADER ================= */}
         <div
-          className={`hidden lg:block bg-white border-b border-gray-100 transition-all duration-500 overflow-hidden ${
-            scrolled ? "max-h-0 opacity-0 border-0" : "max-h-40 opacity-100"
+          className={`hidden lg:block bg-white border-b border-gray-100 transition-all duration-500 relative z-60 ${
+            scrolled
+              ? "max-h-0 opacity-0 border-0 overflow-hidden"
+              : "max-h-40 opacity-100 overflow-visible"
           }`}
         >
           <div className="mx-auto max-w-7xl px-4 lg:px-8 flex items-center justify-between gap-4 lg:gap-8 py-3">
@@ -207,10 +209,30 @@ const Navbar = () => {
                 </div>
               </Link>
 
-            {/* PROFILE DROPDOWN */}
-            {token && (
+              <Link href="/addtocart">
+                <button className="relative p-2.5 text-primarys hover:bg-orange-50 rounded-xl transition-colors">
+                  <ShoppingCart size={24} />
+                  {cartCount > 0 && (
+                    <span className="absolute top-1 right-1 bg-primarys text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-white font-bold">
+                      {cartCount}
+                    </span>
+                  )}
+                </button>
+              </Link>
+
+              <Link href="/wishlistpage">
+                <button className="relative p-2.5 text-primarys hover:bg-orange-50 rounded-xl transition-colors">
+                  <Heart size={24} />
+                  <span className="absolute top-1 right-1 bg-primarys text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-white font-bold">
+                    {wishlist.length}
+                  </span>
+                </button>
+              </Link>
+
+              {/* PROFILE DROPDOWN */}
+             {token && (
               <div
-                className="relative z-[110]"
+                className="relative z-110"
                 onMouseEnter={() => setIsProfileOpen(true)}
                 onMouseLeave={() => setIsProfileOpen(false)}
               >
@@ -226,6 +248,7 @@ const Navbar = () => {
                   }`}
                 >
                   <div className="h-2 w-full" />
+
                   <div className="bg-white shadow-[0_10px_40px_rgba(0,0,0,0.15)] rounded-2xl border border-gray-100 py-2 overflow-hidden">
                     <div className="px-4 py-2 border-b border-gray-50 mb-1">
                       <p className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">
@@ -271,6 +294,7 @@ const Navbar = () => {
                 </div>
               </div>
             )}
+            </div>
           </div>
         </div>
 
@@ -281,11 +305,13 @@ const Navbar = () => {
           }`}
         >
           <div className="mx-auto max-w-7xl flex items-center justify-between h-full px-8 relative">
-            
+
             {/* SCROLL LOGO (Appears when scrolled) */}
             <div
               className={`absolute left-8 transition-all duration-300 ${
-                scrolled ? "opacity-100 scale-100" : "opacity-0 scale-90 pointer-events-none"
+                scrolled
+                  ? "opacity-100 scale-100"
+                  : "opacity-0 scale-90 pointer-events-none"
               }`}
             >
               <Link href="/" className="block">
@@ -314,7 +340,7 @@ const Navbar = () => {
               </button>
 
               {isCategoriesOpen && (
-                <div className="absolute top-full left-0 w-80 bg-white text-texts-dark shadow-[0_20px_50px_rgba(0,0,0,0.2)] rounded-b-3xl py-4 border-x border-b border-gray-100 z-50">
+                <div className="absolute top-full left-0 w-80 bg-white text-texts-dark shadow-[0_20px_50px_rgba(0,0,0,0.2)] rounded-b-3xl py-4 border-x border-b border-gray-100 z-70">
                   {categories.map((cat, idx) => (
                     <div key={idx} className="group/item px-4 relative">
                       <Link href="/category">
@@ -329,7 +355,7 @@ const Navbar = () => {
                         </div>
                       </Link>
 
-                      <div className="invisible opacity-0 group-hover/item:visible group-hover/item:opacity-100 absolute left-[95%] top-0 w-64 bg-white shadow-2xl rounded-3xl py-6 border border-gray-100 transition-all duration-300 z-50">
+                      <div className="invisible opacity-0 group-hover/item:visible group-hover/item:opacity-100 absolute left-[95%] top-0 w-64 bg-white shadow-2xl rounded-3xl py-6 border border-gray-100 transition-all duration-300 z-80">
                         {cat.items.map((sub, i) => (
                           <Link key={i} href="/category/subcategory">
                             <span className="block px-8 py-2 text-sm text-texts-dark hover:text-primarys hover:pl-10 transition-all font-medium border-l-4 border-transparent hover:border-primarys">
@@ -349,7 +375,9 @@ const Navbar = () => {
               <Link
                 href="/"
                 className={`px-5 text-sm font-bold tracking-wide transition-colors h-full flex items-center ${
-                  isActive("/") ? "text-orange-300 border-b-2 border-orange-300" : "hover:text-orange-200"
+                  isActive("/")
+                    ? "text-orange-300 border-b-2 border-orange-300"
+                    : "hover:text-orange-900"
                 }`}
               >
                 HOME
@@ -357,7 +385,9 @@ const Navbar = () => {
               <Link
                 href="/aboutpage"
                 className={`px-5 text-sm font-bold tracking-wide transition-colors h-full flex items-center ${
-                  isActive("/aboutpage") ? "text-orange-300 border-b-2 border-orange-300" : "hover:text-orange-200"
+                  isActive("/aboutpage")
+                    ? "text-orange-300 border-b-2 border-orange-300"
+                    : "hover:text-orange-200"
                 }`}
               >
                 ABOUT
@@ -365,7 +395,9 @@ const Navbar = () => {
               <Link
                 href="/shop"
                 className={`px-5 text-sm font-bold tracking-wide transition-colors h-full flex items-center ${
-                  isActive("/shop") ? "text-orange-300 border-b-2 border-orange-300" : "hover:text-orange-200"
+                  isActive("/shop")
+                    ? "text-orange-300 border-b-2 border-orange-300"
+                    : "hover:text-orange-200"
                 }`}
               >
                 SHOP
@@ -373,7 +405,9 @@ const Navbar = () => {
               <Link
                 href="/blogpage/bloghero"
                 className={`px-5 text-sm font-bold tracking-wide transition-colors h-full flex items-center ${
-                  isActive("/blogpage/bloghero") ? "text-orange-300 border-b-2 border-orange-300" : "hover:text-orange-200"
+                  isActive("/blogpage/bloghero")
+                    ? "text-orange-300 border-b-2 border-orange-300"
+                    : "hover:text-orange-200"
                 }`}
               >
                 BLOG
