@@ -14,6 +14,7 @@ import { motion, useAnimation, useInView } from "framer-motion";
 import { useWishlist } from "@/context/WishlistContext";
 import { useCart } from "@/context/CartContext";
 import toast from "react-hot-toast";
+import { useGetBestSellingProductsQuery } from "@/services/categoryApi";
 
 type Product = {
   id: number;
@@ -31,6 +32,9 @@ export default function ProductSection({
 }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const autoScrollRef = useRef<NodeJS.Timeout | null>(null);
+  const { data: bestSellingProducts } = useGetBestSellingProductsQuery();
+
+  console.log("Best Selling Products:", bestSellingProducts); // Debugging log
 
   const controls = useAnimation();
   const ref = useRef(null);
@@ -144,7 +148,7 @@ export default function ProductSection({
           animate={controls}
           className="flex gap-4 sm:gap-5 overflow-x-auto no-scrollbar pb-6 pt-1"
         >
-          {products.map((product) => {
+          {bestSellingProducts?.data?.map((product: any, index: any) => {
             const isInWishlist = wishlist.some(
               (item) => item.id === product.id,
             );
@@ -152,10 +156,10 @@ export default function ProductSection({
             const whatsappUrl = `https://wa.me/9845526696?text=Interested in: ${encodeURIComponent(product.name)} (Price: Rs. ${product.price})`;
 
             return (
-              <motion.div
-                key={product.id}
-                variants={itemVariants}
-                className="flex-shrink-0 w-[240px] sm:w-[260px] cursor-pointer"
+              <div
+                key={index}
+                className="flex-shrink-0 w-full sm:w-[48%] md:w-[32%] lg:w-[24%] cursor-pointer"
+                onClick={() => (window.location.href = "/product")}
               >
                 <div className="bg-white rounded-2xl p-3 shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 flex flex-col h-full relative group/card">
                   {/* ❤️ Wishlist Button - Isolated from Card Click */}
@@ -174,20 +178,30 @@ export default function ProductSection({
                         : "bg-white/90 text-gray-400 shadow-sm"
                     }`}
                   >
-                    <Heart size={16} fill={isInWishlist ? "white" : "none"} />
-                  </motion.button>
+                    <Heart
+                      size={16}
+                      className={isInWishlist ? "fill-white" : "text-white"}
+                    />
+                  </button>
 
-                  {/* IMPORTANT: LINK WRAPPER FOR NAVIGATION */}
-                  <Link href="/product" className="flex flex-col flex-grow">
-                    {/* IMAGE */}
-                    <div className="relative w-full aspect-square overflow-hidden rounded-xl bg-gray-50">
-                      <Image
-                        src={product.image_url}
-                        alt={product.name}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover/card:scale-110"
-                      />
-                    </div>
+                  {/* IMAGE */}
+                  <div className="relative w-full aspect-square overflow-hidden rounded-lg sm:rounded-xl bg-gray-50">
+                    <Image
+                      src={product?.image[0]}
+                      alt={product.name}
+                      fill
+                      className="object-contain p-2 group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  {/* INFO */}
+                  <div className="mt-3 sm:mt-4">
+                    <h3 className="text-sm sm:text-base font-semibold text-gray-800 line-clamp-2">
+                      {product.name}
+                    </h3>
+                    <p className="text-gray-500 text-xs sm:text-sm mt-1">
+                      Rs. {product.price}
+                    </p>
+                  </div>
 
                     {/* INFO */}
                     <div className="mt-3 px-1">
@@ -222,22 +236,18 @@ export default function ProductSection({
                       {isInCart ? "IN CART" : "ADD TO CART"}
                     </motion.button>
 
-                    {/* WhatsApp Enquiry */}
-                    <Link
-                      href={whatsappUrl}
-                      target="_blank"
-                      onClick={(e) => e.stopPropagation()}
-                      className="w-full"
-                    >
-                      <motion.button
-                        whileTap={{ scale: 0.97 }}
-                        className="w-full flex items-center justify-center gap-2 bg-[#25D366] text-white py-2.5 rounded-xl transition-all border border-[#25D366]/20 font-bold text-[10px] tracking-widest hover:brightness-110"
-                      >
-                        <MessageCircle size={14} />
-                        ENQUIRY ON WHATSAPP
-                      </motion.button>
-                    </Link>
-                  </div>
+                      addToCart(product);
+                      toast.success("Added to cart 🛒");
+                    }}
+                    disabled={isInCart}
+                    className={`mt-3 sm:mt-4 w-full flex items-center justify-center gap-2 py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm transition ${isInCart
+                        ? "bg-primarys text-white"
+                        : "bg-gray-900 hover:bg-primarys text-white"
+                      }`}
+                  >
+                    <ShoppingCart size={16} />
+                    {isInCart ? "In Cart" : "Add to Cart"}
+                  </button>
                 </div>
               </motion.div>
             );
