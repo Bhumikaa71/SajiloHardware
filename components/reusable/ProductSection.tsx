@@ -1,7 +1,13 @@
 "use client";
 
 import { useRef, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Heart, ShoppingCart, MessageCircle } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Heart,
+  ShoppingCart,
+  MessageCircle,
+} from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useAnimation, useInView } from "framer-motion";
@@ -25,7 +31,7 @@ export default function ProductSection({
 }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const autoScrollRef = useRef<NodeJS.Timeout | null>(null);
-  
+
   const controls = useAnimation();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.1 });
@@ -42,7 +48,7 @@ export default function ProductSection({
   const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
     const el = scrollRef.current;
-    const scrollAmount = 280; 
+    const scrollAmount = 280;
     el.scrollBy({
       left: direction === "left" ? -scrollAmount : scrollAmount,
       behavior: "smooth",
@@ -76,17 +82,17 @@ export default function ProductSection({
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.1 }
-    }
+      transition: { staggerChildren: 0.1 },
+    },
   };
 
   const itemVariants = {
-    hidden: { x: 40, opacity: 0 }, 
+    hidden: { x: 40, opacity: 0 },
     visible: {
       x: 0,
       opacity: 1,
-      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
-    }
+      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+    },
   };
 
   return (
@@ -98,7 +104,7 @@ export default function ProductSection({
     >
       {/* HEADER */}
       <div className="mb-6 flex items-center justify-between px-1">
-        <motion.h2 
+        <motion.h2
           initial={{ opacity: 0, x: -20 }}
           animate={inView ? { opacity: 1, x: 0 } : {}}
           className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900 tracking-tight"
@@ -139,7 +145,9 @@ export default function ProductSection({
           className="flex gap-4 sm:gap-5 overflow-x-auto no-scrollbar pb-6 pt-1"
         >
           {products.map((product) => {
-            const isInWishlist = wishlist.some((item) => item.id === product.id);
+            const isInWishlist = wishlist.some(
+              (item) => item.id === product.id,
+            );
             const isInCart = cart.some((item) => item.id === product.id);
             const whatsappUrl = `https://wa.me/9845526696?text=Interested in: ${encodeURIComponent(product.name)} (Price: Rs. ${product.price})`;
 
@@ -150,17 +158,20 @@ export default function ProductSection({
                 className="flex-shrink-0 w-[240px] sm:w-[260px] cursor-pointer"
               >
                 <div className="bg-white rounded-2xl p-3 shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 flex flex-col h-full relative group/card">
-                  
                   {/* ❤️ Wishlist Button - Isolated from Card Click */}
                   <motion.button
                     whileTap={{ scale: 0.8 }}
                     onClick={(e) => {
                       e.stopPropagation();
-                      isInWishlist ? removeFromWishlist(product.id) : addToWishlist(product);
+                      isInWishlist
+                        ? removeFromWishlist(product.id)
+                        : addToWishlist(product);
                       toast.success(isInWishlist ? "Removed" : "Added ❤️");
                     }}
                     className={`absolute top-4 right-4 z-20 p-2 rounded-xl backdrop-blur-md transition-all ${
-                      isInWishlist ? "bg-primarys text-white" : "bg-white/90 text-gray-400 shadow-sm"
+                      isInWishlist
+                        ? "bg-primarys text-white"
+                        : "bg-white/90 text-gray-400 shadow-sm"
                     }`}
                   >
                     <Heart size={16} fill={isInWishlist ? "white" : "none"} />
@@ -202,9 +213,9 @@ export default function ProductSection({
                         }
                       }}
                       className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[10px] font-black tracking-widest transition-all ${
-                        isInCart 
-                        ? "bg-gray-100 text-gray-400" 
-                        : "bg-gray-900 text-white hover:bg-primarys"
+                        isInCart
+                          ? "bg-gray-100 text-gray-400"
+                          : "bg-gray-900 text-white hover:bg-primarys"
                       }`}
                     >
                       <ShoppingCart size={14} />
@@ -212,10 +223,10 @@ export default function ProductSection({
                     </motion.button>
 
                     {/* WhatsApp Enquiry */}
-                    <Link 
-                      href={whatsappUrl} 
-                      target="_blank" 
-                      onClick={(e) => e.stopPropagation()} 
+                    <Link
+                      href={whatsappUrl}
+                      target="_blank"
+                      onClick={(e) => e.stopPropagation()}
                       className="w-full"
                     >
                       <motion.button
@@ -235,8 +246,13 @@ export default function ProductSection({
       </div>
 
       <style jsx global>{`
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
       `}</style>
     </section>
   );
