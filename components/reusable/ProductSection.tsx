@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useWishlist } from "@/context/WishlistContext";
 import { useCart } from "@/context/CartContext";
 import toast from "react-hot-toast";
+import { useGetBestSellingProductsQuery } from "@/services/categoryApi";
 
 type Product = {
   id: number;
@@ -24,6 +25,9 @@ export default function ProductSection({
 }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const autoScrollRef = useRef<NodeJS.Timeout | null>(null);
+  const { data: bestSellingProducts } = useGetBestSellingProductsQuery();
+
+  console.log("Best Selling Products:", bestSellingProducts); // Debugging log
 
   const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const { cart, addToCart } = useCart();
@@ -121,7 +125,7 @@ export default function ProductSection({
           ref={scrollRef}
           className="flex gap-4 sm:gap-5 lg:gap-6 overflow-hidden scroll-smooth"
         >
-          {products.map((product) => {
+          {bestSellingProducts?.data?.map((product: any, index: any) => {
             const isInWishlist = wishlist.some(
               (item) => item.id === product.id,
             );
@@ -130,7 +134,7 @@ export default function ProductSection({
 
             return (
               <div
-                key={product.id}
+                key={index}
                 className="flex-shrink-0 w-full sm:w-[48%] md:w-[32%] lg:w-[24%] cursor-pointer"
                 onClick={() => (window.location.href = "/product")}
               >
@@ -157,15 +161,14 @@ export default function ProductSection({
                   </button>
 
                   {/* IMAGE */}
-                  <div className="relative w-full h-32 sm:h-40 md:h-44 lg:h-48 overflow-hidden rounded-lg sm:rounded-xl">
+                  <div className="relative w-full aspect-square overflow-hidden rounded-lg sm:rounded-xl bg-gray-50">
                     <Image
-                      src={product.image_url}
+                      src={product?.image[0]}
                       alt={product.name}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="object-contain p-2 group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
-
                   {/* INFO */}
                   <div className="mt-3 sm:mt-4">
                     <h3 className="text-sm sm:text-base font-semibold text-gray-800 line-clamp-2">
@@ -187,11 +190,10 @@ export default function ProductSection({
                       toast.success("Added to cart 🛒");
                     }}
                     disabled={isInCart}
-                    className={`mt-3 sm:mt-4 w-full flex items-center justify-center gap-2 py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm transition ${
-                      isInCart
+                    className={`mt-3 sm:mt-4 w-full flex items-center justify-center gap-2 py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm transition ${isInCart
                         ? "bg-primarys text-white"
                         : "bg-gray-900 hover:bg-primarys text-white"
-                    }`}
+                      }`}
                   >
                     <ShoppingCart size={16} />
                     {isInCart ? "In Cart" : "Add to Cart"}
