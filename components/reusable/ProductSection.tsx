@@ -1,9 +1,16 @@
 "use client";
 
 import { useRef, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Heart, ShoppingCart } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Heart,
+  ShoppingCart,
+  MessageCircle,
+} from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { motion, useAnimation, useInView } from "framer-motion";
 import { useWishlist } from "@/context/WishlistContext";
 import { useCart } from "@/context/CartContext";
 import toast from "react-hot-toast";
@@ -29,53 +36,44 @@ export default function ProductSection({
 
   console.log("Best Selling Products:", bestSellingProducts); // Debugging log
 
+  const controls = useAnimation();
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, amount: 0.1 });
+
   const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const { cart, addToCart } = useCart();
 
+  useEffect(() => {
+    if (inView) {
+      controls.start("visible");
+    }
+  }, [controls, inView]);
+
   const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
-
     const el = scrollRef.current;
-    const card = el.firstElementChild as HTMLElement;
-    if (!card) return;
-
-    const gap = 24;
-    const scrollAmount = card.offsetWidth + gap;
-
+    const scrollAmount = 280;
     el.scrollBy({
       left: direction === "left" ? -scrollAmount : scrollAmount,
       behavior: "smooth",
     });
   };
 
-  // ✅ AUTO SCROLL
   const startAutoScroll = () => {
     stopAutoScroll();
-
     autoScrollRef.current = setInterval(() => {
       if (!scrollRef.current) return;
-
       const el = scrollRef.current;
-      const card = el.firstElementChild as HTMLElement;
-      if (!card) return;
-
-      const gap = 24;
-      const scrollAmount = card.offsetWidth + gap;
-
-      // if reached end → reset to start
       if (el.scrollLeft + el.offsetWidth >= el.scrollWidth - 10) {
         el.scrollTo({ left: 0, behavior: "smooth" });
       } else {
-        el.scrollBy({ left: scrollAmount, behavior: "smooth" });
+        scroll("right");
       }
-    }, 5000);
+    }, 6000);
   };
 
   const stopAutoScroll = () => {
-    if (autoScrollRef.current) {
-      clearInterval(autoScrollRef.current);
-      autoScrollRef.current = null;
-    }
+    if (autoScrollRef.current) clearInterval(autoScrollRef.current);
   };
 
   useEffect(() => {
@@ -83,54 +81,79 @@ export default function ProductSection({
     return () => stopAutoScroll();
   }, []);
 
+  // Animation Variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { x: 40, opacity: 0 },
+    visible: {
+      x: 0,
+      opacity: 1,
+      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+    },
+  };
+
   return (
     <section
-      className="py-10 sm:py-14 lg:py-16 px-4 sm:px-6 max-w-7xl mx-auto"
+      ref={ref}
+      className="py-10 px-4 sm:px-6 max-w-7xl mx-auto overflow-hidden bg-white"
       onMouseEnter={stopAutoScroll}
       onMouseLeave={startAutoScroll}
     >
       {/* HEADER */}
-      <div className="mb-6 sm:mb-10 flex items-center justify-between">
-        <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800">
+      <div className="mb-6 flex items-center justify-between px-1">
+        <motion.h2
+          initial={{ opacity: 0, x: -20 }}
+          animate={inView ? { opacity: 1, x: 0 } : {}}
+          className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900 tracking-tight"
+        >
           {title}
-        </h2>
+        </motion.h2>
 
         <Link
           href="/shop"
-          className="text-primarys text-sm sm:text-base hover:underline"
+          className="text-primarys text-xs sm:text-sm font-bold hover:underline underline-offset-4"
         >
-          See all
+          See All
         </Link>
       </div>
 
-      <div className="relative">
-        {/* LEFT BUTTON */}
+      <div className="relative group/container">
+        {/* NAVIGATION BUTTONS */}
         <button
           onClick={() => scroll("left")}
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-primarys text-white p-2 sm:p-3 rounded-r-xl shadow-md"
+          className="absolute -left-2 top-[35%] -translate-y-1/2 z-30 bg-white text-primarys p-2 rounded-full shadow-lg border border-gray-100 opacity-0 group-hover/container:opacity-100 transition-all hover:bg-primarys hover:text-white"
         >
           <ChevronLeft size={20} />
         </button>
 
-        {/* RIGHT BUTTON */}
         <button
           onClick={() => scroll("right")}
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-primarys text-white p-2 sm:p-3 rounded-l-xl shadow-md"
+          className="absolute -right-2 top-[35%] -translate-y-1/2 z-30 bg-white text-primarys p-2 rounded-full shadow-lg border border-gray-100 opacity-0 group-hover/container:opacity-100 transition-all hover:bg-primarys hover:text-white"
         >
           <ChevronRight size={20} />
         </button>
 
-        {/* PRODUCTS */}
-        <div
+        {/* PRODUCTS SCROLLER */}
+        <motion.div
           ref={scrollRef}
-          className="flex gap-4 sm:gap-5 lg:gap-6 overflow-hidden scroll-smooth"
+          variants={containerVariants}
+          initial="hidden"
+          animate={controls}
+          className="flex gap-4 sm:gap-5 overflow-x-auto no-scrollbar pb-6 pt-1"
         >
           {bestSellingProducts?.data?.map((product: any, index: any) => {
             const isInWishlist = wishlist.some(
               (item) => item.id === product.id,
             );
-
             const isInCart = cart.some((item) => item.id === product.id);
+            const whatsappUrl = `https://wa.me/9845526696?text=Interested in: ${encodeURIComponent(product.name)} (Price: Rs. ${product.price})`;
 
             return (
               <div
@@ -138,21 +161,22 @@ export default function ProductSection({
                 className="flex-shrink-0 w-full sm:w-[48%] md:w-[32%] lg:w-[24%] cursor-pointer"
                 onClick={() => (window.location.href = "/product")}
               >
-                <div className="group relative bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 shadow-sm hover:shadow-lg transition border border-gray-100">
-                  {/* ❤️ Wishlist */}
-                  <button
-                    className="absolute top-2 right-2 z-10 p-2 rounded-full bg-primarys shadow"
+                <div className="bg-white rounded-2xl p-3 shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 flex flex-col h-full relative group/card">
+                  {/* ❤️ Wishlist Button - Isolated from Card Click */}
+                  <motion.button
+                    whileTap={{ scale: 0.8 }}
                     onClick={(e) => {
                       e.stopPropagation();
-
-                      if (isInWishlist) {
-                        removeFromWishlist(product.id);
-                        toast("Removed ❌");
-                      } else {
-                        addToWishlist(product);
-                        toast.success("Added ❤️");
-                      }
+                      isInWishlist
+                        ? removeFromWishlist(product.id)
+                        : addToWishlist(product);
+                      toast.success(isInWishlist ? "Removed" : "Added ❤️");
                     }}
+                    className={`absolute top-4 right-4 z-20 p-2 rounded-xl backdrop-blur-md transition-all ${
+                      isInWishlist
+                        ? "bg-primarys text-white"
+                        : "bg-white/90 text-gray-400 shadow-sm"
+                    }`}
                   >
                     <Heart
                       size={16}
@@ -179,12 +203,38 @@ export default function ProductSection({
                     </p>
                   </div>
 
-                  {/* CART */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
+                    {/* INFO */}
+                    <div className="mt-3 px-1">
+                      <h3 className="text-sm font-bold text-gray-800 line-clamp-1 leading-tight group-hover/card:text-primarys transition-colors">
+                        {product.name}
+                      </h3>
+                      <p className="mt-1 text-primarys font-extrabold text-base">
+                        Rs. {product.price.toLocaleString()}
+                      </p>
+                    </div>
+                  </Link>
 
-                      if (isInCart) return;
+                  {/* ACTION BUTTONS */}
+                  <div className="mt-4 flex flex-col gap-1.5">
+                    {/* Add to Cart */}
+                    <motion.button
+                      whileTap={{ scale: 0.97 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (!isInCart) {
+                          addToCart(product);
+                          toast.success("Added to Cart 🛒");
+                        }
+                      }}
+                      className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[10px] font-black tracking-widest transition-all ${
+                        isInCart
+                          ? "bg-gray-100 text-gray-400"
+                          : "bg-gray-900 text-white hover:bg-primarys"
+                      }`}
+                    >
+                      <ShoppingCart size={14} />
+                      {isInCart ? "IN CART" : "ADD TO CART"}
+                    </motion.button>
 
                       addToCart(product);
                       toast.success("Added to cart 🛒");
@@ -199,11 +249,21 @@ export default function ProductSection({
                     {isInCart ? "In Cart" : "Add to Cart"}
                   </button>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </div>
+
+      <style jsx global>{`
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
     </section>
   );
 }

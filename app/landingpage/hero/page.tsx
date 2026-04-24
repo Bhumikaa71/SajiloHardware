@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 
 type Slide = {
   id: number;
@@ -66,16 +67,18 @@ function AnimatedWords({
     <span className="inline-flex flex-wrap">
       {text.split(" ").map((word, i) => (
         <span key={i} className="inline-block overflow-hidden mr-[0.25em]">
-          <span
-            className="inline-block transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
-            style={{
-              transitionDelay: `${delay + i * 90}ms`,
-              transform: active ? "translateY(0%)" : "translateY(115%)",
-              opacity: active ? 1 : 0,
+          <motion.span
+            className="inline-block"
+            initial={{ translateY: "115%", opacity: 0 }}
+            animate={active ? { translateY: "0%", opacity: 1 } : { translateY: "115%", opacity: 0 }}
+            transition={{
+              duration: 0.8,
+              ease: [0.22, 1, 0.36, 1],
+              delay: (delay + i * 90) / 1000,
             }}
           >
             {word}
-          </span>
+          </motion.span>
         </span>
       ))}
     </span>
@@ -92,12 +95,11 @@ function AnimatedLine({
 }) {
   return (
     <div className="overflow-hidden h-0.75">
-      <div
-        className="h-full rounded-full bg-linear-to-r from-orange-500 via-amber-400 to-orange-500 transition-all duration-1000 ease-out"
-        style={{
-          width: active ? "96px" : "0px",
-          transitionDelay: `${delay}ms`,
-        }}
+      <motion.div
+        className="h-full rounded-full bg-gradient-to-r from-orange-500 via-amber-400 to-orange-500"
+        initial={{ width: "0px" }}
+        animate={active ? { width: "96px" } : { width: "0px" }}
+        transition={{ duration: 1, ease: "easeOut", delay: delay / 1000 }}
       />
     </div>
   );
@@ -117,16 +119,17 @@ function Reveal({
 }) {
   return (
     <div className="overflow-hidden">
-      <div
-        className="transition-all duration-800 ease-[cubic-bezier(0.22,1,0.36,1)]"
-        style={{
-          transform: active ? "translateY(0)" : `translateY(${y}px)`,
-          opacity: active ? 1 : 0,
-          transitionDelay: `${delay}ms`,
+      <motion.div
+        initial={{ translateY: y, opacity: 0 }}
+        animate={active ? { translateY: 0, opacity: 1 } : { translateY: y, opacity: 0 }}
+        transition={{
+          duration: 0.8,
+          ease: [0.22, 1, 0.36, 1],
+          delay: delay / 1000,
         }}
       >
         {children}
-      </div>
+      </motion.div>
     </div>
   );
 }
@@ -139,10 +142,10 @@ export default function HeroCarousel() {
   const DURATION = 6000;
 
   const goTo = useCallback(
-    (next: number) => {
-      if (isLocked || next === index) return;
+    (nextIdx: number) => {
+      if (isLocked || nextIdx === index) return;
       setIsLocked(true);
-      setIndex(next);
+      setIndex(nextIdx);
       setProgress(0);
       setTimeout(() => setIsLocked(false), 1200);
     },
@@ -181,278 +184,209 @@ export default function HeroCarousel() {
   return (
     <section className="relative h-screen w-full overflow-hidden bg-neutral-950 select-none">
       {/* ═══════════ SLIDES ═══════════ */}
-      {slides.map((slide, i) => {
-        const live = i === index;
-        return (
-          <div
-            key={slide.id}
-            className={`absolute inset-0 transition-all duration-1200 ease-[cubic-bezier(0.65,0,0.35,1)] ${
-              live ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
-            }`}
-          >
-            {/* Ken Burns image */}
-            <div
-              className={`absolute inset-[-4%] transition-transform duration-9000 ease-linear ${
-                live ? "scale-110" : "scale-100"
-              }`}
+      <AnimatePresence mode="wait">
+        {slides.map((slide, i) => {
+          if (i !== index) return null;
+          return (
+            <motion.div
+              key={slide.id}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.2, ease: [0.65, 0, 0.35, 1] }}
+              className="absolute inset-0 z-10"
             >
-              <Image
-                src={slide.image}
-                alt={slide.title}
-                fill
-                priority={i === 0}
-                className="object-cover"
-                sizes="100vw"
+              {/* Ken Burns image */}
+              <motion.div
+                className="absolute inset-[-4%]"
+                initial={{ scale: 1 }}
+                animate={{ scale: 1.15 }}
+                transition={{ duration: 9, ease: "linear" }}
+              >
+                <Image
+                  src={slide.image}
+                  alt={slide.title}
+                  fill
+                  priority={i === 0}
+                  className="object-cover"
+                  sizes="100vw"
+                />
+              </motion.div>
+
+              {/* Overlay stack */}
+              <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-black/10" />
+
+              {/* Subtle grain texture */}
+              <div
+                className="absolute inset-0 z-5 opacity-[0.035] mix-blend-overlay pointer-events-none"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+                }}
               />
-            </div>
 
-            {/* Overlay stack */}
-            <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/50 to-black/10" />
-            {/* <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-black/30" /> */}
+              {/* Decorative rings with floating animation */}
+              <motion.div 
+                animate={{ y: [0, -15, 0], opacity: [0.04, 0.08, 0.04] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-[15%] right-[10%] w-80 h-80 rounded-full border border-white/5 z-6 hidden lg:block" 
+              />
+              <motion.div 
+                animate={{ y: [0, 15, 0], opacity: [0.08, 0.12, 0.08] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                className="absolute top-[18%] right-[13%] w-60 h-60 rounded-full border border-orange-500/10 z-6 hidden lg:block" 
+              />
 
-            {/* Subtle grain texture */}
-            <div
-              className="absolute inset-0 z-5 opacity-[0.035] mix-blend-overlay pointer-events-none"
-              style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-              }}
-            />
+              {/* ═══ CONTENT ═══ */}
+              <div className="relative z-20 flex h-full items-center">
+                <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-11">
+                  <motion.div 
+                    initial={{ x: -40 }}
+                    animate={{ x: 0 }}
+                    transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+                    className="max-w-3xl"
+                  >
+                    {/* Tag pill */}
+                    <Reveal active={true} delay={150}>
+                      <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-[11px] sm:text-xs font-semibold tracking-[0.2em] uppercase mb-6">
+                        <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
+                        {slide.tag}
+                      </span>
+                    </Reveal>
 
-            {/* Decorative rings – desktop only */}
-            <div className="absolute top-[15%] right-[10%] w-64 h-64 md:w-80 md:h-80 rounded-full border border-white/4 z-6 hidden lg:block" />
-            <div className="absolute top-[18%] right-[13%] w-48 h-48 md:w-60 md:h-60 rounded-full border border-orange-500/8 z-6 hidden lg:block" />
-            <div className="absolute bottom-[35%] right-[18%] w-2.5 h-2.5 rounded-full bg-orange-500/50 z-6 hidden lg:block animate-pulse" />
-            <div className="absolute top-[40%] right-[8%] w-1.5 h-1.5 rounded-full bg-white/20 z-6 hidden lg:block animate-pulse" />
+                    {/* Subtitle */}
+                    <Reveal active={true} delay={250}>
+                      <p className="text-neutral-400 text-xs sm:text-sm md:text-base font-medium tracking-[0.18em] uppercase mb-3">
+                        {slide.subtitle}
+                      </p>
+                    </Reveal>
 
-            {/* ═══ CONTENT ═══ */}
-            <div className="relative z-20 flex h-full items-center">
-              <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-11">
-                <div className="max-w-3xl">
-                  {/* Tag pill */}
-                  <Reveal active={live} delay={150}>
-                    <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-[11px] sm:text-xs font-semibold tracking-[0.2em] uppercase mb-6">
-                      <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
-                      {slide.tag}
-                    </span>
-                  </Reveal>
+                    {/* Title */}
+                    <h1 className="text-[2.5rem] sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-white leading-[0.95] tracking-tight mb-5">
+                      <AnimatedWords text={slide.title} active={true} delay={350} />
+                    </h1>
 
-                  {/* Subtitle */}
-                  <Reveal active={live} delay={250}>
-                    <p className="text-neutral-400 text-xs sm:text-sm md:text-base font-medium tracking-[0.18em] uppercase mb-3">
-                      {slide.subtitle}
-                    </p>
-                  </Reveal>
-
-                  {/* Title */}
-                  <h1 className="text-[2.5rem] sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-white leading-[0.95] tracking-tight mb-5">
-                    <AnimatedWords
-                      text={slide.title}
-                      active={live}
-                      delay={350}
-                    />
-                  </h1>
-
-                  {/* Accent line */}
-                  <div className="mb-8">
-                    <AnimatedLine active={live} delay={900} />
-                  </div>
-
-                  {/* Description */}
-                  <Reveal active={live} delay={650}>
-                    <p className="text-sm sm:text-base md:text-lg lg:text-xl text-neutral-300/80 max-w-xl leading-relaxed font-light mb-10">
-                      {slide.description}
-                    </p>
-                  </Reveal>
-
-                  {/* CTAs */}
-                  <Reveal active={live} delay={850}>
-                    <div className="flex flex-col sm:flex-row gap-4">
-                      {/* Primary */}
-                      <Link href="/shop" className="group">
-                        <button className="relative w-full sm:w-auto overflow-hidden bg-orange-500 text-white px-8 md:px-10 py-4 rounded-full font-bold text-sm md:text-base tracking-wide transition-all duration-500 hover:shadow-[0_0_50px_rgba(249,115,22,0.35)] active:scale-[0.97]">
-                          <span className="relative z-10 flex items-center justify-center gap-2.5">
-                            Shop Now
-                            <svg
-                              className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              strokeWidth={2.5}
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M13 7l5 5m0 0l-5 5m5-5H6"
-                              />
-                            </svg>
-                          </span>
-                          <span className="absolute inset-0 bg-linear-to-r from-orange-600 to-amber-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                        </button>
-                      </Link>
-
-                      {/* Secondary */}
-                      <Link href="/aboutpage" className="group">
-                        <button className="relative w-full sm:w-auto overflow-hidden bg-white/4 backdrop-blur-sm text-white px-8 md:px-10 py-4 rounded-full font-bold text-sm md:text-base tracking-wide border border-white/15 hover:border-white/40 hover:bg-white/10 transition-all duration-500 active:scale-[0.97]">
-                          <span className="relative z-10 flex items-center justify-center gap-2.5">
-                            Learn More
-                            <svg
-                              className="w-4 h-4 transition-transform duration-300 group-hover:translate-y-0.5"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              strokeWidth={2.5}
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M19 9l-7 7-7-7"
-                              />
-                            </svg>
-                          </span>
-                        </button>
-                      </Link>
+                    {/* Accent line */}
+                    <div className="mb-8">
+                      <AnimatedLine active={true} delay={900} />
                     </div>
-                  </Reveal>
+
+                    {/* Description */}
+                    <Reveal active={true} delay={650}>
+                      <p className="text-sm sm:text-base md:text-lg lg:text-xl text-neutral-300/80 max-w-xl leading-relaxed font-light mb-10">
+                        {slide.description}
+                      </p>
+                    </Reveal>
+
+                    {/* CTAs */}
+                    <Reveal active={true} delay={850}>
+                      <div className="flex flex-col sm:flex-row gap-4">
+                        <Link href="/shop" className="group">
+                          <motion.button 
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.98 }}
+                            className="relative w-full sm:w-auto overflow-hidden bg-orange-500 text-white px-10 py-4 rounded-full font-bold text-sm md:text-base tracking-wide shadow-lg hover:shadow-orange-500/40 transition-all duration-500"
+                          >
+                            <span className="relative z-10 flex items-center justify-center gap-2.5">
+                              Shop Now
+                              <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                              </svg>
+                            </span>
+                            <motion.span 
+                               initial={{ x: "-100%" }}
+                               whileHover={{ x: "0%" }}
+                               className="absolute inset-0 bg-gradient-to-r from-orange-600 to-amber-500 transition-transform duration-500" 
+                            />
+                          </motion.button>
+                        </Link>
+
+                        <Link href="/aboutpage" className="group">
+                          <motion.button 
+                            whileHover={{ backgroundColor: "rgba(255,255,255,0.15)" }}
+                            className="relative w-full sm:w-auto overflow-hidden bg-white/5 backdrop-blur-md text-white px-10 py-4 rounded-full font-bold text-sm md:text-base tracking-wide border border-white/20 transition-all duration-500"
+                          >
+                            Learn More
+                          </motion.button>
+                        </Link>
+                      </div>
+                    </Reveal>
+                  </motion.div>
                 </div>
               </div>
-            </div>
-          </div>
-        );
-      })}
+            </motion.div>
+          );
+        })}
+      </AnimatePresence>
 
-      {/* ═══════════ SIDE ARROWS – desktop ═══════════ */}
+      {/* ═══════════ SIDE ARROWS ═══════════ */}
       <div className="absolute right-6 md:right-10 top-1/2 -translate-y-1/2 z-30 hidden md:flex flex-col gap-3">
-        <button
-          onClick={prev}
-          aria-label="Previous slide"
-          className="w-12 h-12 rounded-full border border-white/10 bg-white/4 backdrop-blur-sm flex items-center justify-center text-white/40 hover:text-white hover:border-white/30 hover:bg-white/10 transition-all duration-300 active:scale-90"
-        >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
+        {[ { fn: prev, icon: "M5 15l7-7 7 7" }, { fn: next, icon: "M19 9l-7 7-7-7" } ].map((btn, i) => (
+          <motion.button
+            key={i}
+            whileHover={{ scale: 1.1, backgroundColor: "rgba(255,255,255,0.15)" }}
+            whileTap={{ scale: 0.9 }}
+            onClick={btn.fn}
+            className="w-12 h-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm flex items-center justify-center text-white/50 hover:text-white transition-all"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M5 15l7-7 7 7"
-            />
-          </svg>
-        </button>
-        <button
-          onClick={next}
-          aria-label="Next slide"
-          className="w-12 h-12 rounded-full border border-white/10 bg-white/4 backdrop-blur-sm flex items-center justify-center text-white/40 hover:text-white hover:border-white/30 hover:bg-white/10 transition-all duration-300 active:scale-90"
-        >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d={btn.icon} />
+            </svg>
+          </motion.button>
+        ))}
       </div>
 
       {/* ═══════════ BOTTOM BAR ═══════════ */}
-      <div className="absolute bottom-0 left-0 right-0 z-30">
-        {/* Thin top border */}
-        <div className="w-full h-px bg-linear-to-r from-transparent via-white/10 to-transparent" />
-
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12 lg:px-20 xl:px-24">
-          <div className="flex items-end justify-between py-6 md:py-8 gap-4">
-            {/* Left: slide label – hidden on mobile */}
-            <div className="hidden md:block min-w-0 shrink-0">
-              <p className="text-white/25 text-[10px] tracking-[0.3em] uppercase font-medium mb-0.5">
-                Current Slide
-              </p>
-              <p className="text-white/50 text-sm font-medium truncate max-w-50">
-                {slides[index].title}
-              </p>
+      <div className="absolute bottom-0 left-0 right-0 z-30 bg-gradient-to-t from-black/80 to-transparent">
+        <div className="max-w-7xl mx-auto px-5 sm:px-12 py-8">
+          <div className="flex items-end justify-between gap-4">
+            {/* Slide Info */}
+            <div className="hidden md:block">
+              <p className="text-orange-500 text-[10px] tracking-[0.3em] uppercase font-black mb-1">Explore</p>
+              <AnimatePresence mode="wait">
+                <motion.p 
+                  key={index}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="text-white/60 text-sm font-medium"
+                >
+                  {slides[index].title}
+                </motion.p>
+              </AnimatePresence>
             </div>
 
-            {/* Center: progress + dots */}
-            <div className="flex flex-col items-center gap-3 shrink-0">
-              {/* Progress bar */}
-              <div className="w-36 sm:w-48 md:w-60 h-0.5 bg-white/8 rounded-full overflow-hidden">
-                <div
-                  className="h-full rounded-full bg-linear-to-r from-orange-500 to-amber-400"
-                  style={{ width: `${progress}%`, transition: "none" }}
+            {/* Progress + Dots */}
+            <div className="flex flex-col items-center gap-4 grow max-w-xs md:max-w-md">
+              <div className="w-full h-[3px] bg-white/10 rounded-full overflow-hidden">
+                <motion.div
+                  className="h-full bg-gradient-to-r from-orange-500 to-amber-400"
+                  style={{ width: `${progress}%` }}
                 />
               </div>
 
-              {/* Dot indicators */}
-              <div className="flex items-center gap-2.5 sm:gap-3">
-                {slides.map((s, i) => (
-                  <button
-                    key={i}
-                    onClick={() => goTo(i)}
-                    aria-label={`Go to slide ${i + 1}`}
-                    className="group relative flex items-center justify-center focus:outline-none"
-                  >
-                    {/* Tooltip */}
-                    <span className="absolute -top-7 left-1/2 -translate-x-1/2 text-[9px] text-white/0 group-hover:text-white/50 tracking-[0.2em] uppercase font-semibold whitespace-nowrap transition-all duration-300 pointer-events-none">
-                      {s.tag}
-                    </span>
-                    <div
-                      className={`rounded-full transition-all duration-500 ease-out ${
-                        i === index
-                          ? "w-8 h-1.75 bg-orange-500 shadow-[0_0_12px_rgba(249,115,22,0.4)]"
-                          : "w-1.75 h-1.75 bg-white/25 group-hover:bg-white/50"
-                      }`}
+              <div className="flex gap-3">
+                {slides.map((_, i) => (
+                  <button key={i} onClick={() => goTo(i)} className="group py-2">
+                    <motion.div
+                      animate={{ 
+                        width: i === index ? 32 : 8,
+                        backgroundColor: i === index ? "#f97316" : "rgba(255,255,255,0.2)"
+                      }}
+                      className="h-2 rounded-full transition-colors"
                     />
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Right: counter – hidden on mobile */}
-            <div className="hidden md:flex items-center gap-2 shrink-0">
-              <span className="text-white font-black text-2xl tabular-nums leading-none">
-                0{index + 1}
-              </span>
-              <span className="text-white/15 font-extralight text-lg leading-none">
-                /
-              </span>
-              <span className="text-white/25 font-medium text-lg tabular-nums leading-none">
-                0{slides.length}
-              </span>
+            {/* Counter */}
+            <div className="hidden md:flex items-center gap-3">
+              <span className="text-white font-black text-3xl tabular-nums leading-none">0{index + 1}</span>
+              <div className="h-8 w-px bg-white/10" />
+              <span className="text-white/30 font-bold text-xl leading-none">0{slides.length}</span>
             </div>
           </div>
         </div>
-      </div>
-
-      {/* ═══════════ MOBILE SWIPE HINT ═══════════ */}
-      <div className="absolute bottom-28 sm:bottom-32 left-1/2 -translate-x-1/2 z-30 flex md:hidden items-center gap-2 text-white/20">
-        <svg
-          className="w-4 h-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={1.5}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M7 16l-4-4m0 0l4-4m-4 4h18"
-          />
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M17 16l4-4m0 0l-4-4m4 4H3"
-          />
-        </svg>
-        <span className="text-[10px] tracking-[0.2em] uppercase font-medium">
-          Swipe or tap dots
-        </span>
       </div>
     </section>
   );
