@@ -36,7 +36,7 @@ export default function AddToCart() {
         ? window.location.origin
         : "https://your-domain.com";
 
-    const phoneNumber = "9779869946896";
+    const phoneNumber = "9779845526696";
 
     const message = selectedProducts
       .map((item, index) => {
