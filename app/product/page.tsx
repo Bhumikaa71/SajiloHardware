@@ -164,8 +164,8 @@ export default function Page() {
                 href="https://wa.me/9845526696"
                 className="w-full sm:w-auto"
               >
-                <button className="w-full px-22 py-3 bg-primarys text-white rounded-xl font-medium">
-                  Buy Now
+                <button className="w-full px-10 py-3 bg-green-600 text-white rounded-xl font-medium">
+                  Enquiry on Whatsapp
                 </button>
               </Link>
 
@@ -180,7 +180,7 @@ export default function Page() {
                   toast.success("Added to cart 🛒");
                 }}
                 disabled={isInCart}
-                className={`w-full sm:w-auto px-22 py-3 rounded-xl font-medium ${
+                className={`w-full sm:w-auto px-23 py-3 rounded-xl font-medium ${
                   isInCart
                     ? "bg-[var(--primarys)] text-white"
                     : "border border-[var(--primarys)] text-[var(--primarys)]"
