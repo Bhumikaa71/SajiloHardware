@@ -3,7 +3,8 @@
 import React, { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, type Variants } from "framer-motion";
+import { useGetBrandsQuery } from "@/services/brandApi";
 
 type Brand = {
   name: string;
@@ -28,9 +29,12 @@ const brands: Brand[] = [
 export default function Brand() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.1 });
+  const { data: brandsData, isLoading } = useGetBrandsQuery();
+
+
 
   // Container variants for staggered entrance
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -41,13 +45,13 @@ export default function Brand() {
   };
 
   // Item variants for individual logo pop
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { scale: 0.8, opacity: 0, y: 20 },
     visible: {
       scale: 1,
       opacity: 1,
       y: 0,
-      transition: { type: "spring", stiffness: 260, damping: 20 },
+      transition: { type: "spring" as const, stiffness: 260, damping: 20 },
     },
   };
 
@@ -60,25 +64,11 @@ export default function Brand() {
           animate={inView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-3xl md:text-5xl font-black text-gray-900 tracking-tight">
+          <h2 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tight">
             Shop by Brands
           </h2>
           <div className="h-1.5 w-20 bg-primarys rounded-full mt-3" />
         </motion.div>
-
-        <Link href="/brands">
-          <motion.button 
-            initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
-            whileHover={{ x: 5 }}
-            className="flex items-center gap-3 text-gray-600 hover:text-primarys font-black text-sm tracking-widest transition-all group"
-          >
-            VIEW ALL BRANDS
-            <span className="bg-gray-100 group-hover:bg-primarys group-hover:text-white p-2.5 rounded-full transition-all">
-              →
-            </span>
-          </motion.button>
-        </Link>
       </div>
 
       {/* Brand Grid */}
@@ -88,17 +78,17 @@ export default function Brand() {
         animate={inView ? "visible" : "hidden"}
         className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5"
       >
-        {brands.map((brand, index) => (
+        {brandsData?.data?.map((brand:any, index:any) => (
           <motion.div key={index} variants={itemVariants}>
             <Link
-              href="/category"
+              href= {`/brands/${brand?.slug}`}
               className="group relative flex flex-col items-center justify-center h-44 bg-white border border-gray-100 rounded-[2.5rem] p-6 transition-all duration-500 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.08)] hover:border-primarys/20"
             >
               {/* Image Container - Always in Color */}
               <div className="relative w-full h-full max-h-20 transition-all duration-500 group-hover:scale-110">
                 <Image
-                  src={brand.logo}
-                  alt={brand.name}
+                  src={brand?.image}
+                  alt={brand?.brand_name}
                   fill
                   className="object-contain transition-all duration-500"
                 />
@@ -106,7 +96,7 @@ export default function Brand() {
 
               {/* Brand Label */}
               <p className="mt-4 text-[11px] font-black tracking-[0.1em] text-gray-400 group-hover:text-primarys uppercase transition-colors">
-                {brand.name}
+                {brand?.brand_name}
               </p>
 
               {/* Decorative Underline on Hover */}

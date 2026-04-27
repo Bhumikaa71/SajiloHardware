@@ -55,3 +55,9 @@ body {
     }
   }
 }
+
+
+input[type="radio"] {
+  appearance: auto !important;
+  -webkit-appearance: radio !important;
+}

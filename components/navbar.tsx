@@ -41,7 +41,7 @@ const Navbar = () => {
   const { data: categoryTree } = useGetCategoryTreeQuery();
 
 
-  console.log("Fetched Category Tree:", categoryTree);
+
 
 
   useEffect(() => {
@@ -175,8 +175,8 @@ const Navbar = () => {
         {/* ================= DESKTOP TOP HEADER ================= */}
         <div
           className={`hidden lg:block bg-white border-b border-gray-100 transition-all duration-500 relative z-60 ${scrolled
-              ? "max-h-0 opacity-0 border-0 overflow-hidden"
-              : "max-h-40 opacity-100 overflow-visible"
+            ? "max-h-0 opacity-0 border-0 overflow-hidden"
+            : "max-h-40 opacity-100 overflow-visible"
             }`}
         >
           <div className="mx-auto max-w-7xl px-4 lg:px-8 flex items-center justify-between gap-4 lg:gap-8 py-3">
@@ -246,8 +246,8 @@ const Navbar = () => {
 
                   <div
                     className={`absolute right-0 top-full w-56 transition-all duration-300 ${isProfileOpen
-                        ? "opacity-100 visible translate-y-0"
-                        : "opacity-0 invisible -translate-y-2"
+                      ? "opacity-100 visible translate-y-0"
+                      : "opacity-0 invisible -translate-y-2"
                       }`}
                   >
                     <div className="h-2 w-full" />
@@ -310,8 +310,8 @@ const Navbar = () => {
             {/* SCROLL LOGO (Appears when scrolled) */}
             <div
               className={`absolute left-8 transition-all duration-300 ${scrolled
-                  ? "opacity-100 scale-100"
-                  : "opacity-0 scale-90 pointer-events-none"
+                ? "opacity-100 scale-100"
+                : "opacity-0 scale-90 pointer-events-none"
                 }`}
             >
               <Link href="/" className="block">
@@ -328,67 +328,67 @@ const Navbar = () => {
             </div>
 
             {/* CATEGORY MENU */}
-     {/* CATEGORY MENU */}
-<div
-  className={`relative h-full transition-all duration-300 ${scrolled ? "ml-36" : ""}`}
-  onMouseEnter={() => setIsCategoriesOpen(true)}
-  onMouseLeave={() => setIsCategoriesOpen(false)}
->
-  <button className="bg-black/10 text-white px-6 h-full flex items-center gap-3 font-black text-sm tracking-wider hover:bg-black/20 transition-colors">
-    <Menu size={20} />
-    ALL CATEGORIES
-    <ChevronDown size={16} />
-  </button>
+            {/* CATEGORY MENU */}
+            <div
+              className={`relative h-full transition-all duration-300 ${scrolled ? "ml-36" : ""}`}
+              onMouseEnter={() => setIsCategoriesOpen(true)}
+              onMouseLeave={() => setIsCategoriesOpen(false)}
+            >
+              <button className="bg-black/10 text-white px-6 h-full flex items-center gap-3 font-black text-sm tracking-wider hover:bg-black/20 transition-colors">
+                <Menu size={20} />
+                ALL CATEGORIES
+                <ChevronDown size={16} />
+              </button>
 
-  {isCategoriesOpen && (
-    <div className="absolute top-full left-0 w-80 bg-white text-texts-dark shadow-[0_20px_50px_rgba(0,0,0,0.2)] rounded-b-3xl py-4 border-x border-b border-gray-100 z-50">
-      {categoryTree?.data?.map((cat: any) => (
-        <div key={cat._id} className="group/item px-4 relative">
-          
-          {/* MAIN CATEGORY */}
-          <Link href={`/category/${cat.slug}`}>
-            <div className="flex items-center justify-between py-3 px-4 rounded-xl hover:bg-primarys hover:text-white transition-all cursor-pointer">
-              <div className="flex items-center gap-4 font-bold">
-                <Image
-                  src={cat.image}
-                  alt={cat.name}
-                  width={24}
-                  height={24}
-                  className="object-contain"
-                />
-                {cat.name}
-              </div>
-              <ChevronRight size={16} />
-            </div>
-          </Link>
+              {isCategoriesOpen && (
+                <div className="absolute top-full left-0 w-80 bg-white text-texts-dark shadow-[0_20px_50px_rgba(0,0,0,0.2)] rounded-b-3xl py-4 border-x border-b border-gray-100 z-50">
+                  {categoryTree?.data?.map((cat: any) => (
+                    <div key={cat._id} className="group/item px-4 relative">
 
-          {/* SUB CATEGORY - FIXED POSITIONING */}
-          {cat.children?.length > 0 && (
-            <div className="invisible opacity-0 group-hover/item:visible group-hover/item:opacity-100 absolute left-full top-0 ml-1 w-64 bg-white shadow-2xl rounded-3xl py-6 border border-gray-100 transition-all duration-300 z-50">
-              {cat.children.map((sub: any) => (
-                <Link
-                  key={sub._id}
-                  href={`/category/${cat.slug}/${sub.slug}`}
-                >
-                  <span className="flex items-center gap-3 px-8 py-2 text-sm text-texts-dark hover:text-primarys hover:pl-10 transition-all font-medium border-l-4 border-transparent hover:border-primarys">
-                    <Image
-                      src={sub.image}
-                      alt={sub.name}
-                      width={20}
-                      height={20}
-                      className="object-contain"
-                    />
-                    {sub.name}
-                  </span>
-                </Link>
-              ))}
+                      {/* MAIN CATEGORY */}
+                      <Link href={`/category/${cat.slug}`}>
+                        <div className="flex items-center justify-between py-3 px-4 rounded-xl hover:bg-primarys hover:text-white transition-all cursor-pointer">
+                          <div className="flex items-center gap-4 font-bold">
+                            <Image
+                              src={cat.image}
+                              alt={cat.name}
+                              width={24}
+                              height={24}
+                              className="object-contain"
+                            />
+                            {cat.name}
+                          </div>
+                          <ChevronRight size={16} />
+                        </div>
+                      </Link>
+
+                      {/* SUB CATEGORY - FIXED POSITIONING */}
+                      {cat.children?.length > 0 && (
+                        <div className="invisible opacity-0 group-hover/item:visible group-hover/item:opacity-100 absolute left-full top-0 ml-1 w-64 bg-white shadow-2xl rounded-3xl py-6 border border-gray-100 transition-all duration-300 z-50">
+                          {cat.children.map((sub: any) => (
+                            <Link
+                              key={sub._id}
+                              href={`/category/${cat.slug}/${sub.slug}`}
+                            >
+                              <span className="flex items-center gap-3 px-8 py-2 text-sm text-texts-dark hover:text-primarys hover:pl-10 transition-all font-medium border-l-4 border-transparent hover:border-primarys">
+                                <Image
+                                  src={sub.image}
+                                  alt={sub.name}
+                                  width={20}
+                                  height={20}
+                                  className="object-contain"
+                                />
+                                {sub.name}
+                              </span>
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      ))}
-    </div>
-  )}
-</div>
 
             {/* NAV LINKS */}
             <div
@@ -397,17 +397,17 @@ const Navbar = () => {
               <Link
                 href="/"
                 className={`px-5 text-sm font-bold tracking-wide transition-colors h-full flex items-center ${isActive("/")
-                    ? "text-white   border-b-2 border-orange-300"
-                    : "hover:text-orange-300"
-                }`}
+                  ? "text-white   border-b-2 border-orange-300"
+                  : "hover:text-orange-300"
+                  }`}
               >
                 HOME
               </Link>
               <Link
                 href="/aboutpage"
                 className={`px-5 text-sm font-bold tracking-wide transition-colors h-full flex items-center ${isActive("/aboutpage")
-                    ? "text-orange-300 border-b-2 border-orange-300"
-                    : "hover:text-orange-200"
+                  ? "text-orange-300 border-b-2 border-orange-300"
+                  : "hover:text-orange-200"
                   }`}
               >
                 ABOUT
@@ -415,8 +415,8 @@ const Navbar = () => {
               <Link
                 href="/shop"
                 className={`px-5 text-sm font-bold tracking-wide transition-colors h-full flex items-center ${isActive("/shop")
-                    ? "text-orange-300 border-b-2 border-orange-300"
-                    : "hover:text-orange-200"
+                  ? "text-orange-300 border-b-2 border-orange-300"
+                  : "hover:text-orange-200"
                   }`}
               >
                 SHOP
@@ -424,8 +424,8 @@ const Navbar = () => {
               <Link
                 href="/blogpage/bloghero"
                 className={`px-5 text-sm font-bold tracking-wide transition-colors h-full flex items-center ${isActive("/blogpage/bloghero")
-                    ? "text-orange-300 border-b-2 border-orange-300"
-                    : "hover:text-orange-200"
+                  ? "text-orange-300 border-b-2 border-orange-300"
+                  : "hover:text-orange-200"
                   }`}
               >
                 BLOG
@@ -494,8 +494,8 @@ const Navbar = () => {
                     href={href}
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={`flex items-center gap-2 p-3 rounded-xl text-sm font-semibold transition-colors border ${isActive(href)
-                        ? "bg-primarys text-white border-primarys shadow-md"
-                        : "bg-gray-50 text-gray-700 hover:bg-orange-50 hover:text-primarys hover:border-orange-100"
+                      ? "bg-primarys text-white border-primarys shadow-md"
+                      : "bg-gray-50 text-gray-700 hover:bg-orange-50 hover:text-primarys hover:border-orange-100"
                       }`}
                   >
                     <Icon size={14} className="shrink-0" />

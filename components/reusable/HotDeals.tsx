@@ -3,16 +3,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useRef, useEffect, useCallback } from "react";
-import products from "@/data/products.json";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, Flame, Tag } from "lucide-react";
 import { motion, useInView } from "framer-motion";
+import { useGetHotDealsQuery } from "@/services/productApi";
+import no_image_available from "@/public/images/no-image-available.png";
 
 export default function HotDeals() {
-  const hotDeals = products["hot-deals"] || [];
   const scrollRef = useRef<HTMLDivElement>(null);
   const autoScrollRef = useRef<NodeJS.Timeout | null>(null);
-  
+  const { data: hotDeals } = useGetHotDealsQuery();
+
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
 
@@ -24,7 +25,7 @@ export default function HotDeals() {
     const card = el.firstElementChild as HTMLElement;
     if (!card) return;
 
-    const gap = 16; 
+    const gap = 16;
     const scrollAmount = card.offsetWidth + gap;
 
     if (direction === "right") {
@@ -81,11 +82,11 @@ export default function HotDeals() {
 
   const cardVariants = {
     hidden: { opacity: 0, y: 30, scale: 0.95 },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
+    visible: {
+      opacity: 1,
+      y: 0,
       scale: 1,
-      transition: { duration: 0.5, ease: "easeOut" } 
+      transition: { duration: 0.5, ease: "easeOut" as const }
     },
   };
 
@@ -93,21 +94,21 @@ export default function HotDeals() {
     <section ref={sectionRef} className="bg-gray-50 py-10 sm:py-12 px-4 sm:px-6 relative overflow-hidden">
       {/* Background Animated Glows */}
       <div className="absolute inset-0 pointer-events-none">
-        <motion.div 
+        <motion.div
           animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
           transition={{ duration: 8, repeat: Infinity }}
-          className="absolute top-0 left-1/4 w-72 sm:w-96 h-52 sm:h-64 bg-[#EE7820]/5 rounded-full blur-3xl" 
+          className="absolute top-0 left-1/4 w-72 sm:w-96 h-52 sm:h-64 bg-[#EE7820]/5 rounded-full blur-3xl"
         />
-        <motion.div 
+        <motion.div
           animate={{ scale: [1.2, 1, 1.2], opacity: [0.3, 0.5, 0.3] }}
           transition={{ duration: 8, repeat: Infinity }}
-          className="absolute bottom-0 right-1/4 w-52 sm:w-64 h-40 sm:h-48 bg-[#EE7820]/5 rounded-full blur-3xl" 
+          className="absolute bottom-0 right-1/4 w-52 sm:w-64 h-40 sm:h-48 bg-[#EE7820]/5 rounded-full blur-3xl"
         />
       </div>
 
       <div className="max-w-7xl mx-auto relative">
         {/* HEADER */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={isInView ? { opacity: 1, x: 0 } : {}}
           className="flex items-end justify-between mb-6 sm:mb-8"
@@ -169,9 +170,9 @@ export default function HotDeals() {
             className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {hotDeals.map((item: any) => (
+            {hotDeals?.data?.map((item: any, index: number) => (
               <motion.div
-                key={item.id}
+                key={index}
                 variants={cardVariants}
                 className="flex-shrink-0 w-[85%] sm:w-[48%] md:w-[31%] lg:w-[23%] xl:w-[19%]"
               >
@@ -180,11 +181,11 @@ export default function HotDeals() {
                   className="block h-full bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl group"
                 >
                   {/* PRODUCT IMAGE */}
-                  <div className="relative w-full aspect-[3/2] bg-gray-50 overflow-hidden">
+                  <div className="relative w-full aspect-[3/2] bg-gray-50 overflow-hidden rounded-t-2xl">
                     <img
-                      src={item.image_url}
-                      alt={item.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      src={item?.image?.[0] || no_image_available}
+                      alt={item?.name}
+                      className="w-full h-full object-contain p-3 group-hover:scale-110 transition-transform duration-700"
                     />
                     <div className="absolute top-2 left-2 flex items-center gap-1 bg-[#EE7820] text-white text-[10px] font-bold px-2 py-1 rounded-lg shadow-sm">
                       <Flame size={10} />
@@ -196,10 +197,10 @@ export default function HotDeals() {
                   <div className="p-4 flex flex-col gap-2">
                     <div className="flex items-center gap-1 text-[#EE7820]/70 text-[10px] font-black uppercase tracking-widest">
                       <Tag size={10} />
-                      {item.category || "Limited Deal"}
+                      {item?.category?.name || "Limited Deal"}
                     </div>
                     <p className="text-[#282D31] text-sm font-extrabold line-clamp-2 group-hover:text-[#EE7820] transition-colors">
-                      {item.name}
+                      {item?.name}
                     </p>
                   </div>
                 </Link>
