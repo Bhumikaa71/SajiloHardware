@@ -2,6 +2,36 @@
 
 // import products from "@/data/products.json";
 // import ProductSection from "@/components/reusable/ProductSection";
+// import { useGetNewArrivalsQuery } from "@/services/productApi";
+
+// export default function PowerTools() {
+//   const powertools = products.power_tools.filter((item) => item.powertools);
+//   const {data: newArrivals} = useGetNewArrivalsQuery();
+
+//   console.log("New Arrivals:", newArrivals);
+
+//   return <ProductSection title="New Arrivals" products={newArrivals?.data ?? [] || []} />;
+// }
+
+
+// "use client";
+
+// import ProductSection from "@/components/reusable/ProductSection";
+// import {  useGetNewArrivalsQuery } from "@/services/productApi";
+
+// export default function BestSelling() {
+//   const { data: bestSellingProducts } = useGetNewArrivalsQuery();
+
+//   return <ProductSection title="Best Selling" products={bestSellingProducts?.data ?? []} />;
+// }
+
+
+
+
+// "use client";
+
+// import products from "@/data/products.json";
+// import ProductSection from "@/components/reusable/ProductSection";
 // import { useGetBestSellingProductsQuery } from "@/services/categoryApi";
 
 // export default function BestSelling() {
@@ -20,17 +50,15 @@
 "use client";
 
 import ProductSection from "@/components/reusable/ProductSection";
-import { useGetBestSellingProductsQuery } from "@/services/productApi";
+import ProductSectionFlat from "@/components/reusable/ProductSectionFlat";
+import { useGetBestSellingProductsQuery, useGetNewArrivalsQuery } from "@/services/productApi";
 import { useState } from "react";
 
-export default function BestSelling() {
+export default function NewArrivals() {
   const [page, setPage] = useState(1);
   const limit = 10;
 
-  const { data, isLoading, isFetching } = useGetBestSellingProductsQuery(
-    { page, limit },
-    { refetchOnMountOrArgChange: false }
-  );
+  const { data, isLoading, isFetching } = useGetNewArrivalsQuery();
 
   const products = data?.data ?? [];
   const hasMore = products.length === limit;
@@ -68,8 +96,8 @@ if (isLoading && (!products || products.length === 0)) {
 if (!isLoading && (!products || products.length === 0)) return null;
 
   return (
-    <ProductSection
-      title="Best Selling"
+    <ProductSectionFlat
+      title="New Arrivals"
       products={products}
       onLoadMore={handleLoadMore}
       hasMore={hasMore}

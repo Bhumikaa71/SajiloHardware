@@ -16,6 +16,7 @@ type Product = {
   image: string; // Optional array of image URLs
   op_price: number; // Original price (for discounts)
   dp_price: number; // Discounted price (for discounts)
+  slug: string; // Product slug for URL
 };
 
 export default function ProductGrid({ products }: { products: Product[] }) {
@@ -62,7 +63,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
                 </button>
 
                 {/* 🔗 Wrap content in Link */}
-                <Link href="/product" className="flex flex-col flex-grow">
+                <Link href={`/product/${product?.slug}`} className="flex flex-col flex-grow">
                   {/* Image */}
                   <div className="relative h-56 w-full overflow-hidden rounded-xl bg-gray-50">
                     {product?.image?.[0] ? (
