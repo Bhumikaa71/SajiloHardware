@@ -66,10 +66,9 @@ const BlogPage = () => {
     <div className="bg-white min-h-screen overflow-x-hidden">
       <Navbar />
       <main className="mx-auto max-w-7xl">
-        
         {/* ================= HERO ================= */}
         <section className="relative px-4 sm:px-6 lg:px-8 pt-16 pb-20">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8 }}
@@ -85,7 +84,7 @@ const BlogPage = () => {
             </div>
 
             <div className="relative z-10 p-8 md:p-16 max-w-3xl">
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 }}
@@ -97,7 +96,7 @@ const BlogPage = () => {
                 </span>
               </motion.div>
 
-              <motion.h1 
+              <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
@@ -106,7 +105,7 @@ const BlogPage = () => {
                 Master Your <span className="text-primarys">Hardware</span>
               </motion.h1>
 
-              <motion.p 
+              <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.7 }}
@@ -120,7 +119,7 @@ const BlogPage = () => {
 
         {/* ================= FEATURED ================= */}
         <section className="px-4 sm:px-6 lg:px-8 mb-16">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -173,7 +172,7 @@ const BlogPage = () => {
               Recent Articles
             </h3>
 
-            <motion.button 
+            <motion.button
               whileHover={{ rotate: 90 }}
               className="p-2 border rounded-lg hover:border-primarys transition"
             >
@@ -181,7 +180,7 @@ const BlogPage = () => {
             </motion.button>
           </div>
 
-          <motion.div 
+          <motion.div
             variants={containerVariants}
             initial="hidden"
             animate={gridInView ? "visible" : "hidden"}
@@ -215,8 +214,14 @@ const BlogPage = () => {
                     {post.excerpt}
                   </p>
 
-                  <Link
+                  {/* <Link
                     href={`/blog/${post.id}`}
+                    className="text-xs font-bold flex items-center gap-1 group-hover:gap-2 transition-all text-primarys"
+                  >
+                    Read More <ArrowRight size={14} />
+                  </Link> */}
+                  <Link
+                    href="/blogpage/readmoreblog"
                     className="text-xs font-bold flex items-center gap-1 group-hover:gap-2 transition-all text-primarys"
                   >
                     Read More <ArrowRight size={14} />
@@ -229,7 +234,7 @@ const BlogPage = () => {
 
         {/* ================= NEWSLETTER ================= */}
         <section className="px-4 sm:px-6 lg:px-8 pb-20">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -237,7 +242,7 @@ const BlogPage = () => {
           >
             {/* Background Decoration */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-primarys/10 rounded-full -mr-10 -mt-10" />
-            
+
             <h3 className="text-2xl md:text-4xl font-black mb-4 relative z-10">
               Join Our Newsletter
             </h3>
@@ -253,7 +258,7 @@ const BlogPage = () => {
                 className="px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white w-full sm:w-80 outline-none focus:border-primarys transition"
               />
 
-              <motion.button 
+              <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="bg-primarys px-8 py-3 rounded-xl text-xs font-bold hover:bg-white hover:text-primarys transition-colors"
