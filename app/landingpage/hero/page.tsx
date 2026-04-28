@@ -63,6 +63,9 @@ function AnimatedWords({
   active: boolean;
   delay?: number;
 }) {
+
+
+  
   return (
     <span className="inline-flex flex-wrap">
       {text.split(" ").map((word, i) => (

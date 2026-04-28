@@ -2,7 +2,11 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const baseApi = createApi({
   reducerPath: 'api', // The key in your Redux store
-  baseQuery: fetchBaseQuery({ 
+  keepUnusedDataFor: 300,        // ✅ Keep cache for 5 min globally
+  refetchOnFocus: false,         // ✅ Disable - causes unnecessary refetches
+  refetchOnReconnect: true,        // ✅ fixes reconnect re-fetch
+  refetchOnMountOrArgChange: false, // ✅ MUST be false - this is your skeleton cause
+  baseQuery: fetchBaseQuery({
     // baseUrl: process.env.NEXT_PUBLIC_API_URL || 'https://sajilo-hardware.onrender.com',
     baseUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
     prepareHeaders: (headers) => {

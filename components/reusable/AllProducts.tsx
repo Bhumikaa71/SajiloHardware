@@ -49,7 +49,7 @@ function AllProducts({
       {/* HEADER */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
         <h1 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-800">
-          All Products
+          Sub Categories Products
         </h1>
       </div>
 

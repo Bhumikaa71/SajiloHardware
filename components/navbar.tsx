@@ -40,9 +40,7 @@ const Navbar = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const { data: categoryTree } = useGetCategoryTreeQuery();
 
-
-
-
+  
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -328,7 +326,6 @@ const Navbar = () => {
             </div>
 
             {/* CATEGORY MENU */}
-            {/* CATEGORY MENU */}
             <div
               className={`relative h-full transition-all duration-300 ${scrolled ? "ml-36" : ""}`}
               onMouseEnter={() => setIsCategoriesOpen(true)}
@@ -346,7 +343,6 @@ const Navbar = () => {
                     <div key={cat._id} className="group/item px-4 relative">
 
                       {/* MAIN CATEGORY */}
-                      <Link href={`/category/${cat.slug}`}>
                         <div className="flex items-center justify-between py-3 px-4 rounded-xl hover:bg-primarys hover:text-white transition-all cursor-pointer">
                           <div className="flex items-center gap-4 font-bold">
                             <Image
@@ -360,7 +356,6 @@ const Navbar = () => {
                           </div>
                           <ChevronRight size={16} />
                         </div>
-                      </Link>
 
                       {/* SUB CATEGORY - FIXED POSITIONING */}
                       {cat.children?.length > 0 && (
@@ -368,7 +363,7 @@ const Navbar = () => {
                           {cat.children.map((sub: any) => (
                             <Link
                               key={sub._id}
-                              href={`/category/${cat.slug}/${sub.slug}`}
+                              href={`/shop/${sub.slug}`}
                             >
                               <span className="flex items-center gap-3 px-8 py-2 text-sm text-texts-dark hover:text-primarys hover:pl-10 transition-all font-medium border-l-4 border-transparent hover:border-primarys">
                                 <Image
