@@ -7,8 +7,8 @@ export const baseApi = createApi({
   refetchOnReconnect: true,        // ✅ fixes reconnect re-fetch
   refetchOnMountOrArgChange: false, // ✅ MUST be false - this is your skeleton cause
   baseQuery: fetchBaseQuery({
-    // baseUrl: process.env.NEXT_PUBLIC_API_URL || 'https://sajilo-hardware.onrender.com',
-    baseUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
+    baseUrl: process.env.NEXT_PUBLIC_API_URL || 'https://sajilo-hardware.onrender.com',
+    // baseUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
     prepareHeaders: (headers) => {
       const sh_token = localStorage.getItem('sh-token');
       if (sh_token) headers.set('authorization', `Bearer ${sh_token}`);
