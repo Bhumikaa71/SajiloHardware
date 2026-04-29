@@ -54,18 +54,19 @@ export const productApi = baseApi.injectEndpoints({
         }),
 
         // GET FEATURED PRODUCTS
-        // getFeaturedProducts: builder.query<any, void>({
-        //     query: () =>
-        //         `/api/v1/product/featured`,
-        //     providesTags: ['Product'],
-        //     keepUnusedDataFor: 10, // cache for 10 sec
-        // })
-
-        // GET FEATURED PRODUCTS
         getFeaturedProducts: builder.query<any, void>({
             query: () => `/api/v1/product/featured`,
             providesTags: ['Product'],
             keepUnusedDataFor: 300, // cache for 5 min - featured products don't change often, so we can cache them for longer
+        }),
+
+        // CART PRODUCTS LIST
+        getCartProducts: builder.mutation<any, { ids: string[] }>({
+            query: ({ ids }) => ({
+                url: `/api/v1/cart-product-list`,
+                method: "POST",
+                body: { ids },
+            }),
         }),
 
     }),
@@ -79,4 +80,5 @@ export const {
     useGetProductByCategoriesQuery,
     useGetFeaturedProductsQuery,
     useGetNewArrivalsQuery,
+    useGetCartProductsMutation,
 } = productApi;

@@ -40,7 +40,7 @@ const Navbar = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const { data: categoryTree } = useGetCategoryTreeQuery();
 
-  
+
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -51,12 +51,12 @@ const Navbar = () => {
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("sh-token");
+    const storedToken = localStorage.getItem("vn-sh-token");
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (storedToken) setToken(storedToken);
 
     const handleStorage = () => {
-      setToken(localStorage.getItem("sh-token"));
+      setToken(localStorage.getItem("vn-sh-token"));
     };
 
     window.addEventListener("storage", handleStorage);
@@ -137,15 +137,6 @@ const Navbar = () => {
                   </button>
                 </Link>
 
-                <Link href="/wishlistpage">
-                  <button className="relative p-2 text-primarys hover:bg-orange-50 rounded-full transition-colors">
-                    <Heart size={22} />
-                    <span className="absolute top-0.5 right-0.5 bg-primarys text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center border border-white font-bold">
-                      {wishlist.length}
-                    </span>
-                  </button>
-                </Link>
-
                 <Link href={token ? "/profile" : "/login"}>
                   <button className="p-2 text-primarys hover:bg-orange-50 rounded-full transition-colors">
                     <User size={22} />
@@ -192,14 +183,7 @@ const Navbar = () => {
 
             <div className="flex grow max-w-xl">
               <div className="relative w-full group">
-                <input
-                  type="text"
-                  placeholder="Search for tools, hardware..."
-                  className="w-full bg-gray-50 border-2 border-transparent rounded-2xl py-2.5 pl-6 pr-14 focus:bg-white focus:border-primarys focus:ring-4 focus:ring-orange-50 transition-all outline-none text-texts-dark"
-                />
-                <button className="absolute right-1.5 top-1/2 -translate-y-1/2 bg-primarys text-white p-2 rounded-xl hover:bg-orange-600 transition-colors">
-                  <Search size={20} />
-                </button>
+
               </div>
             </div>
 
@@ -219,15 +203,6 @@ const Navbar = () => {
                       {cartCount}
                     </span>
                   )}
-                </button>
-              </Link>
-
-              <Link href="/wishlistpage">
-                <button className="relative p-2.5 text-primarys hover:bg-orange-50 rounded-xl transition-colors">
-                  <Heart size={24} />
-                  <span className="absolute top-1 right-1 bg-primarys text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-white font-bold">
-                    {wishlist.length}
-                  </span>
                 </button>
               </Link>
 
@@ -266,19 +241,19 @@ const Navbar = () => {
                       </Link>
 
                       <Link
-                        href="/vendor-order-history"
-                        onClick={() => setIsProfileOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
-                      >
-                        Order History
-                      </Link>
-
-                      <Link
                         href="/vendor-orders"
                         onClick={() => setIsProfileOpen(false)}
                         className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
                       >
                         My Orders
+                      </Link>
+
+                      <Link
+                        href="/vendor-order-history"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
+                      >
+                        Order History
                       </Link>
 
                       <button
@@ -343,19 +318,19 @@ const Navbar = () => {
                     <div key={cat._id} className="group/item px-4 relative">
 
                       {/* MAIN CATEGORY */}
-                        <div className="flex items-center justify-between py-3 px-4 rounded-xl hover:bg-primarys hover:text-white transition-all cursor-pointer">
-                          <div className="flex items-center gap-4 font-bold">
-                            <Image
-                              src={cat.image}
-                              alt={cat.name}
-                              width={24}
-                              height={24}
-                              className="object-contain"
-                            />
-                            {cat.name}
-                          </div>
-                          <ChevronRight size={16} />
+                      <div className="flex items-center justify-between py-3 px-4 rounded-xl hover:bg-primarys hover:text-white transition-all cursor-pointer">
+                        <div className="flex items-center gap-4 font-bold">
+                          <Image
+                            src={cat.image}
+                            alt={cat.name}
+                            width={24}
+                            height={24}
+                            className="object-contain"
+                          />
+                          {cat.name}
                         </div>
+                        <ChevronRight size={16} />
+                      </div>
 
                       {/* SUB CATEGORY - FIXED POSITIONING */}
                       {cat.children?.length > 0 && (
