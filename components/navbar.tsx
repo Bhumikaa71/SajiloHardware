@@ -258,7 +258,7 @@ const Navbar = () => {
 
                       <button
                         onClick={() => {
-                          localStorage.removeItem("sh-token");
+                          localStorage.removeItem("vn-sh-token");
                           setToken(null);
                           setIsProfileOpen(false);
                         }}
