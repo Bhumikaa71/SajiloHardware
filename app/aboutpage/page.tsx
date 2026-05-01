@@ -193,7 +193,7 @@ const AboutPage = () => {
                 whileHover={{ y: -10 }}
                 className="group p-8 bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all border"
               >
-                <div className="mb-5 p-3 bg-gray-100 rounded-xl w-fit group-hover:bg-primarys group-hover:text-white transition-colors duration-300">
+                <div className="mb-5 p-3 bg-gray-100 rounded-xl w-fit  group-hover:text-white transition-colors duration-300">
                   {value.icon}
                 </div>
 
@@ -227,13 +227,6 @@ const AboutPage = () => {
                 From a small shop in Kathmandu to a nationwide supplier, our
                 journey is built on trust and quality.
               </p>
-
-              <motion.button 
-                whileHover={{ x: 10 }}
-                className="flex items-center gap-2 bg-texts-dark px-6 py-3 rounded-xl text-xs font-bold tracking-wide hover:shadow-lg transition"
-              >
-                MEET THE TEAM <ArrowRight size={16} />
-              </motion.button>
             </div>
 
             {/* IMAGES */}

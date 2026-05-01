@@ -177,7 +177,7 @@ export default function HotDeals() {
                 className="flex-shrink-0 w-[85%] sm:w-[48%] md:w-[31%] lg:w-[23%] xl:w-[19%]"
               >
                 <Link
-                  href="/product"
+                  href={`/product/${item?.slug}`}
                   className="block h-full bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl group"
                 >
                   {/* PRODUCT IMAGE */}
