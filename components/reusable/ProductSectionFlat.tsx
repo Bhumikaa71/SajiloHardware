@@ -139,23 +139,7 @@ export default function ProductSectionFlat({
               onClick={() => (window.location.href = `/product/${product.slug}`)}
             >
               <div className="bg-white rounded-2xl p-3 shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 flex flex-col h-full relative group/card">
-                {/* WISHLIST BUTTON */}
-                <motion.button
-                  whileTap={{ scale: 0.8 }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    isInWishlist ? removeFromWishlist(product.id) : addToWishlist(product);
-                    toast.success(isInWishlist ? "Removed" : "Added ❤️");
-                  }}
-                  className={`absolute top-4 right-4 z-20 p-2 rounded-xl backdrop-blur-md transition-all ${
-                    isInWishlist
-                      ? "bg-primarys text-white"
-                      : "bg-white/90 text-gray-400 shadow-sm"
-                  }`}
-                >
-                  <Heart size={16} className={isInWishlist ? "fill-red-600" : "text-gray-400"} />
-                </motion.button>
-
+         
                 {/* IMAGE */}
                 <div className="relative w-full aspect-square overflow-hidden rounded-lg sm:rounded-xl bg-gray-50">
                   <Image

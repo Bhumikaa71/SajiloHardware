@@ -67,12 +67,7 @@ const Footer = () => {
                 >
                   <ShoppingBag size={16} /> EXPLORE SHOP
                 </Link>
-                <Link
-                  href="/hot-deals"
-                  className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white px-6 py-3 rounded-xl font-black text-xs tracking-widest transition-all flex items-center gap-2"
-                >
-                  <Flame size={16} className="text-yellow-400" /> VIEW DEALS
-                </Link>
+            
               </div>
             </div>
             <div className="absolute -right-10 -bottom-10 opacity-10 rotate-12 transition-transform group-hover:rotate-0 duration-700">

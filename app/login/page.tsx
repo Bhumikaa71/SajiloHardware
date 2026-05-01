@@ -4,18 +4,35 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Lock, Mail, Eye, EyeOff, ArrowRight } from "lucide-react";
-// import VendorNavbar from "@/components/VendorNavbar";
+import { useLoginVendorMutation } from "@/services/vendorApi";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const VendorLoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = (e: React.FormEvent) => {
+  const router = useRouter();
+  const [loginVendor, { isLoading }] = useLoginVendorMutation();
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // just redirect
-    window.location.href = "/";
+    if (!email || !password) {
+      toast.error("Email and password are required");
+      return;
+    }
+
+    try {
+      const res = await loginVendor({ email, password }).unwrap();
+      // ✅ Save token to localStorage
+      localStorage.setItem("vn-sh-token", res.token);
+      toast.success("Login successful!");
+      router.push("/");
+    } catch (err: any) {
+      toast.error(err?.data?.message ?? "Invalid email or password");
+    }
   };
 
   return (
@@ -57,7 +74,6 @@ const VendorLoginPage = () => {
                     className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-green-500 transition-colors"
                     size={18}
                   />
-
                   <input
                     type="email"
                     value={email}
@@ -74,7 +90,6 @@ const VendorLoginPage = () => {
                   <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                     Password
                   </label>
-
                   <Link
                     href="#"
                     className="text-[10px] font-black text-green-500 hover:text-slate-900 tracking-widest transition-colors"
@@ -88,7 +103,6 @@ const VendorLoginPage = () => {
                     className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-green-500 transition-colors"
                     size={18}
                   />
-
                   <input
                     type={showPassword ? "text" : "password"}
                     value={password}
@@ -96,7 +110,6 @@ const VendorLoginPage = () => {
                     placeholder="••••••••"
                     className="w-full bg-slate-50/50 border border-slate-100 rounded-2xl py-4 pl-12 pr-12 outline-none focus:bg-white focus:border-green-500 focus:ring-4 focus:ring-green-500/5 transition-all font-bold text-slate-700"
                   />
-
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
@@ -108,8 +121,12 @@ const VendorLoginPage = () => {
               </div>
 
               {/* Submit */}
-              <button className="w-full bg-slate-900 text-white py-5 rounded-2xl font-black text-xs tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-[#10B981] hover:shadow-xl hover:shadow-green-500/20 active:scale-[0.98] transition-all duration-300">
-                SIGN IN
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-slate-900 text-white py-5 rounded-2xl font-black text-xs tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-[#10B981] hover:shadow-xl hover:shadow-green-500/20 active:scale-[0.98] transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {isLoading ? "SIGNING IN..." : "SIGN IN"}
                 <ArrowRight size={18} />
               </button>
             </form>
