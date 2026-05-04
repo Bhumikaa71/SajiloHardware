@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // "use client";
 
 // import { Heart, MessageCircle, ShoppingCart } from "lucide-react";
@@ -160,10 +161,6 @@
 //   );
 // }
 
-
-
-
-
 "use client";
 
 import { Heart, MessageCircle, ShoppingCart } from "lucide-react";
@@ -208,26 +205,28 @@ export default function ProductGrid({ products }: { products: Product[] }) {
     });
   };
 
-  
   return (
     <div className="max-w-7xl mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {products.map((product, index) => {
-          const id = product.id ?? (product as any)._id ?? (product as any).product_id;
+          const id =
+            product.id ?? (product as any)._id ?? (product as any).product_id;
 
           const isInWishlist = wishlist.some((item) => item.id === id);
           const isInCart = cart.includes(id);
 
           const whatsappUrl = `https://wa.me/9845526696?text=${encodeURIComponent(
-            `Interested in: ${product.name} (Price: Rs. ${product.price})`
+            `Interested in: ${product.name} (Price: Rs. ${product.price})`,
           )}`;
 
           return (
             <div key={`${id}-${index}`} className="cursor-pointer">
               <div className="group relative bg-white rounded-2xl p-4 shadow-md hover:shadow-xl transition border border-gray-100 flex flex-col h-full">
-    
                 {/* 🔗 Product Link */}
-                <Link href={`/product/${product?.slug}`} className="flex flex-col flex-grow">
+                <Link
+                  href={`/product/${product?.slug}`}
+                  className="flex flex-col flex-grow"
+                >
                   {/* Image */}
                   <div className="relative h-56 w-full overflow-hidden rounded-xl bg-gray-50">
                     {product?.image?.[0] ? (
@@ -260,7 +259,9 @@ export default function ProductGrid({ products }: { products: Product[] }) {
                       ) : (
                         <div className="flex gap-2 mt-1 items-center">
                           <span className="text-primarys font-bold">
-                            {product.op_price ? `Rs. ${product?.op_price?.toLocaleString()}` : ""}
+                            {product.op_price
+                              ? `Rs. ${product?.op_price?.toLocaleString()}`
+                              : ""}
                           </span>
                         </div>
                       )}
@@ -278,7 +279,6 @@ export default function ProductGrid({ products }: { products: Product[] }) {
 
                 {/* Buttons */}
                 <div className="flex gap-2 mt-4">
-
                   {/* 🛒 Add to Cart */}
                   <button
                     onClick={(e) => {
@@ -288,8 +288,11 @@ export default function ProductGrid({ products }: { products: Product[] }) {
                       toast.success("Added to cart 🛒");
                     }}
                     disabled={isInCart}
-                    className={`w-1/2 text-sm flex items-center justify-center gap-2 py-2 rounded-xl transition ${isInCart ? "bg-green-100 text-green-600" : "bg-gray-100 text-gray-400"
-                      }`}
+                    className={`w-1/2 text-sm flex items-center justify-center gap-2 py-2 rounded-xl transition ${
+                      isInCart
+                        ? "bg-green-100 text-green-600"
+                        : "bg-gray-100 text-gray-400"
+                    }`}
                   >
                     <ShoppingCart size={18} />
                     {isInCart ? "IN CART" : ""}
@@ -310,7 +313,6 @@ export default function ProductGrid({ products }: { products: Product[] }) {
                       ENQUIRY
                     </motion.button>
                   </Link>
-
                 </div>
               </div>
             </div>
