@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useRef } from "react";
@@ -5,7 +6,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
-import { Calendar, Clock, ArrowLeft, ArrowRight, Share2, BookOpen, ChevronRight } from "lucide-react";
+import {
+  Calendar,
+  Clock,
+  ArrowLeft,
+  ArrowRight,
+  Share2,
+  BookOpen,
+  ChevronRight,
+} from "lucide-react";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { useGetBlogByIdQuery, useGetAllBlogsQuery } from "@/services/blogApi";
@@ -13,7 +22,10 @@ import { useGetBlogByIdQuery, useGetAllBlogsQuery } from "@/services/blogApi";
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 const stripHtml = (html: string): string =>
-  html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  html
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const extractFirstImage = (html: string): string | null => {
   const match = html.match(/<img[^>]+src=["']([^"']+)["']/);
@@ -52,7 +64,9 @@ const ReadingProgressBar = () => {
 
 // ─── Table of Contents ───────────────────────────────────────────────────────
 
-const extractHeadings = (html: string): { id: string; text: string; level: number }[] => {
+const extractHeadings = (
+  html: string,
+): { id: string; text: string; level: number }[] => {
   const matches = [...html.matchAll(/<h([2-3])[^>]*>(.*?)<\/h[2-3]>/gi)];
   return matches.map((m, i) => ({
     id: `heading-${i}`,
@@ -173,6 +187,7 @@ const BlogDetailPage = () => {
       alert("Link copied to clipboard!");
     }
   };
+  const phone = process.env.NEXT_PUBLIC_PHONE_NUMBER;
 
   return (
     <div className="bg-white min-h-screen overflow-x-hidden">
@@ -180,7 +195,6 @@ const BlogDetailPage = () => {
       <Navbar />
 
       <main className="mx-auto max-w-5xl">
-
         {/* ── Loading ── */}
         {isLoading && (
           <div className="px-4 sm:px-6 lg:px-8 pt-10">
@@ -206,14 +220,15 @@ const BlogDetailPage = () => {
         {blog && (
           <>
             {/* ── Hero Banner ── */}
-            <section className="px-4 sm:px-6 lg:px-8 pt-8 pb-0">
+            <section className="px-4 mt-20 sm:px-6 lg:px-8 pt-8 pb-0">
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
                 className="relative rounded-2xl overflow-hidden min-h-[340px] md:min-h-[420px] flex items-end"
                 style={{
-                  background: "linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 50%, #1a2a1a 100%)",
+                  background:
+                    "linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 50%, #1a2a1a 100%)",
                 }}
               >
                 {/* Background image */}
@@ -237,11 +252,23 @@ const BlogDetailPage = () => {
                     transition={{ delay: 0.25 }}
                     className="flex items-center gap-2 text-white/40 text-[11px] tracking-wide mb-4"
                   >
-                    <Link href="/" className="hover:text-white/70 transition-colors">Home</Link>
+                    <Link
+                      href="/"
+                      className="hover:text-white/70 transition-colors"
+                    >
+                      Home
+                    </Link>
                     <ChevronRight size={11} className="opacity-40" />
-                    <Link href="/blog" className="hover:text-white/70 transition-colors">Blog</Link>
+                    <Link
+                      href="/blog"
+                      className="hover:text-white/70 transition-colors"
+                    >
+                      Blog
+                    </Link>
                     <ChevronRight size={11} className="opacity-40" />
-                    <span className="truncate max-w-[200px] opacity-50">{blog.title}</span>
+                    <span className="truncate max-w-[200px] opacity-50">
+                      {blog.title}
+                    </span>
                   </motion.div>
 
                   {/* Meta pills */}
@@ -270,7 +297,9 @@ const BlogDetailPage = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.45 }}
                     className="text-2xl sm:text-3xl md:text-[2.4rem] font-black text-white leading-[1.2] max-w-2xl tracking-tight"
-                    style={{ fontFamily: "'Playfair Display', 'Georgia', serif" }}
+                    style={{
+                      fontFamily: "'Playfair Display', 'Georgia', serif",
+                    }}
                   >
                     {blog.title}
                   </motion.h1>
@@ -282,23 +311,33 @@ const BlogDetailPage = () => {
             <div className="px-4 sm:px-6 lg:px-8 py-5 flex items-center justify-between max-w-7xl mx-auto">
               <Link
                 href="/blogpage/bloghero"
-                className="inline-flex items-center gap-2 text-[13px] font-medium text-gray-400 hover:text-gray-900 transition-colors group"
+                className="inline-flex items-center gap-2 text-[13px] font-medium text-black hover:text-gray-400 transition-colors group"
               >
-                <ArrowLeft size={15} className="group-hover:-translate-x-0.5 transition-transform" />
+                <ArrowLeft
+                  size={15}
+                  className="group-hover:-translate-x-0.5 transition-transform"
+                />
                 Back to Blog
               </Link>
 
-           
+              {/* WhatsApp Enquiry Button */}
+              <a
+                href={`https://wa.me/${phone}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-[13px] font-medium text-green-600 hover:text-green-700 transition-colors"
+              >
+                Enquiry on WhatsApp
+              </a>
             </div>
 
             {/* ── Body: TOC + Content ── */}
             <section className="px-4 sm:px-6 lg:px-8 pb-20">
               <div className="flex gap-10 items-start">
-
                 {/* Table of Contents — sticky sidebar */}
                 {blog.headings.length > 0 && (
                   <aside className="hidden xl:block w-44 shrink-0 sticky top-24 self-start">
-                    <p className="text-[10px] font-medium uppercase tracking-[0.12em] text-gray-400 mb-3">
+                    <p className="text-[10px] font-medium uppercase tracking-[0.12em] text-black mb-3">
                       In this article
                     </p>
                     <ul className="space-y-0">
@@ -309,9 +348,10 @@ const BlogDetailPage = () => {
                             className={`
                               block text-[12px] leading-relaxed py-[5px] border-l-2 transition-all
                               ${h.level === 3 ? "pl-4" : "pl-3"}
-                              ${i === 0
-                                ? "border-gray-900 text-gray-900 font-medium"
-                                : "border-gray-100 text-gray-400 hover:text-gray-700 hover:border-gray-300"
+                              ${
+                                i === 0
+                                  ? "border-gray-900 text-gray-900 font-medium"
+                                  : "border-gray-100 text-black hover:text-gray-700 hover:border-gray-300"
                               }
                             `}
                           >
@@ -360,18 +400,18 @@ const BlogDetailPage = () => {
                         ET
                       </div>
                       <div>
-                        <p className="text-[13px] font-medium text-gray-800">Editorial Team</p>
-                        <p className="text-[11px] text-gray-400">Published {blog.date}</p>
+                        <p className="text-[13px] font-medium text-gray-800">
+                          Editorial Team
+                        </p>
+                        <p className="text-[11px] text-gray-400">
+                          Published {blog.date}
+                        </p>
                       </div>
                     </div>
-
-            
                   </div>
                 </motion.div>
               </div>
             </section>
-
-         
           </>
         )}
       </main>

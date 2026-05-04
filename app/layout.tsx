@@ -18,6 +18,7 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+const phone = process.env.NEXT_PUBLIC_PHONE_NUMBER;
 
 export const metadata: Metadata = {
   title: "Sajilo HardWare",
@@ -43,7 +44,7 @@ export default function RootLayout({
               {/* ✅ IMPORTANT: prevents overlap */}
               <main className="flex-1">{children}</main>
               <a
-                href="https://wa.me/9845526696"
+                href={`https://wa.me/${phone}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="fixed bottom-5 right-5 z-50 bg-green-500 hover:bg-green-600 p-2 text-white  rounded-full shadow-lg transition duration-300 animate-bounce"

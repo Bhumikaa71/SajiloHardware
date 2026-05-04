@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // "use client";
 
 // import Footer from "@/components/footer";
@@ -24,7 +25,6 @@
 //   );
 
 //   console.log("Single Product Data:", singleProductData);
-
 
 //   const images = [
 //     "/images/addtocart.jpg",
@@ -323,9 +323,6 @@
 //   );
 // }
 
-
-
-
 "use client";
 
 import Footer from "@/components/footer";
@@ -348,7 +345,7 @@ export default function Page() {
 
   const { data: singleProductData, isLoading } = useGetProductDetailsQuery(
     { slug: slug as string },
-    { skip: !slug }
+    { skip: !slug },
   );
 
   const productDetails = singleProductData?.data;
@@ -382,8 +379,10 @@ export default function Page() {
     setZoomPos({ x, y });
   };
 
-  const whatsappUrl = `https://wa.me/9845526696?text=${encodeURIComponent(
-    `Interested in: ${productDetails?.name} (Price: Rs. ${productDetails?.dp_price || productDetails?.op_price})`
+  const phone = process.env.NEXT_PUBLIC_PHONE_NUMBER;
+
+  const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(
+    `Interested in: ${productDetails?.name} (Price: Rs. ${productDetails?.dp_price || productDetails?.op_price})`,
   )}`;
 
   if (isLoading) {
@@ -430,9 +429,13 @@ export default function Page() {
 
           {/* BREADCRUMB */}
           <nav className="text-xs sm:text-sm text-gray-500 flex items-center gap-1 flex-wrap">
-            <Link href="/" className="hover:text-primarys">Home</Link>
+            <Link href="/" className="hover:text-primarys">
+              Home
+            </Link>
             <span>/</span>
-            <Link href="/shop" className="hover:text-primarys">Shop</Link>
+            <Link href="/shop" className="hover:text-primarys">
+              Shop
+            </Link>
             {productDetails.parentCategory && (
               <>
                 <span>/</span>
@@ -456,7 +459,9 @@ export default function Page() {
               </>
             )}
             <span>/</span>
-            <span className="text-gray-400 line-clamp-1">{productDetails.name}</span>
+            <span className="text-gray-400 line-clamp-1">
+              {productDetails.name}
+            </span>
           </nav>
         </header>
 
@@ -503,12 +508,19 @@ export default function Page() {
                   <div
                     key={i}
                     onClick={() => setActiveImage(img)}
-                    className={`border rounded-lg p-2 cursor-pointer transition ${currentImage === img
+                    className={`border rounded-lg p-2 cursor-pointer transition ${
+                      currentImage === img
                         ? "border-[var(--primarys)]"
                         : "border-gray-200"
-                      }`}
+                    }`}
                   >
-                    <Image src={img} alt={`thumb-${i}`} width={70} height={70} className="object-contain" />
+                    <Image
+                      src={img}
+                      alt={`thumb-${i}`}
+                      width={70}
+                      height={70}
+                      className="object-contain"
+                    />
                   </div>
                 ))}
               </div>
@@ -569,7 +581,10 @@ export default function Page() {
                   </span>
                 )}
                 <span className="text-2xl sm:text-3xl font-bold text-[var(--primarys)]">
-                  Rs. {(productDetails.dp_price || productDetails.op_price)?.toLocaleString()}
+                  Rs.{" "}
+                  {(
+                    productDetails.dp_price || productDetails.op_price
+                  )?.toLocaleString()}
                 </span>
               </div>
             ) : (
@@ -580,10 +595,11 @@ export default function Page() {
 
             {/* AVAILABILITY */}
             <span
-              className={`text-sm  font-medium ${productDetails.availability === "Available"
+              className={`text-sm  font-medium ${
+                productDetails.availability === "Available"
                   ? "text-green-600"
                   : "text-red-500"
-                }`}
+              }`}
             >
               {productDetails.availability === "Available"
                 ? "✅ In Stock"
@@ -592,7 +608,11 @@ export default function Page() {
 
             {/* BUTTONS */}
             <div className="flex mt-4 flex-col sm:flex-row gap-4">
-              <Link href={whatsappUrl} target="_blank" className="w-full sm:w-auto">
+              <Link
+                href={whatsappUrl}
+                target="_blank"
+                className="w-full sm:w-auto"
+              >
                 <button className="w-full px-10 py-3 bg-green-600 text-white rounded-xl font-medium hover:bg-green-700 transition">
                   Enquiry on Whatsapp
                 </button>
@@ -608,10 +628,11 @@ export default function Page() {
                   toast.success("Added to cart 🛒");
                 }}
                 disabled={isInCart}
-                className={`w-full sm:w-auto px-10 py-3 rounded-xl font-medium transition ${isInCart
+                className={`w-full sm:w-auto px-10 py-3 rounded-xl font-medium transition ${
+                  isInCart
                     ? "bg-[var(--primarys)] text-white"
                     : "border border-[var(--primarys)] text-[var(--primarys)] hover:bg-[var(--primarys)] hover:text-white"
-                  }`}
+                }`}
               >
                 {isInCart ? "In Cart" : "Add to Cart"}
               </button>
@@ -635,16 +656,19 @@ export default function Page() {
 
             {/* INQUIRY */}
             <div>
-              <p className="text-sm text-[var(--texts-secondary)] mb-2">For Inquiry</p>
+              <p className="text-sm text-[var(--texts-secondary)] mb-2">
+                For Inquiry
+              </p>
               <div className="flex gap-3">
-
-                <a href="tel:+9779845526696"
+                <a
+                  href={`https://tel/${phone}`}
                   className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center"
                 >
                   <Phone size={24} />
                 </a>
 
-                <a href={whatsappUrl}
+                <a
+                  href={whatsappUrl}
                   className="w-12 h-12 rounded-full bg-green-100 text-green-600 flex items-center justify-center"
                 >
                   <FaWhatsapp size={24} />
@@ -655,7 +679,9 @@ export default function Page() {
             {/* SPECIFICATIONS */}
             {productDetails.specifications?.length > 0 && (
               <div>
-                <h3 className="text-lg font-semibold mb-2">Product Specification</h3>
+                <h3 className="text-lg font-semibold mb-2">
+                  Product Specification
+                </h3>
                 <ul className="space-y-2 text-[var(--texts-secondary)]">
                   {productDetails.specifications.map((spec: any) => (
                     <li key={spec._id} className="flex items-center gap-2">
@@ -667,7 +693,9 @@ export default function Page() {
                 </ul>
                 <button
                   onClick={() =>
-                    descriptionRef.current?.scrollIntoView({ behavior: "smooth" })
+                    descriptionRef.current?.scrollIntoView({
+                      behavior: "smooth",
+                    })
                   }
                   className="mt-3 border border-[var(--primarys)] text-[var(--primarys)] px-4 py-1 rounded hover:bg-[var(--primarys)] hover:text-white transition text-sm"
                 >
@@ -687,8 +715,6 @@ export default function Page() {
             ⚡ 24 Hours Express Delivery
           </div>
         </div>
-
-
 
         {/* DESCRIPTION */}
         <div

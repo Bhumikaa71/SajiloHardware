@@ -21,6 +21,7 @@ import { PiTiktokLogoBold } from "react-icons/pi";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const phone = process.env.NEXT_PUBLIC_PHONE_NUMBER;
 
   return (
     <footer className="bg-gray-50 border-t border-gray-200 pt-16 font-sans">
@@ -39,7 +40,7 @@ const Footer = () => {
             </div>
             <p className="text-texts-secondary text-sm leading-relaxed font-medium">
               The most trusted hardware partner in Nepal. Providing professional
-              tools for contractors and DIY enthusiasts since 2012.
+              tools for contractors and DIY enthusiasts since 2075 BS.
             </p>
             <div className="flex gap-3">
               <SocialBtn icon={<FaFacebookF size={18} />} />
@@ -67,7 +68,6 @@ const Footer = () => {
                 >
                   <ShoppingBag size={16} /> EXPLORE SHOP
                 </Link>
-            
               </div>
             </div>
             <div className="absolute -right-10 -bottom-10 opacity-10 rotate-12 transition-transform group-hover:rotate-0 duration-700">
@@ -124,9 +124,8 @@ const Footer = () => {
               </p>
             </div>
             <div className="space-y-3">
-              {/* Phone Link */}
               <a
-                href="tel:+9779800000000"
+                href={`https://wa.me/${phone}`}
                 className="flex items-center gap-3 text-sm font-bold text-texts-dark hover:text-primarys transition-colors group"
               >
                 <div className="p-2 bg-orange-50 rounded-lg group-hover:bg-primarys group-hover:text-white transition-all">
@@ -135,12 +134,12 @@ const Footer = () => {
                     className="text-primarys group-hover:text-white"
                   />
                 </div>
-                +977-9800000000
+                +977-{phone}
               </a>
 
               {/* Email Link */}
               <a
-                href="mailto:sales@sajilo.com"
+                href="mailto:sajilohardwareofficial@gmail.com"
                 className="flex items-center gap-3 text-sm font-bold text-texts-dark hover:text-primarys transition-colors group"
               >
                 <div className="p-2 bg-orange-50 rounded-lg group-hover:bg-primarys group-hover:text-white transition-all">
@@ -149,7 +148,7 @@ const Footer = () => {
                     className="text-primarys group-hover:text-white"
                   />
                 </div>
-                sales@sajilo.com
+                sajilohardwareofficial@gmail.com
               </a>
             </div>
           </div>
@@ -164,14 +163,14 @@ const Footer = () => {
               <div className="flex items-start gap-3">
                 <MapPin size={20} className="text-primarys shrink-0" />
                 <p className="text-xs font-bold text-texts-secondary leading-tight">
-                  New Baneshwor, Ward No. 10,
+                  06 School Chowk Sanogaun,
                   <br />
-                  Kathmandu, Nepal
+                  Mahalaxmi 44708
                 </p>
               </div>
               <div className="mt-4 flex items-center justify-between">
                 <a
-                  href="https://www.google.com/maps/search/?api=1&query=Sajilo+Hardware+New+Baneshwor+Kathmandu"
+                  href="https://maps.app.goo.gl/FHm5y8Fk5cZAeC6r5"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-4 flex items-center justify-between group/map"

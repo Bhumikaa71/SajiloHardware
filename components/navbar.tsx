@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -39,8 +40,8 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const { data: categoryTree } = useGetCategoryTreeQuery();
+  const phone = process.env.NEXT_PUBLIC_PHONE_NUMBER;
 
-  // ✅ FIX 1: Added { passive: true } to prevent scroll blocking
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -155,15 +156,11 @@ const Navbar = () => {
         {/* ================= DESKTOP TOP HEADER (Logo + Icons) ================= */}
         {/* ✅ FIX 4: Replaced max-h transition with transform+opacity (GPU only, no reflow) */}
         <div
-          className="hidden lg:block bg-white border-b border-gray-100"
-          style={{
-            transform: scrolled ? "translateY(-100%)" : "translateY(0)",
-            opacity: scrolled ? 0 : 1,
-            maxHeight: scrolled ? 0 : "80px",
-            overflow: "hidden",
-            transition: "transform 0.3s ease, opacity 0.3s ease, max-height 0.3s ease",
-            pointerEvents: scrolled ? "none" : "auto",
-          }}
+          className={`hidden lg:block bg-white border-b border-gray-100 transition-all duration-500 relative z-60 ${
+            scrolled
+              ? "max-h-0 opacity-0 border-0 overflow-hidden"
+              : "max-h-40 opacity-100 overflow-visible"
+          }`}
         >
           <div className="mx-auto max-w-7xl px-4 lg:px-8 flex items-center justify-between gap-4 lg:gap-8 py-3">
             <Link href="/" className="shrink-0 group flex items-center">
@@ -178,8 +175,12 @@ const Navbar = () => {
               </div>
             </Link>
 
+            <div className="flex grow max-w-xl">
+              <div className="relative w-full group"></div>
+            </div>
+
             <div className="flex items-center gap-2 md:gap-4">
-              <Link href="https://wa.me/9845526696" className="hidden md:flex">
+              <Link href={`https://wa.me/${phone}`} className="hidden md:flex">
                 <div className="flex items-center gap-2 bg-[#25D366] text-white p-2.5 md:px-5 md:py-2.5 rounded-2xl shadow-md hover:shadow-lg transition-all">
                   <MessageCircle size={20} fill="white" />
                   <span className="font-bold text-sm">WhatsApp</span>
@@ -264,23 +265,19 @@ const Navbar = () => {
         {/* ================= DESKTOP MAIN NAV (Orange Bar) ================= */}
         {/* ✅ FIX 5: Height transition via inline style (GPU friendly) */}
         <div
-          className="hidden lg:block bg-primarys text-white shadow-lg"
-          style={{
-            height: scrolled ? "64px" : "56px",
-            transition: "height 0.3s ease",
-          }}
+          className={`hidden lg:block bg-primarys text-white shadow-lg transition-all duration-300 relative z-40 ${
+            scrolled ? "h-16" : "h-14"
+          }`}
         >
           <div className="mx-auto max-w-7xl flex items-center justify-between h-full px-8 relative">
 
             {/* Scroll Logo - appears when scrolled */}
             <div
-              className="absolute left-8"
-              style={{
-                opacity: scrolled ? 1 : 0,
-                transform: scrolled ? "scale(1)" : "scale(0.9)",
-                pointerEvents: scrolled ? "auto" : "none",
-                transition: "opacity 0.3s ease, transform 0.3s ease",
-              }}
+              className={`absolute left-8 transition-all duration-300 ${
+                scrolled
+                  ? "opacity-100 scale-100"
+                  : "opacity-0 scale-90 pointer-events-none"
+              }`}
             >
               <Link href="/" className="block">
                 <div className="relative h-9 w-28">
@@ -315,6 +312,7 @@ const Navbar = () => {
                 <div className="absolute top-full left-0 w-80 bg-white text-texts-dark shadow-[0_20px_50px_rgba(0,0,0,0.2)] rounded-b-3xl py-4 border-x border-b border-gray-100 z-50">
                   {categoryTree?.data?.map((cat: any) => (
                     <div key={cat._id} className="group/item px-4 relative">
+                      {/* MAIN CATEGORY */}
                       <div className="flex items-center justify-between py-3 px-4 rounded-xl hover:bg-primarys hover:text-white transition-all cursor-pointer">
                         <div className="flex items-center gap-4 font-bold">
                           <Image
@@ -354,25 +352,49 @@ const Navbar = () => {
             </div>
 
             {/* NAV LINKS */}
-            <div className="flex items-center h-full">
-              {[
-                { href: "/", label: "HOME" },
-                { href: "/aboutpage", label: "ABOUT" },
-                { href: "/shop", label: "SHOP" },
-                { href: "/blogpage/bloghero", label: "BLOG" },
-              ].map(({ href, label }) => (
-                <Link
-                  key={href}
-                  href={href}
-                  className={`px-5 text-sm font-bold tracking-wide transition-colors h-full flex items-center ${
-                    isActive(href)
-                      ? "text-white border-b-2 border-orange-300"
-                      : "hover:text-orange-300"
-                  }`}
-                >
-                  {label}
-                </Link>
-              ))}
+            <div
+              className={`flex items-center h-full transition-all duration-300 ${scrolled ? "ml-4" : ""}`}
+            >
+              <Link
+                href="/"
+                className={`px-5 text-sm font-bold tracking-wide transition-colors h-full flex items-center ${
+                  isActive("/")
+                    ? "text-white   border-b-2 border-orange-300"
+                    : "hover:text-orange-300"
+                }`}
+              >
+                HOME
+              </Link>
+              <Link
+                href="/aboutpage"
+                className={`px-5 text-sm font-bold tracking-wide transition-colors h-full flex items-center ${
+                  isActive("/aboutpage")
+                    ? "text-orange-300 border-b-2 border-orange-300"
+                    : "hover:text-orange-200"
+                }`}
+              >
+                ABOUT
+              </Link>
+              <Link
+                href="/shop"
+                className={`px-5 text-sm font-bold tracking-wide transition-colors h-full flex items-center ${
+                  isActive("/shop")
+                    ? "text-orange-300 border-b-2 border-orange-300"
+                    : "hover:text-orange-200"
+                }`}
+              >
+                SHOP
+              </Link>
+              <Link
+                href="/blogpage/bloghero"
+                className={`px-5 text-sm font-bold tracking-wide transition-colors h-full flex items-center ${
+                  isActive("/blogpage/bloghero")
+                    ? "text-orange-300 border-b-2 border-orange-300"
+                    : "hover:text-orange-200"
+                }`}
+              >
+                BLOG
+              </Link> 
             </div>
 
             {/* CTA BUTTONS */}
@@ -384,7 +406,7 @@ const Navbar = () => {
                 <Flame size={16} className="text-yellow-300" /> HOT DEALS
               </Link>
               <Link
-                href="https://wa.me/9845526696"
+                href={`https://wa.me/${phone}`}
                 className="flex items-center gap-2 bg-white text-primarys px-5 py-2 rounded-xl text-xs font-black tracking-widest shadow-lg hover:bg-orange-50 transition-all hover:scale-105"
               >
                 <CreditCard size={16} /> BUY NOW
@@ -402,23 +424,37 @@ const Navbar = () => {
       >
         {/* Backdrop */}
         <div
-          className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-500 ${
-            isMobileMenuOpen ? "opacity-100" : "opacity-0"
-          }`}
-          onClick={() => setIsMobileMenuOpen(false)}
-        />
-
-        {/* Slide Panel */}
-        <div
-          className={`absolute left-0 top-0 bottom-0 w-[82%] max-w-xs bg-white shadow-2xl transition-transform duration-500 ease-out flex flex-col ${
-            isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+          className={`fixed inset-0 z-200 lg:hidden transition-all duration-500 ${
+            isMobileMenuOpen ? "visible" : "invisible"
           }`}
         >
-          {/* Panel Header */}
-          <div className="flex items-center justify-between px-5 py-4 bg-primarys shrink-0">
-            <div>
-              <p className="text-white font-black text-sm tracking-widest">MENU</p>
-              <p className="text-orange-200 text-[10px] mt-0.5">Sajilo Hardware</p>
+          <div
+            className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-500 ${
+              isMobileMenuOpen ? "opacity-100" : "opacity-0"
+            }`}
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+
+          <div
+            className={`absolute left-0 top-0 bottom-0 w-[82%] max-w-xs bg-white shadow-2xl transition-transform duration-500 ease-out flex flex-col ${
+              isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+            }`}
+          >
+            <div className="flex items-center justify-between px-5 py-4 bg-primarys shrink-0">
+              <div>
+                <p className="text-white font-black text-sm tracking-widest">
+                  MENU
+                </p>
+                <p className="text-orange-200 text-[10px] mt-0.5">
+                  Sajilo Hardware
+                </p>
+              </div>
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
+              >
+                <X size={18} className="text-white" />
+              </button>
             </div>
             <button
               onClick={() => setIsMobileMenuOpen(false)}
@@ -428,15 +464,29 @@ const Navbar = () => {
             </button>
           </div>
 
-          {/* Panel Body */}
-          <div className="overflow-y-auto flex-1 py-4">
-            <div className="px-4 grid grid-cols-2 gap-2">
-              {[
-                { label: "Home", href: "/", Icon: Home },
-                { label: "About", href: "/aboutpage", Icon: Info },
-                { label: "Shop", href: "/shop", Icon: ShoppingBag },
-                { label: "Blog", href: "/blogpage/bloghero", Icon: BookOpen },
-              ].map(({ label, href, Icon }) => (
+            <div className="overflow-y-auto flex-1 py-4">
+              <div className="px-4 grid grid-cols-2 gap-2">
+                {[
+                  { label: "Home", href: "/", Icon: Home },
+                  { label: "About", href: "/aboutpage", Icon: Info },
+                  { label: "Shop", href: "/shop", Icon: ShoppingBag },
+                  { label: "Blog", href: "/blogpage/bloghero", Icon: BookOpen },
+                ].map(({ label, href, Icon }) => (
+                  <Link
+                    key={label}
+                    href={href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`flex items-center gap-2 p-3 rounded-xl text-sm font-semibold transition-colors border ${
+                      isActive(href)
+                        ? "bg-primarys text-white border-primarys shadow-md"
+                        : "bg-gray-50 text-gray-700 hover:bg-orange-50 hover:text-primarys hover:border-orange-100"
+                    }`}
+                  >
+                    <Icon size={14} className="shrink-0" />
+                    {label}
+                  </Link>
+                ))}
+
                 <Link
                   key={label}
                   href={href}
