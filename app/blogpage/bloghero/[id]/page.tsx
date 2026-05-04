@@ -325,14 +325,14 @@ const BlogDetailPage = () => {
                 href={`https://wa.me/${phone}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-[13px] font-medium text-green-600 hover:text-green-700 transition-colors"
+                className="inline-flex items-center gap-2 text-md underline font-extrabold  text-green-600 hover:text-green-700 transition-colors"
               >
                 Enquiry on WhatsApp
               </a>
             </div>
 
             {/* ── Body: TOC + Content ── */}
-            <section className="px-4 sm:px-6 lg:px-8 pb-20">
+            <section className="px-4 sm:px-6 lg:px-8 pb-20 text-black text-justify">
               <div className="flex gap-10 items-start">
                 {/* Table of Contents — sticky sidebar */}
                 {blog.headings.length > 0 && (
