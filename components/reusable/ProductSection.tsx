@@ -5,7 +5,6 @@ import { useRef, useEffect, useState } from "react";
 import {
   ChevronLeft,
   ChevronRight,
-  Heart,
   ShoppingCart,
   MessageCircle,
 } from "lucide-react";
@@ -43,7 +42,7 @@ export default function ProductSection({
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.1 });
 
-  const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
+  useWishlist();
 
   useEffect(() => {
     if (inView) controls.start("visible");
@@ -72,14 +71,26 @@ export default function ProductSection({
     if (!scrollRef.current) return;
     const el = scrollRef.current;
     const scrollAmount = 280;
+    
     if (direction === "right") {
       const isNearEnd = el.scrollLeft + el.offsetWidth >= el.scrollWidth - 300;
       if (isNearEnd && hasMore) onLoadMore?.();
     }
+    
     el.scrollBy({
       left: direction === "left" ? -scrollAmount : scrollAmount,
       behavior: "smooth",
     });
+  };
+
+  // Logic to handle infinite loading when scrolling manually
+  const handleManualScroll = () => {
+    if (!scrollRef.current) return;
+    const el = scrollRef.current;
+    const isNearEnd = el.scrollLeft + el.offsetWidth >= el.scrollWidth - 100;
+    if (isNearEnd && hasMore && !isLoading) {
+      onLoadMore?.();
+    }
   };
 
   const startAutoScroll = () => {
@@ -103,6 +114,7 @@ export default function ProductSection({
   useEffect(() => {
     startAutoScroll();
     return () => stopAutoScroll();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasMore, onLoadMore]);
 
   const containerVariants: Variants = {
@@ -119,7 +131,6 @@ export default function ProductSection({
     },
   };
 
-  // SKELETON
   if (isLoading && products.length === 0) {
     return (
       <section className="py-10 px-4 sm:px-6 max-w-7xl mx-auto bg-white">
@@ -127,18 +138,13 @@ export default function ProductSection({
           <div className="h-8 w-48 bg-gray-200 rounded-lg animate-pulse" />
           <div className="h-4 w-12 bg-gray-200 rounded animate-pulse" />
         </div>
-        <div className="flex gap-4">
+        <div className="flex gap-4 overflow-hidden">
           {[...Array(4)].map((_, i) => (
-            <div
-              key={i}
-              className="shrink-0 w-[80%] sm:w-[48%] md:w-[32%] lg:w-[23%]"
-            >
+            <div key={i} className="shrink-0 w-[80%] sm:w-[48%] md:w-[32%] lg:w-[23%]">
               <div className="rounded-2xl border border-gray-100 p-3 flex flex-col gap-3">
                 <div className="w-full aspect-square bg-gray-200 rounded-xl animate-pulse" />
                 <div className="h-4 bg-gray-200 rounded animate-pulse" />
-                <div className="h-4 w-1/2 bg-gray-200 rounded animate-pulse" />
                 <div className="h-9 bg-gray-200 rounded-xl animate-pulse" />
-                <div className="h-9 bg-green-100 rounded-xl animate-pulse" />
               </div>
             </div>
           ))}
@@ -156,7 +162,6 @@ export default function ProductSection({
       onMouseEnter={stopAutoScroll}
       onMouseLeave={startAutoScroll}
     >
-      {/* HEADER */}
       <div className="mb-6 flex items-center justify-between px-1">
         <motion.h2
           initial={{ opacity: 0, x: -20 }}
@@ -174,6 +179,7 @@ export default function ProductSection({
       </div>
 
       <div className="relative group/container">
+        {/* Navigation Buttons */}
         <button
           onClick={() => scroll("left")}
           className="absolute -left-2 top-[35%] -translate-y-1/2 z-30 bg-white text-primarys p-2 rounded-full shadow-lg border border-gray-100 opacity-0 group-hover/container:opacity-100 transition-all hover:bg-primarys hover:text-white"
@@ -187,20 +193,23 @@ export default function ProductSection({
           <ChevronRight size={20} />
         </button>
 
+        {/* 
+            SCROLL CONTAINER CHANGES:
+            1. Changed overflow-x-hidden to overflow-x-auto to allow mouse scrolling.
+            2. Kept no-scrollbar to hide the visual scrollbar.
+        */}
         <motion.div
           ref={scrollRef}
+          onScroll={handleManualScroll}
           variants={containerVariants}
           initial="hidden"
           animate={controls}
-          className="flex gap-4 sm:gap-5 overflow-x-hidden no-scrollbar pb-6 pt-1"
+          className="flex gap-4 sm:gap-5 overflow-x-auto no-scrollbar pb-6 pt-1 scroll-smooth"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {products.map((product: any, index: number) => {
-            const isInWishlist = wishlist.some(
-              (item) => item.id === product.id,
-            );
             const isInCart = cart.includes(product._id);
             const phone = process.env.NEXT_PUBLIC_PHONE_NUMBER;
-
             const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(
               `Interested in: ${product.name} (Price: Rs. ${product.op_price})`,
             )}`;
@@ -210,9 +219,7 @@ export default function ProductSection({
                 key={product._id ?? index}
                 variants={itemVariants}
                 className="shrink-0 w-[80%] sm:w-[48%] md:w-[32%] lg:w-[23%] cursor-pointer"
-                onClick={() =>
-                  (window.location.href = `/product/${product.slug}`)
-                }
+                onClick={() => (window.location.href = `/product/${product.slug}`)}
               >
                 <div className="bg-white rounded-2xl p-3 shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 flex flex-col h-full relative group/card">
                   <div className="relative w-full aspect-square overflow-hidden rounded-lg sm:rounded-xl bg-gray-50">
@@ -230,10 +237,8 @@ export default function ProductSection({
                       {product?.name}
                     </h3>
 
-                    {/* PRICE */}
-                    <div className="flex items-center gap-2 mt-1 min-h-[28px]">
+                    <div className="flex items-center gap-2 mt-1 min-h-7">
                       {product.op_price > 0 && product.dp_price > 0 ? (
-                        // Has both original and discount price
                         <>
                           <span className="text-gray-400 line-through text-sm">
                             Rs. {product?.op_price?.toLocaleString()}
@@ -243,15 +248,11 @@ export default function ProductSection({
                           </span>
                         </>
                       ) : product.op_price > 0 ? (
-                        // Has only original price
                         <span className="text-primarys font-bold">
                           Rs. {product?.op_price?.toLocaleString()}
                         </span>
                       ) : (
-                        // No price at all — placeholder to preserve height
-                        <span className="text-gray-300 text-sm">
-                          Price not available
-                        </span>
+                        <span className="text-gray-300 text-sm">Price not available</span>
                       )}
                     </div>
                   </div>
