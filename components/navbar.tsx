@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -28,6 +29,7 @@ import {
 } from "lucide-react";
 import { useWishlist } from "@/context/WishlistContext";
 import { useCart } from "@/context/CartContext";
+import { useGetCategoryTreeQuery } from "@/services/categoryApi";
 
 const Navbar = () => {
   const { wishlist } = useWishlist();
@@ -37,6 +39,8 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const { data: categoryTree } = useGetCategoryTreeQuery();
+  const phone = process.env.NEXT_PUBLIC_PHONE_NUMBER;
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -47,12 +51,12 @@ const Navbar = () => {
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("sh-token");
+    const storedToken = localStorage.getItem("vn-sh-token");
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (storedToken) setToken(storedToken);
 
     const handleStorage = () => {
-      setToken(localStorage.getItem("sh-token"));
+      setToken(localStorage.getItem("vn-sh-token"));
     };
 
     window.addEventListener("storage", handleStorage);
@@ -133,15 +137,6 @@ const Navbar = () => {
                   </button>
                 </Link>
 
-                <Link href="/wishlistpage">
-                  <button className="relative p-2 text-primarys hover:bg-orange-50 rounded-full transition-colors">
-                    <Heart size={22} />
-                    <span className="absolute top-0.5 right-0.5 bg-primarys text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center border border-white font-bold">
-                      {wishlist.length}
-                    </span>
-                  </button>
-                </Link>
-
                 <Link href={token ? "/profile" : "/login"}>
                   <button className="p-2 text-primarys hover:bg-orange-50 rounded-full transition-colors">
                     <User size={22} />
@@ -188,20 +183,11 @@ const Navbar = () => {
             </Link>
 
             <div className="flex grow max-w-xl">
-              <div className="relative w-full group">
-                <input
-                  type="text"
-                  placeholder="Search for tools, hardware..."
-                  className="w-full bg-gray-50 border-2 border-transparent rounded-2xl py-2.5 pl-6 pr-14 focus:bg-white focus:border-primarys focus:ring-4 focus:ring-orange-50 transition-all outline-none text-texts-dark"
-                />
-                <button className="absolute right-1.5 top-1/2 -translate-y-1/2 bg-primarys text-white p-2 rounded-xl hover:bg-orange-600 transition-colors">
-                  <Search size={20} />
-                </button>
-              </div>
+              <div className="relative w-full group"></div>
             </div>
 
             <div className="flex items-center gap-2 md:gap-4">
-              <Link href="https://wa.me/9845526696" className="hidden md:flex">
+              <Link href={`https://wa.me/${phone}`} className="hidden md:flex">
                 <div className="flex items-center gap-2 bg-[#25D366] text-white p-2.5 md:px-5 md:py-2.5 rounded-2xl shadow-md hover:shadow-lg transition-all">
                   <MessageCircle size={20} fill="white" />
                   <span className="font-bold text-sm">WhatsApp</span>
@@ -216,15 +202,6 @@ const Navbar = () => {
                       {cartCount}
                     </span>
                   )}
-                </button>
-              </Link>
-
-              <Link href="/wishlistpage">
-                <button className="relative p-2.5 text-primarys hover:bg-orange-50 rounded-xl transition-colors">
-                  <Heart size={24} />
-                  <span className="absolute top-1 right-1 bg-primarys text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-white font-bold">
-                    {wishlist.length}
-                  </span>
                 </button>
               </Link>
 
@@ -264,14 +241,6 @@ const Navbar = () => {
                       </Link>
 
                       <Link
-                        href="/vendor-order-history"
-                        onClick={() => setIsProfileOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
-                      >
-                        Order History
-                      </Link>
-
-                      <Link
                         href="/vendor-orders"
                         onClick={() => setIsProfileOpen(false)}
                         className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
@@ -279,9 +248,17 @@ const Navbar = () => {
                         My Orders
                       </Link>
 
+                      <Link
+                        href="/vendor-order-history"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
+                      >
+                        Order History
+                      </Link>
+
                       <button
                         onClick={() => {
-                          localStorage.removeItem("sh-token");
+                          localStorage.removeItem("vn-sh-token");
                           setToken(null);
                           setIsProfileOpen(false);
                         }}
@@ -338,30 +315,43 @@ const Navbar = () => {
               </button>
 
               {isCategoriesOpen && (
-                <div className="absolute top-full left-0 w-80 bg-white text-texts-dark shadow-[0_20px_50px_rgba(0,0,0,0.2)] rounded-b-3xl py-4 border-x border-b border-gray-100 z-70">
-                  {categories.map((cat, idx) => (
-                    <div key={idx} className="group/item px-4 relative">
-                      <Link href="/category">
-                        <div className="flex items-center justify-between py-3 px-4 rounded-xl hover:bg-primarys hover:text-white transition-all cursor-pointer">
-                          <div className="flex items-center gap-4 font-bold">
-                            <span className="text-primarys group-hover/item:text-white transition-colors">
-                              {cat.icon}
-                            </span>
-                            {cat.name}
-                          </div>
-                          <ChevronRight size={16} />
+                <div className="absolute top-full left-0 w-80 bg-white text-texts-dark shadow-[0_20px_50px_rgba(0,0,0,0.2)] rounded-b-3xl py-4 border-x border-b border-gray-100 z-50">
+                  {categoryTree?.data?.map((cat: any) => (
+                    <div key={cat._id} className="group/item px-4 relative">
+                      {/* MAIN CATEGORY */}
+                      <div className="flex items-center justify-between py-3 px-4 rounded-xl hover:bg-primarys hover:text-white transition-all cursor-pointer">
+                        <div className="flex items-center gap-4 font-bold">
+                          <Image
+                            src={cat.image}
+                            alt={cat.name}
+                            width={24}
+                            height={24}
+                            className="object-contain"
+                          />
+                          {cat.name}
                         </div>
-                      </Link>
-
-                      <div className="invisible opacity-0 group-hover/item:visible group-hover/item:opacity-100 absolute left-[95%] top-0 w-64 bg-white shadow-2xl rounded-3xl py-6 border border-gray-100 transition-all duration-300 z-80">
-                        {cat.items.map((sub, i) => (
-                          <Link key={i} href="/category/subcategory">
-                            <span className="block px-8 py-2 text-sm text-texts-dark hover:text-primarys hover:pl-10 transition-all font-medium border-l-4 border-transparent hover:border-primarys">
-                              {sub}
-                            </span>
-                          </Link>
-                        ))}
+                        <ChevronRight size={16} />
                       </div>
+
+                      {/* SUB CATEGORY - FIXED POSITIONING */}
+                      {cat.children?.length > 0 && (
+                        <div className="invisible opacity-0 group-hover/item:visible group-hover/item:opacity-100 absolute left-full top-0 ml-1 w-64 bg-white shadow-2xl rounded-3xl py-6 border border-gray-100 transition-all duration-300 z-50">
+                          {cat.children.map((sub: any) => (
+                            <Link key={sub._id} href={`/shop/${sub.slug}`}>
+                              <span className="flex items-center gap-3 px-8 py-2 text-sm text-texts-dark hover:text-primarys hover:pl-10 transition-all font-medium border-l-4 border-transparent hover:border-primarys">
+                                <Image
+                                  src={sub.image}
+                                  alt={sub.name}
+                                  width={20}
+                                  height={20}
+                                  className="object-contain"
+                                />
+                                {sub.name}
+                              </span>
+                            </Link>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -411,7 +401,7 @@ const Navbar = () => {
                 }`}
               >
                 BLOG
-              </Link>
+              </Link> 
             </div>
 
             <div className="flex items-center gap-3">
@@ -422,7 +412,7 @@ const Navbar = () => {
                 <Flame size={16} className="text-yellow-300" /> HOT DEALS
               </Link>
               <Link
-                href="https://wa.me/9845526696"
+                href={`https://wa.me/${phone}`}
                 className="flex items-center gap-2 bg-white text-primarys px-5 py-2 rounded-xl text-xs font-black tracking-widest shadow-lg hover:bg-orange-50 transition-all hover:scale-105"
               >
                 <CreditCard size={16} /> BUY NOW

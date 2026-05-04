@@ -6,7 +6,9 @@ import Footer from "@/components/footer";
 import AllProducts from "@/components/reusable/AllProducts";
 import ShopSidebar from "@/components/reusable/AllProductSidebar";
 import HotDeals from "@/components/reusable/HotDeals";
-import { useGetAllProductsQuery } from "@/services/productApi";
+import { useGetAllProductsQuery, useGetProductByCategoriesQuery } from "@/services/productApi";
+import { get } from "http";
+import { useParams } from "next/dist/client/components/navigation";
 
 function Shop() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -14,6 +16,9 @@ function Shop() {
   const [categoryName, setCategoryName] = useState("");
   const [brandName, setBrandName] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const subCategoriesName = useParams().slug as string;
+  const {data: categoryProducts} = useGetProductByCategoriesQuery({ categorySlug: subCategoriesName, page: currentPage, limit: 9 });
+
 
   const { data: allProducts, isLoading } = useGetAllProductsQuery({
     page: currentPage,
@@ -50,49 +55,16 @@ function Shop() {
               />
             )}
 
-            {/* SIDEBAR */}
-            <div
-              className={`
-                fixed md:static top-16 left-0 z-40
-                w-72 h-[calc(100vh-64px)] md:h-auto
-                bg-white md:bg-transparent
-                transform transition-transform duration-300
-                ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
-              `}
-            >
-              <ShopSidebar
-                brandName={brandName}
-                categoryName={categoryName}
-                priceRange={priceRange}
-                setCategoryName={(val) => {
-                  setCategoryName(val);
-                  setCurrentPage(1);
-                }}
-                setBrandName={(val) => {
-                  setBrandName(val);
-                  setCurrentPage(1);
-                }}
-                setPriceRange={(val) => {
-                  setPriceRange(val);
-                  setCurrentPage(1);
-                }}
-              />
-              <button
-                className="md:hidden absolute top-3 right-3 border px-2 py-1 text-sm rounded"
-                onClick={() => setSidebarOpen(false)}
-              >
-                ✕
-              </button>
-            </div>
+          
 
             {/* PRODUCTS */}
             <div className="flex-1 min-w-0 w-full">
               <AllProducts
                 priceRange={priceRange}
-                productList={allProducts?.data || []}
+                productList={categoryProducts?.data || []}
                 isLoading={isLoading}
                 currentPage={currentPage}
-                totalPages={allProducts?.totalPages || 1}   // ← from backend
+                totalPages={categoryProducts?.totalPages || 1}   // ← from backend
                 onPageChange={(page) => setCurrentPage(page)}
               />
             </div>

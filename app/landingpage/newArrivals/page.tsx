@@ -2,17 +2,45 @@
 
 // import products from "@/data/products.json";
 // import ProductSection from "@/components/reusable/ProductSection";
-// import { useGetFeaturedProductsQuery } from "@/services/productApi";
+// import { useGetNewArrivalsQuery } from "@/services/productApi";
 
-// export default function FeaturedProducts() {
-//   const featuredProducts = products.featured_products.filter(
-//     (item) => item.featured === true,
-//   );
-//   const { data: featuredProductData } = useGetFeaturedProductsQuery();
+// export default function PowerTools() {
+//   const powertools = products.power_tools.filter((item) => item.powertools);
+//   const {data: newArrivals} = useGetNewArrivalsQuery();
 
-//   return (
-//     <ProductSection title="Featured Products" products={featuredProducts} />
-//   );
+//   console.log("New Arrivals:", newArrivals);
+
+//   return <ProductSection title="New Arrivals" products={newArrivals?.data ?? [] || []} />;
+// }
+
+
+// "use client";
+
+// import ProductSection from "@/components/reusable/ProductSection";
+// import {  useGetNewArrivalsQuery } from "@/services/productApi";
+
+// export default function BestSelling() {
+//   const { data: bestSellingProducts } = useGetNewArrivalsQuery();
+
+//   return <ProductSection title="Best Selling" products={bestSellingProducts?.data ?? []} />;
+// }
+
+
+
+
+// "use client";
+
+// import products from "@/data/products.json";
+// import ProductSection from "@/components/reusable/ProductSection";
+// import { useGetBestSellingProductsQuery } from "@/services/categoryApi";
+
+// export default function BestSelling() {
+//   // const bestSellingProducts = products.best_selling.filter(
+//   //   (item) => item.best_selling === true,
+//   // );
+//     const { data: bestSellingProducts } = useGetBestSellingProductsQuery();
+
+//   return <ProductSection title="Best Selling" products={bestSellingProducts?.data} />;
 // }
 
 
@@ -22,14 +50,15 @@
 "use client";
 
 import ProductSection from "@/components/reusable/ProductSection";
-import {  useGetFeaturedProductsQuery } from "@/services/productApi";
+import ProductSectionFlat from "@/components/reusable/ProductSectionFlat";
+import { useGetBestSellingProductsQuery, useGetNewArrivalsQuery } from "@/services/productApi";
 import { useState } from "react";
 
-export default function BestSelling() {
+export default function NewArrivals() {
   const [page, setPage] = useState(1);
   const limit = 10;
 
-  const { data, isLoading, isFetching } = useGetFeaturedProductsQuery();
+  const { data, isLoading, isFetching } = useGetNewArrivalsQuery();
 
   const products = data?.data ?? [];
   const hasMore = products.length === limit;
@@ -67,8 +96,8 @@ if (isLoading && (!products || products.length === 0)) {
 if (!isLoading && (!products || products.length === 0)) return null;
 
   return (
-    <ProductSection
-      title="Featured Products"
+    <ProductSectionFlat
+      title="New Arrivals"
       products={products}
       onLoadMore={handleLoadMore}
       hasMore={hasMore}

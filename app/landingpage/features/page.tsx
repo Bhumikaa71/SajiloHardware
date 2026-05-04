@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { Truck, Flame, FileText, Percent, Sparkles } from "lucide-react";
 
 const items = [
-  { title: "Free Delivery", icon: Truck, color: "#f97316" },
   { title: "Hot Deals", icon: Flame, color: "#ef4444" },
   { title: "Blogs", icon: FileText, color: "#3b82f6" },
   { title: "Sell With Us", icon: Percent, color: "#10b981" },
