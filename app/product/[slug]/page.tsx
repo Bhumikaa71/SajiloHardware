@@ -604,7 +604,7 @@ export default function Page() {
                     toast.error("Already in cart");
                     return;
                   }
-                  addToCart(cartProduct);
+                  addToCart(productDetails._id);
                   toast.success("Added to cart 🛒");
                 }}
                 disabled={isInCart}

@@ -146,14 +146,7 @@ const Navbar = () => {
             {/* Bottom Row: Search */}
             <div className="pb-3">
               <div className="relative w-full">
-                <input
-                  type="text"
-                  placeholder="Search for tools, hardware..."
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2 pl-4 pr-10 text-sm focus:bg-white focus:border-primarys focus:ring-2 focus:ring-orange-50 outline-none transition-all text-texts-dark"
-                />
-                <button className="absolute right-2 top-1/2 -translate-y-1/2 text-primarys">
-                  <Search size={18} />
-                </button>
+             
               </div>
             </div>
           </div>
