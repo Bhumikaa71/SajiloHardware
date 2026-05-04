@@ -61,3 +61,12 @@ input[type="radio"] {
   appearance: auto !important;
   -webkit-appearance: radio !important;
 }
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

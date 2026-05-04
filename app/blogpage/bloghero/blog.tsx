@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useRef } from "react";
@@ -11,7 +12,10 @@ import { useGetAllBlogsQuery } from "@/services/blogApi";
 
 // Helper: strip HTML tags to get plain text excerpt
 const stripHtml = (html: string): string => {
-  return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  return html
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 };
 
 // Helper: extract first image src from HTML content
@@ -72,9 +76,8 @@ const BlogPage = () => {
     <div className="bg-white md:pt-30 min-h-screen overflow-x-hidden">
       <Navbar />
       <main className="mx-auto max-w-7xl">
-
         {/* ================= HERO ================= */}
-        <section className="relative px-4 sm:px-6 lg:px-8 pt-16 pb-20">
+        <section className="relative px-4 sm:px-6 lg:px-8 pt-16  pb-20">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
