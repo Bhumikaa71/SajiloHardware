@@ -275,5 +275,4 @@ const Badge = ({ icon, label }: { icon: React.ReactNode; label: string }) => (
 
 export default Footer;
 
-// hello
-// kc
+// khatri
