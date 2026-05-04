@@ -234,6 +234,7 @@ export default function ProductSection({
                       {/* Discount Price */}
                       {product.op_price > 0 && product.dp_price > 0 && (
                         <div className="flex gap-2 mt-1 items-center">
+                          {/*error solving  */}
                           <span className="text-primarys font-bold">
                             Rs. {product.dp_price.toLocaleString()}
                           </span>
