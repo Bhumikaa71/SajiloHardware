@@ -6,7 +6,10 @@ import Footer from "@/components/footer";
 import AllProducts from "@/components/reusable/AllProducts";
 import ShopSidebar from "@/components/reusable/AllProductSidebar";
 import HotDeals from "@/components/reusable/HotDeals";
-import { useGetAllProductsQuery, useGetProductByCategoriesQuery } from "@/services/productApi";
+import {
+  useGetAllProductsQuery,
+  useGetProductByCategoriesQuery,
+} from "@/services/productApi";
 import { get } from "http";
 import { useParams } from "next/dist/client/components/navigation";
 
@@ -17,8 +20,11 @@ function ProductsByCategory() {
   const [brandName, setBrandName] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const subCategoriesName = useParams().slug as string;
-  const {data: categoryProducts} = useGetProductByCategoriesQuery({ categorySlug: subCategoriesName, page: currentPage, limit: 9 });
-
+  const { data: categoryProducts } = useGetProductByCategoriesQuery({
+    categorySlug: subCategoriesName,
+    page: currentPage,
+    limit: 9,
+  });
 
   const { data: allProducts, isLoading } = useGetAllProductsQuery({
     page: currentPage,
@@ -27,12 +33,12 @@ function ProductsByCategory() {
     brand: brandName || undefined,
   });
 
-
-
   return (
     <>
       <Navbar />
-      <HotDeals />
+      <div className="pt-30">
+        <HotDeals />
+      </div>
 
       <div className="bg-gray-50 text-primarys">
         <div className="max-w-7xl mx-auto px-4">
@@ -55,8 +61,6 @@ function ProductsByCategory() {
               />
             )}
 
-          
-
             {/* PRODUCTS */}
             <div className="flex-1 min-w-0 w-full">
               <AllProducts
@@ -64,7 +68,7 @@ function ProductsByCategory() {
                 productList={categoryProducts?.data || []}
                 isLoading={isLoading}
                 currentPage={currentPage}
-                totalPages={categoryProducts?.totalPages || 1}   // ← from backend
+                totalPages={categoryProducts?.totalPages || 1} // ← from backend
                 onPageChange={(page) => setCurrentPage(page)}
               />
             </div>

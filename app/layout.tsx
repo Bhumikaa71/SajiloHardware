@@ -18,11 +18,164 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-const phone = process.env.NEXT_PUBLIC_PHONE_NUMBER;
+const phone = process.env.NEXT_PUBLIC_PHONE_NUMBER; 
 
 export const metadata: Metadata = {
-  title: "Sajilo HardWare",
-  description: "Hardware store",
+  title: {
+    default: "Sajilo Hardware",
+    template: "%s | Sajilo Hardware",
+  },
+  description:
+    "Sajilo Hardware — your one-stop shop for tools, plumbing, electrical, and construction supplies in Nepal. Fast delivery, genuine products.",
+  keywords: [
+    // Brand
+    "Sajilo Hardware",
+    "Sajilo Hardware Nepal",
+    "sajilo hardware store",
+
+    // General hardware
+    "hardware store Nepal",
+    "hardware shop Nepal",
+    "hardware store Kathmandu",
+    "online hardware store Nepal",
+    "hardware supplies Nepal",
+    "building materials Nepal",
+    "construction materials Nepal",
+    "home improvement Nepal",
+
+    // Tools
+    "tools Nepal",
+    "hand tools Nepal",
+    "power tools Nepal",
+    "drill machine Nepal",
+    "angle grinder Nepal",
+    "hammer drill Nepal",
+    "screwdriver set Nepal",
+    "wrench set Nepal",
+    "tool set Nepal",
+    "buy tools online Nepal",
+
+    // Plumbing
+    "plumbing supplies Nepal",
+    "plumbing materials Nepal",
+    "pipes and fittings Nepal",
+    "PVC pipe Nepal",
+    "CPVC pipe Nepal",
+    "GI pipe Nepal",
+    "water tank Nepal",
+    "tap fittings Nepal",
+    "bathroom fittings Nepal",
+    "sanitary ware Nepal",
+
+    // Electrical
+    "electrical supplies Nepal",
+    "electrical materials Nepal",
+    "wires and cables Nepal",
+    "electrical fittings Nepal",
+    "switch socket Nepal",
+    "MCB Nepal",
+    "LED light Nepal",
+    "electrical shop Nepal",
+
+    // Paints & finishing
+    "paint Nepal",
+    "wall paint Nepal",
+    "Asian Paints Nepal",
+    "Berger Paints Nepal",
+    "putty Nepal",
+    "primer Nepal",
+    "wood polish Nepal",
+    "varnish Nepal",
+
+    // Fasteners & fixings
+    "screws and bolts Nepal",
+    "nuts and bolts Nepal",
+    "anchor bolt Nepal",
+    "wall plug Nepal",
+    "nails Nepal",
+    "fasteners Nepal",
+
+    // Safety & PPE
+    "safety equipment Nepal",
+    "helmet Nepal",
+    "safety gloves Nepal",
+    "safety shoes Nepal",
+    "PPE Nepal",
+
+    // Garden & outdoor
+    "garden tools Nepal",
+    "garden pipe Nepal",
+    "spray pump Nepal",
+    "lawn mower Nepal",
+
+    // Adhesives & sealants
+    "adhesive Nepal",
+    "sealant Nepal",
+    "silicone sealant Nepal",
+    "Fevicol Nepal",
+    "construction glue Nepal",
+    "waterproofing Nepal",
+
+    // Nepali language terms
+    "हार्डवेयर पसल",
+    "निर्माण सामग्री",
+    "घर निर्माण सामग्री नेपाल",
+    "हार्डवेयर सामग्री काठमाडौं",
+
+    // Location-based
+    "hardware store Kathmandu",
+    "hardware shop Lalitpur",
+    "hardware store Bhaktapur",
+    "hardware Pokhara",
+    "hardware store Chitwan",
+    "hardware delivery Nepal",
+    "online hardware Nepal",
+  ],
+  authors: [{ name: "Sajilo Hardware" }],
+  creator: "Sajilo Hardware",
+  metadataBase: new URL("https://sajilo-hardware.vercel.app"), // replace with your actual domain
+
+  openGraph: {
+    title: "Sajilo Hardware",
+    description:
+      "Your one-stop shop for tools, plumbing, electrical, and construction supplies in Nepal.",
+    url: "https://sajilo-hardware.vercel.app",
+    siteName: "Sajilo Hardware",
+    images: [
+      {
+        url: "/og-image.png", // add a 1200×630 image in /public
+        width: 1200,
+        height: 630,
+        alt: "Sajilo Hardware",
+      },
+    ],
+    locale: "en_NP",
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Sajilo Hardware",
+    description:
+      "Your one-stop shop for tools, plumbing, electrical, and construction supplies in Nepal.",
+    images: ["/og-image.png"],
+  },
+
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-16x16.png",
+    apple: "/apple-touch-icon.png",
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+    },
+  },
 };
 
 export default function RootLayout({
