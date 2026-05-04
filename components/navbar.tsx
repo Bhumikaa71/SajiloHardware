@@ -44,7 +44,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -52,7 +52,6 @@ const Navbar = () => {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("vn-sh-token");
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (storedToken) setToken(storedToken);
 
     const handleStorage = () => {
@@ -95,14 +94,14 @@ const Navbar = () => {
 
   return (
     <>
-      {/* ========================================== */}
-      {/* MOBILE SPACER (Essential for Fixed Navbar) */}
-      {/* ========================================== */}
-      <div className="h-28.75 lg:hidden bg-transparent"></div>
+      {/* ✅ FIX 2: Mobile spacer only - no desktop spacer needed since header is fixed */}
+      <div className="h-28 lg:hidden bg-transparent" />
 
-      <header className="w-full sticky top-0 z-50 transition-all duration-500 bg-white">
-        {/* ================= MOBILE FIXED HEADER ================= */}
-        <div className="lg:hidden fixed top-0 left-0 right-0 z-100 bg-white shadow-sm transition-all duration-300">
+      {/* ✅ FIX 3: Single fixed header - removed sticky + nested fixed conflict */}
+      <header className="w-full fixed top-0 left-0 right-0 z-50 bg-white">
+
+        {/* ================= MOBILE HEADER ================= */}
+        <div className="lg:hidden bg-white shadow-sm">
           <div className="mx-auto max-w-7xl px-4">
             {/* Top Row: Menu, Logo, Icons */}
             <div className="flex items-center justify-between py-3 gap-3">
@@ -148,20 +147,14 @@ const Navbar = () => {
             {/* Bottom Row: Search */}
             <div className="pb-3">
               <div className="relative w-full">
-                <input
-                  type="text"
-                  placeholder="Search for tools, hardware..."
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2 pl-4 pr-10 text-sm focus:bg-white focus:border-primarys focus:ring-2 focus:ring-orange-50 outline-none transition-all text-texts-dark"
-                />
-                <button className="absolute right-2 top-1/2 -translate-y-1/2 text-primarys">
-                  <Search size={18} />
-                </button>
+             
               </div>
             </div>
           </div>
         </div>
 
-        {/* ================= DESKTOP TOP HEADER ================= */}
+        {/* ================= DESKTOP TOP HEADER (Logo + Icons) ================= */}
+        {/* ✅ FIX 4: Replaced max-h transition with transform+opacity (GPU only, no reflow) */}
         <div
           className={`hidden lg:block bg-white border-b border-gray-100 transition-all duration-500 relative z-60 ${
             scrolled
@@ -208,7 +201,7 @@ const Navbar = () => {
               {/* PROFILE DROPDOWN */}
               {token && (
                 <div
-                  className="relative z-110"
+                  className="relative z-50"
                   onMouseEnter={() => setIsProfileOpen(true)}
                   onMouseLeave={() => setIsProfileOpen(false)}
                 >
@@ -224,14 +217,12 @@ const Navbar = () => {
                     }`}
                   >
                     <div className="h-2 w-full" />
-
                     <div className="bg-white shadow-[0_10px_40px_rgba(0,0,0,0.15)] rounded-2xl border border-gray-100 py-2 overflow-hidden">
                       <div className="px-4 py-2 border-b border-gray-50 mb-1">
                         <p className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">
                           Account
                         </p>
                       </div>
-
                       <Link
                         href="/vendor-profile"
                         onClick={() => setIsProfileOpen(false)}
@@ -239,7 +230,6 @@ const Navbar = () => {
                       >
                         My Profile
                       </Link>
-
                       <Link
                         href="/vendor-orders"
                         onClick={() => setIsProfileOpen(false)}
@@ -247,7 +237,6 @@ const Navbar = () => {
                       >
                         My Orders
                       </Link>
-
                       <Link
                         href="/vendor-order-history"
                         onClick={() => setIsProfileOpen(false)}
@@ -255,7 +244,6 @@ const Navbar = () => {
                       >
                         Order History
                       </Link>
-
                       <button
                         onClick={() => {
                           localStorage.removeItem("vn-sh-token");
@@ -274,14 +262,16 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* ================= MAIN NAV (Desktop Only) ================= */}
+        {/* ================= DESKTOP MAIN NAV (Orange Bar) ================= */}
+        {/* ✅ FIX 5: Height transition via inline style (GPU friendly) */}
         <div
           className={`hidden lg:block bg-primarys text-white shadow-lg transition-all duration-300 relative z-40 ${
             scrolled ? "h-16" : "h-14"
           }`}
         >
           <div className="mx-auto max-w-7xl flex items-center justify-between h-full px-8 relative">
-            {/* SCROLL LOGO (Appears when scrolled) */}
+
+            {/* Scroll Logo - appears when scrolled */}
             <div
               className={`absolute left-8 transition-all duration-300 ${
                 scrolled
@@ -304,7 +294,11 @@ const Navbar = () => {
 
             {/* CATEGORY MENU */}
             <div
-              className={`relative h-full transition-all duration-300 ${scrolled ? "ml-36" : ""}`}
+              className="relative h-full"
+              style={{
+                marginLeft: scrolled ? "144px" : "0",
+                transition: "margin 0.3s ease",
+              }}
               onMouseEnter={() => setIsCategoriesOpen(true)}
               onMouseLeave={() => setIsCategoriesOpen(false)}
             >
@@ -333,7 +327,6 @@ const Navbar = () => {
                         <ChevronRight size={16} />
                       </div>
 
-                      {/* SUB CATEGORY - FIXED POSITIONING */}
                       {cat.children?.length > 0 && (
                         <div className="invisible opacity-0 group-hover/item:visible group-hover/item:opacity-100 absolute left-full top-0 ml-1 w-64 bg-white shadow-2xl rounded-3xl py-6 border border-gray-100 transition-all duration-300 z-50">
                           {cat.children.map((sub: any) => (
@@ -404,6 +397,7 @@ const Navbar = () => {
               </Link> 
             </div>
 
+            {/* CTA BUTTONS */}
             <div className="flex items-center gap-3">
               <Link
                 href="/shop"
@@ -420,8 +414,15 @@ const Navbar = () => {
             </div>
           </div>
         </div>
+      </header>
 
-        {/* ================= MOBILE MENU (Slide Over) ================= */}
+      {/* ================= MOBILE MENU (Slide Over) ================= */}
+      <div
+        className={`fixed inset-0 z-[200] lg:hidden transition-all duration-500 ${
+          isMobileMenuOpen ? "visible" : "invisible"
+        }`}
+      >
+        {/* Backdrop */}
         <div
           className={`fixed inset-0 z-200 lg:hidden transition-all duration-500 ${
             isMobileMenuOpen ? "visible" : "invisible"
@@ -455,6 +456,13 @@ const Navbar = () => {
                 <X size={18} className="text-white" />
               </button>
             </div>
+            <button
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
+            >
+              <X size={18} className="text-white" />
+            </button>
+          </div>
 
             <div className="overflow-y-auto flex-1 py-4">
               <div className="px-4 grid grid-cols-2 gap-2">
@@ -480,52 +488,66 @@ const Navbar = () => {
                 ))}
 
                 <Link
-                  href="/checkout"
+                  key={label}
+                  href={href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="col-span-2 flex items-center justify-center gap-2 p-3 bg-primarys hover:bg-orange-600 text-white rounded-xl text-sm font-bold tracking-wide transition-colors shadow-lg mt-2"
+                  className={`flex items-center gap-2 p-3 rounded-xl text-sm font-semibold transition-colors border ${
+                    isActive(href)
+                      ? "bg-primarys text-white border-primarys shadow-md"
+                      : "bg-gray-50 text-gray-700 hover:bg-orange-50 hover:text-primarys hover:border-orange-100"
+                  }`}
                 >
-                  <CreditCard size={14} /> BUY NOW
+                  <Icon size={14} className="shrink-0" />
+                  {label}
                 </Link>
-              </div>
+              ))}
 
-              <div className="px-4 pb-4 mt-6">
-                <p className="text-[10px] font-bold text-gray-400 tracking-widest mb-2 px-1 uppercase">
-                  Categories
-                </p>
-                <div className="flex flex-col gap-1.5">
-                  {categories.map((cat, i) => (
-                    <details key={i} className="group">
-                      <summary className="list-none flex items-center justify-between px-3 py-3 rounded-xl hover:bg-orange-50 cursor-pointer transition-colors border border-transparent hover:border-orange-100">
-                        <div className="flex items-center gap-3 font-semibold text-sm text-gray-700">
-                          <span className="text-primarys">{cat.icon}</span>
-                          {cat.name}
-                        </div>
-                        <ChevronDown
-                          size={15}
-                          className="text-gray-400 transition-transform duration-200 group-open:rotate-180 shrink-0"
-                        />
-                      </summary>
+              <Link
+                href="/checkout"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="col-span-2 flex items-center justify-center gap-2 p-3 bg-primarys hover:bg-orange-600 text-white rounded-xl text-sm font-bold tracking-wide transition-colors shadow-lg mt-2"
+              >
+                <CreditCard size={14} /> BUY NOW
+              </Link>
+            </div>
 
-                      <div className="mt-1 ml-9 pl-3 border-l-2 border-orange-100 flex flex-col gap-2 pb-2">
-                        {cat.items.map((sub, j) => (
-                          <Link
-                            key={j}
-                            href="/category/subcategory"
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            className="text-sm text-gray-600 hover:text-primarys font-medium transition-colors py-0.5"
-                          >
-                            {sub}
-                          </Link>
-                        ))}
+            {/* Mobile Categories */}
+            <div className="px-4 pb-4 mt-6">
+              <p className="text-[10px] font-bold text-gray-400 tracking-widest mb-2 px-1 uppercase">
+                Categories
+              </p>
+              <div className="flex flex-col gap-1.5">
+                {categories.map((cat, i) => (
+                  <details key={i} className="group">
+                    <summary className="list-none flex items-center justify-between px-3 py-3 rounded-xl hover:bg-orange-50 cursor-pointer transition-colors border border-transparent hover:border-orange-100">
+                      <div className="flex items-center gap-3 font-semibold text-sm text-gray-700">
+                        <span className="text-primarys">{cat.icon}</span>
+                        {cat.name}
                       </div>
-                    </details>
-                  ))}
-                </div>
+                      <ChevronDown
+                        size={15}
+                        className="text-gray-400 transition-transform duration-200 group-open:rotate-180 shrink-0"
+                      />
+                    </summary>
+                    <div className="mt-1 ml-9 pl-3 border-l-2 border-orange-100 flex flex-col gap-2 pb-2">
+                      {cat.items.map((sub, j) => (
+                        <Link
+                          key={j}
+                          href="/category/subcategory"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="text-sm text-gray-600 hover:text-primarys font-medium transition-colors py-0.5"
+                        >
+                          {sub}
+                        </Link>
+                      ))}
+                    </div>
+                  </details>
+                ))}
               </div>
             </div>
           </div>
         </div>
-      </header>
+      </div>
     </>
   );
 };

@@ -69,7 +69,7 @@ const BlogPage = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen overflow-x-hidden">
+    <div className="bg-white md:pt-30 min-h-screen overflow-x-hidden">
       <Navbar />
       <main className="mx-auto max-w-7xl">
 

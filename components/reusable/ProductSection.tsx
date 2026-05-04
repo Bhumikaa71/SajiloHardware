@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import {
   ChevronLeft,
   ChevronRight,
@@ -13,7 +13,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, useAnimation, useInView, type Variants } from "framer-motion";
 import { useWishlist } from "@/context/WishlistContext";
-import { useCart } from "@/context/CartContext";
 import toast from "react-hot-toast";
 import no_image_available from "@/public/images/no-image-available.png";
 
@@ -45,11 +44,30 @@ export default function ProductSection({
   const inView = useInView(ref, { once: true, amount: 0.1 });
 
   const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
-  const { cart, addToCart } = useCart();
 
   useEffect(() => {
     if (inView) controls.start("visible");
   }, [controls, inView]);
+
+  const [cart, setCart] = useState<number[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const stored = localStorage.getItem("cart");
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const addToCart = (id: number) => {
+    setCart((prev) => {
+      if (prev.includes(id)) return prev;
+      const updated = [...prev, id];
+      localStorage.setItem("cart", JSON.stringify(updated));
+      return updated;
+    });
+  };
+
 
   const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
@@ -216,7 +234,8 @@ export default function ProductSection({
                     <div className="flex items-center gap-2 mt-1">
                       {/* Original Price */}
                       {product.op_price > 0 && product.dp_price > 0 ? (
-                        <div className="flex gap-2 mt-1 items-center">
+                        // Has both original and discount price
+                        <>
                           <span className="text-gray-400 line-through text-sm">
                             Rs. {product?.op_price?.toLocaleString()}
                           </span>
@@ -235,9 +254,17 @@ export default function ProductSection({
                       {product.op_price > 0 && product.dp_price > 0 && (
                         <div className="flex gap-2 mt-1 items-center">
                           <span className="text-primarys font-bold">
-                            Rs. {product.dp_price.toLocaleString()}
+                            Rs. {product?.dp_price?.toLocaleString()}
                           </span>
-                        </div>
+                        </>
+                      ) : product.op_price > 0 ? (
+                        // Has only original price
+                        <span className="text-primarys font-bold">
+                          Rs. {product?.op_price?.toLocaleString()}
+                        </span>
+                      ) : (
+                        // No price at all — placeholder to preserve height
+                        <span className="text-gray-300 text-sm">Price not available</span>
                       )}
                     </div>
                   </div>
@@ -248,7 +275,7 @@ export default function ProductSection({
                       onClick={(e) => {
                         e.stopPropagation();
                         if (!isInCart) {
-                          addToCart(product);
+                          addToCart(product._id);
                           toast.success("Added to Cart 🛒");
                         }
                       }}
