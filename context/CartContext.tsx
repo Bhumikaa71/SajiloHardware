@@ -140,23 +140,6 @@ const setStoredIds = (ids: string[]) => {
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
 
-  // ✅ On mount: read IDs → fetch full products from backend
-  useEffect(() => {
-    const ids = getStoredIds();
-    if (ids.length === 0) return;
-
-    fetch("/api/products/bulk", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ids }),
-    })
-      .then((res) => res.json())
-      .then((data: CartItem[]) => {
-        // Map to ensure default quantity is 1
-        setCart(data.map((p) => ({ ...p, quantity: 1 })));
-      })
-      .catch((err) => console.error("Failed to load cart:", err));
-  }, []);
 
   // ✅ Add: Save ONLY ID to localStorage
   const addToCart = async (id: string) => {

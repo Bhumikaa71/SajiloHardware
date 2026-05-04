@@ -41,6 +41,24 @@ export const vendorApi = baseApi.injectEndpoints({
             query: () => ({ url: "/api/v1/vendor/orders", method: "GET" }),
         }),
 
+        // Send Otp
+        sendOtp: builder.mutation<any, { email: string }>({
+            query: (body) => ({
+                url: "/api/v1/vendor/send-otp",
+                method: "POST",
+                body,
+            }),
+        }),
+
+        // Reset Password 
+        sendOtpAndResetPassword: builder.mutation<any, { email: string; otp: string; newPassword: string }>({
+            query: (body) => ({
+                url: "/api/v1/vendor/verify-otp",
+                method: "POST",
+                body,
+            }),
+        }),
+
     }),
 });
 
@@ -52,4 +70,6 @@ export const {
     useUpdatePasswordMutation,
     useGetVendorOrdersHistoryQuery,
     useGetVendorActiveOrdersQuery,
+    useSendOtpMutation,
+    useSendOtpAndResetPasswordMutation,
 } = vendorApi;

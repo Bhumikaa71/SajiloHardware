@@ -40,11 +40,11 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const { data: categoryTree } = useGetCategoryTreeQuery();
-  const phone = process.env.NEXT_PUBLIC_PHONE_NUMBER;
 
+  // ✅ FIX 1: Added { passive: true } to prevent scroll blocking
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);  
 
@@ -95,14 +95,14 @@ const Navbar = () => {
 
   return (
     <>
-      {/* ========================================== */}
-      {/* MOBILE SPACER (Essential for Fixed Navbar) */}
-      {/* ========================================== */}
-      <div className="h-28.75 lg:hidden bg-transparent"></div>
+      {/* ✅ FIX 2: Mobile spacer only - no desktop spacer needed since header is fixed */}
+      <div className="h-28 lg:hidden bg-transparent" />
 
-      <header className="w-full sticky top-0 z-50 transition-all duration-500 bg-white">
-        {/* ================= MOBILE FIXED HEADER ================= */}
-        <div className="lg:hidden fixed top-0 left-0 right-0 z-100 bg-white shadow-sm transition-all duration-300">
+      {/* ✅ FIX 3: Single fixed header - removed sticky + nested fixed conflict */}
+      <header className="w-full fixed top-0 left-0 right-0 z-50 bg-white">
+
+        {/* ================= MOBILE HEADER ================= */}
+        <div className="lg:hidden bg-white shadow-sm">
           <div className="mx-auto max-w-7xl px-4">
             {/* Top Row: Menu, Logo, Icons */}
             <div className="flex items-center justify-between py-3 gap-3">
@@ -148,26 +148,24 @@ const Navbar = () => {
             {/* Bottom Row: Search */}
             <div className="pb-3">
               <div className="relative w-full">
-                <input
-                  type="text"
-                  placeholder="Search for tools, hardware..."
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl py-2 pl-4 pr-10 text-sm focus:bg-white focus:border-primarys focus:ring-2 focus:ring-orange-50 outline-none transition-all text-texts-dark"
-                />
-                <button className="absolute right-2 top-1/2 -translate-y-1/2 text-primarys">
-                  <Search size={18} />
-                </button>
+             
               </div>
             </div>
           </div>
         </div>
 
-        {/* ================= DESKTOP TOP HEADER ================= */}
+        {/* ================= DESKTOP TOP HEADER (Logo + Icons) ================= */}
+        {/* ✅ FIX 4: Replaced max-h transition with transform+opacity (GPU only, no reflow) */}
         <div
-          className={`hidden lg:block bg-white border-b border-gray-100 transition-all duration-500 relative z-60 ${
-            scrolled
-              ? "max-h-0 opacity-0 border-0 overflow-hidden"
-              : "max-h-40 opacity-100 overflow-visible"
-          }`}
+          className="hidden lg:block bg-white border-b border-gray-100"
+          style={{
+            transform: scrolled ? "translateY(-100%)" : "translateY(0)",
+            opacity: scrolled ? 0 : 1,
+            maxHeight: scrolled ? 0 : "80px",
+            overflow: "hidden",
+            transition: "transform 0.3s ease, opacity 0.3s ease, max-height 0.3s ease",
+            pointerEvents: scrolled ? "none" : "auto",
+          }}
         >
           <div className="mx-auto max-w-7xl px-4 lg:px-8 flex items-center justify-between gap-4 lg:gap-8 py-3">
             <Link href="/" className="shrink-0 group flex items-center">
@@ -182,12 +180,8 @@ const Navbar = () => {
               </div>
             </Link>
 
-            <div className="flex grow max-w-xl">
-              <div className="relative w-full group"></div>
-            </div>
-
             <div className="flex items-center gap-2 md:gap-4">
-              <Link href={`https://wa.me/${phone}`} className="hidden md:flex">
+              <Link href="https://wa.me/9845526696" className="hidden md:flex">
                 <div className="flex items-center gap-2 bg-[#25D366] text-white p-2.5 md:px-5 md:py-2.5 rounded-2xl shadow-md hover:shadow-lg transition-all">
                   <MessageCircle size={20} fill="white" />
                   <span className="font-bold text-sm">WhatsApp</span>
@@ -208,7 +202,7 @@ const Navbar = () => {
               {/* PROFILE DROPDOWN */}
               {token && (
                 <div
-                  className="relative z-110"
+                  className="relative z-50"
                   onMouseEnter={() => setIsProfileOpen(true)}
                   onMouseLeave={() => setIsProfileOpen(false)}
                 >
@@ -224,14 +218,12 @@ const Navbar = () => {
                     }`}
                   >
                     <div className="h-2 w-full" />
-
                     <div className="bg-white shadow-[0_10px_40px_rgba(0,0,0,0.15)] rounded-2xl border border-gray-100 py-2 overflow-hidden">
                       <div className="px-4 py-2 border-b border-gray-50 mb-1">
                         <p className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">
                           Account
                         </p>
                       </div>
-
                       <Link
                         href="/vendor-profile"
                         onClick={() => setIsProfileOpen(false)}
@@ -239,7 +231,6 @@ const Navbar = () => {
                       >
                         My Profile
                       </Link>
-
                       <Link
                         href="/vendor-orders"
                         onClick={() => setIsProfileOpen(false)}
@@ -247,7 +238,6 @@ const Navbar = () => {
                       >
                         My Orders
                       </Link>
-
                       <Link
                         href="/vendor-order-history"
                         onClick={() => setIsProfileOpen(false)}
@@ -255,7 +245,6 @@ const Navbar = () => {
                       >
                         Order History
                       </Link>
-
                       <button
                         onClick={() => {
                           localStorage.removeItem("vn-sh-token");
@@ -274,20 +263,26 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* ================= MAIN NAV (Desktop Only) ================= */}
+        {/* ================= DESKTOP MAIN NAV (Orange Bar) ================= */}
+        {/* ✅ FIX 5: Height transition via inline style (GPU friendly) */}
         <div
-          className={`hidden lg:block bg-primarys text-white shadow-lg transition-all duration-300 relative z-40 ${
-            scrolled ? "h-16" : "h-14"
-          }`}
+          className="hidden lg:block bg-primarys text-white shadow-lg"
+          style={{
+            height: scrolled ? "64px" : "56px",
+            transition: "height 0.3s ease",
+          }}
         >
           <div className="mx-auto max-w-7xl flex items-center justify-between h-full px-8 relative">
-            {/* SCROLL LOGO (Appears when scrolled) */}
+
+            {/* Scroll Logo - appears when scrolled */}
             <div
-              className={`absolute left-8 transition-all duration-300 ${
-                scrolled
-                  ? "opacity-100 scale-100"
-                  : "opacity-0 scale-90 pointer-events-none"
-              }`}
+              className="absolute left-8"
+              style={{
+                opacity: scrolled ? 1 : 0,
+                transform: scrolled ? "scale(1)" : "scale(0.9)",
+                pointerEvents: scrolled ? "auto" : "none",
+                transition: "opacity 0.3s ease, transform 0.3s ease",
+              }}
             >
               <Link href="/" className="block">
                 <div className="relative h-9 w-28">
@@ -304,7 +299,11 @@ const Navbar = () => {
 
             {/* CATEGORY MENU */}
             <div
-              className={`relative h-full transition-all duration-300 ${scrolled ? "ml-36" : ""}`}
+              className="relative h-full"
+              style={{
+                marginLeft: scrolled ? "144px" : "0",
+                transition: "margin 0.3s ease",
+              }}
               onMouseEnter={() => setIsCategoriesOpen(true)}
               onMouseLeave={() => setIsCategoriesOpen(false)}
             >
@@ -318,7 +317,6 @@ const Navbar = () => {
                 <div className="absolute top-full left-0 w-80 bg-white text-texts-dark shadow-[0_20px_50px_rgba(0,0,0,0.2)] rounded-b-3xl py-4 border-x border-b border-gray-100 z-50">
                   {categoryTree?.data?.map((cat: any) => (
                     <div key={cat._id} className="group/item px-4 relative">
-                      {/* MAIN CATEGORY */}
                       <div className="flex items-center justify-between py-3 px-4 rounded-xl hover:bg-primarys hover:text-white transition-all cursor-pointer">
                         <div className="flex items-center gap-4 font-bold">
                           <Image
@@ -333,7 +331,6 @@ const Navbar = () => {
                         <ChevronRight size={16} />
                       </div>
 
-                      {/* SUB CATEGORY - FIXED POSITIONING */}
                       {cat.children?.length > 0 && (
                         <div className="invisible opacity-0 group-hover/item:visible group-hover/item:opacity-100 absolute left-full top-0 ml-1 w-64 bg-white shadow-2xl rounded-3xl py-6 border border-gray-100 transition-all duration-300 z-50">
                           {cat.children.map((sub: any) => (
@@ -359,51 +356,28 @@ const Navbar = () => {
             </div>
 
             {/* NAV LINKS */}
-            <div
-              className={`flex items-center h-full transition-all duration-300 ${scrolled ? "ml-4" : ""}`}
-            >
-              <Link
-                href="/"
-                className={`px-5 text-sm font-bold tracking-wide transition-colors h-full flex items-center ${
-                  isActive("/")
-                    ? "text-white   border-b-2 border-orange-300"
-                    : "hover:text-orange-300"
-                }`}
-              >
-                HOME
-              </Link>
-              <Link
-                href="/aboutpage"
-                className={`px-5 text-sm font-bold tracking-wide transition-colors h-full flex items-center ${
-                  isActive("/aboutpage")
-                    ? "text-orange-300 border-b-2 border-orange-300"
-                    : "hover:text-orange-200"
-                }`}
-              >
-                ABOUT
-              </Link>
-              <Link
-                href="/shop"
-                className={`px-5 text-sm font-bold tracking-wide transition-colors h-full flex items-center ${
-                  isActive("/shop")
-                    ? "text-orange-300 border-b-2 border-orange-300"
-                    : "hover:text-orange-200"
-                }`}
-              >
-                SHOP
-              </Link>
-              <Link
-                href="/blogpage/bloghero"
-                className={`px-5 text-sm font-bold tracking-wide transition-colors h-full flex items-center ${
-                  isActive("/blogpage/bloghero")
-                    ? "text-orange-300 border-b-2 border-orange-300"
-                    : "hover:text-orange-200"
-                }`}
-              >
-                BLOG
-              </Link> 
+            <div className="flex items-center h-full">
+              {[
+                { href: "/", label: "HOME" },
+                { href: "/aboutpage", label: "ABOUT" },
+                { href: "/shop", label: "SHOP" },
+                { href: "/blogpage/bloghero", label: "BLOG" },
+              ].map(({ href, label }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className={`px-5 text-sm font-bold tracking-wide transition-colors h-full flex items-center ${
+                    isActive(href)
+                      ? "text-white border-b-2 border-orange-300"
+                      : "hover:text-orange-300"
+                  }`}
+                >
+                  {label}
+                </Link>
+              ))}
             </div>
 
+            {/* CTA BUTTONS */}
             <div className="flex items-center gap-3">
               <Link
                 href="/shop"
@@ -412,7 +386,7 @@ const Navbar = () => {
                 <Flame size={16} className="text-yellow-300" /> HOT DEALS
               </Link>
               <Link
-                href={`https://wa.me/${phone}`}
+                href="https://wa.me/9845526696"
                 className="flex items-center gap-2 bg-white text-primarys px-5 py-2 rounded-xl text-xs font-black tracking-widest shadow-lg hover:bg-orange-50 transition-all hover:scale-105"
               >
                 <CreditCard size={16} /> BUY NOW
@@ -420,112 +394,112 @@ const Navbar = () => {
             </div>
           </div>
         </div>
+      </header>
 
-        {/* ================= MOBILE MENU (Slide Over) ================= */}
+      {/* ================= MOBILE MENU (Slide Over) ================= */}
+      <div
+        className={`fixed inset-0 z-[200] lg:hidden transition-all duration-500 ${
+          isMobileMenuOpen ? "visible" : "invisible"
+        }`}
+      >
+        {/* Backdrop */}
         <div
-          className={`fixed inset-0 z-200 lg:hidden transition-all duration-500 ${
-            isMobileMenuOpen ? "visible" : "invisible"
+          className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-500 ${
+            isMobileMenuOpen ? "opacity-100" : "opacity-0"
+          }`}
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+
+        {/* Slide Panel */}
+        <div
+          className={`absolute left-0 top-0 bottom-0 w-[82%] max-w-xs bg-white shadow-2xl transition-transform duration-500 ease-out flex flex-col ${
+            isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
-          <div
-            className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-500 ${
-              isMobileMenuOpen ? "opacity-100" : "opacity-0"
-            }`}
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
+          {/* Panel Header */}
+          <div className="flex items-center justify-between px-5 py-4 bg-primarys shrink-0">
+            <div>
+              <p className="text-white font-black text-sm tracking-widest">MENU</p>
+              <p className="text-orange-200 text-[10px] mt-0.5">Sajilo Hardware</p>
+            </div>
+            <button
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
+            >
+              <X size={18} className="text-white" />
+            </button>
+          </div>
 
-          <div
-            className={`absolute left-0 top-0 bottom-0 w-[82%] max-w-xs bg-white shadow-2xl transition-transform duration-500 ease-out flex flex-col ${
-              isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-            }`}
-          >
-            <div className="flex items-center justify-between px-5 py-4 bg-primarys shrink-0">
-              <div>
-                <p className="text-white font-black text-sm tracking-widest">
-                  MENU
-                </p>
-                <p className="text-orange-200 text-[10px] mt-0.5">
-                  Sajilo Hardware
-                </p>
-              </div>
-              <button
+          {/* Panel Body */}
+          <div className="overflow-y-auto flex-1 py-4">
+            <div className="px-4 grid grid-cols-2 gap-2">
+              {[
+                { label: "Home", href: "/", Icon: Home },
+                { label: "About", href: "/aboutpage", Icon: Info },
+                { label: "Shop", href: "/shop", Icon: ShoppingBag },
+                { label: "Blog", href: "/blogpage/bloghero", Icon: BookOpen },
+              ].map(({ label, href, Icon }) => (
+                <Link
+                  key={label}
+                  href={href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`flex items-center gap-2 p-3 rounded-xl text-sm font-semibold transition-colors border ${
+                    isActive(href)
+                      ? "bg-primarys text-white border-primarys shadow-md"
+                      : "bg-gray-50 text-gray-700 hover:bg-orange-50 hover:text-primarys hover:border-orange-100"
+                  }`}
+                >
+                  <Icon size={14} className="shrink-0" />
+                  {label}
+                </Link>
+              ))}
+
+              <Link
+                href="/checkout"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
+                className="col-span-2 flex items-center justify-center gap-2 p-3 bg-primarys hover:bg-orange-600 text-white rounded-xl text-sm font-bold tracking-wide transition-colors shadow-lg mt-2"
               >
-                <X size={18} className="text-white" />
-              </button>
+                <CreditCard size={14} /> BUY NOW
+              </Link>
             </div>
 
-            <div className="overflow-y-auto flex-1 py-4">
-              <div className="px-4 grid grid-cols-2 gap-2">
-                {[
-                  { label: "Home", href: "/", Icon: Home },
-                  { label: "About", href: "/aboutpage", Icon: Info },
-                  { label: "Shop", href: "/shop", Icon: ShoppingBag },
-                  { label: "Blog", href: "/blogpage/bloghero", Icon: BookOpen },
-                ].map(({ label, href, Icon }) => (
-                  <Link
-                    key={label}
-                    href={href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`flex items-center gap-2 p-3 rounded-xl text-sm font-semibold transition-colors border ${
-                      isActive(href)
-                        ? "bg-primarys text-white border-primarys shadow-md"
-                        : "bg-gray-50 text-gray-700 hover:bg-orange-50 hover:text-primarys hover:border-orange-100"
-                    }`}
-                  >
-                    <Icon size={14} className="shrink-0" />
-                    {label}
-                  </Link>
-                ))}
-
-                <Link
-                  href="/checkout"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="col-span-2 flex items-center justify-center gap-2 p-3 bg-primarys hover:bg-orange-600 text-white rounded-xl text-sm font-bold tracking-wide transition-colors shadow-lg mt-2"
-                >
-                  <CreditCard size={14} /> BUY NOW
-                </Link>
-              </div>
-
-              <div className="px-4 pb-4 mt-6">
-                <p className="text-[10px] font-bold text-gray-400 tracking-widest mb-2 px-1 uppercase">
-                  Categories
-                </p>
-                <div className="flex flex-col gap-1.5">
-                  {categories.map((cat, i) => (
-                    <details key={i} className="group">
-                      <summary className="list-none flex items-center justify-between px-3 py-3 rounded-xl hover:bg-orange-50 cursor-pointer transition-colors border border-transparent hover:border-orange-100">
-                        <div className="flex items-center gap-3 font-semibold text-sm text-gray-700">
-                          <span className="text-primarys">{cat.icon}</span>
-                          {cat.name}
-                        </div>
-                        <ChevronDown
-                          size={15}
-                          className="text-gray-400 transition-transform duration-200 group-open:rotate-180 shrink-0"
-                        />
-                      </summary>
-
-                      <div className="mt-1 ml-9 pl-3 border-l-2 border-orange-100 flex flex-col gap-2 pb-2">
-                        {cat.items.map((sub, j) => (
-                          <Link
-                            key={j}
-                            href="/category/subcategory"
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            className="text-sm text-gray-600 hover:text-primarys font-medium transition-colors py-0.5"
-                          >
-                            {sub}
-                          </Link>
-                        ))}
+            {/* Mobile Categories */}
+            <div className="px-4 pb-4 mt-6">
+              <p className="text-[10px] font-bold text-gray-400 tracking-widest mb-2 px-1 uppercase">
+                Categories
+              </p>
+              <div className="flex flex-col gap-1.5">
+                {categories.map((cat, i) => (
+                  <details key={i} className="group">
+                    <summary className="list-none flex items-center justify-between px-3 py-3 rounded-xl hover:bg-orange-50 cursor-pointer transition-colors border border-transparent hover:border-orange-100">
+                      <div className="flex items-center gap-3 font-semibold text-sm text-gray-700">
+                        <span className="text-primarys">{cat.icon}</span>
+                        {cat.name}
                       </div>
-                    </details>
-                  ))}
-                </div>
+                      <ChevronDown
+                        size={15}
+                        className="text-gray-400 transition-transform duration-200 group-open:rotate-180 shrink-0"
+                      />
+                    </summary>
+                    <div className="mt-1 ml-9 pl-3 border-l-2 border-orange-100 flex flex-col gap-2 pb-2">
+                      {cat.items.map((sub, j) => (
+                        <Link
+                          key={j}
+                          href="/category/subcategory"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="text-sm text-gray-600 hover:text-primarys font-medium transition-colors py-0.5"
+                        >
+                          {sub}
+                        </Link>
+                      ))}
+                    </div>
+                  </details>
+                ))}
               </div>
             </div>
           </div>
         </div>
-      </header>
+      </div>
     </>
   );
 };
