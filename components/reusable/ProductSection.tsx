@@ -192,18 +192,14 @@ export default function ProductSection({
           variants={containerVariants}
           initial="hidden"
           animate={controls}
-          className="flex gap-4 sm:gap-5 overflow-x-hidden no-scrollbar pb-6 pt-1"
+          className="flex gap-4 sm:gap-5 overflow-x-auto no-scrollbar pb-6 pt-1"
         >
           {products.map((product: any, index: number) => {
             const isInWishlist = wishlist.some(
               (item) => item.id === product.id,
             );
             const isInCart = cart.includes(product._id);
-            const phone = process.env.NEXT_PUBLIC_PHONE_NUMBER;
-
-            const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(
-              `Interested in: ${product.name} (Price: Rs. ${product.op_price})`,
-            )}`;
+            const whatsappUrl = `https://wa.me/9845526696?text=Interested in: ${encodeURIComponent(product.name)} (Price: Rs. ${product.op_price})`;
 
             return (
               <motion.div
