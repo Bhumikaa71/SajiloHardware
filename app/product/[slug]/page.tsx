@@ -420,7 +420,7 @@ export default function Page() {
     <div className="bg-gray-50">
       <Navbar />
 
-      <div className="min-h-screen max-w-7xl mx-auto">
+      <div className="min-h-screen max-w-7xl mx-auto pt-35">
         {/* HEADER */}
         <header className="bg-white border-b px-4 sm:px-6 py-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
           <h1 className="text-xl sm:text-2xl font-bold text-[var(--texts-dark)]">

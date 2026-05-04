@@ -91,7 +91,7 @@ const RelatedCard = ({ post }: { post: any }) => (
     className="group bg-white rounded-2xl border border-gray-100 hover:border-gray-200 overflow-hidden transition-all duration-200"
   >
     {/* Image */}
-    <div className="relative h-36 w-full overflow-hidden bg-gray-50">
+    <div className="relative h-36 w-full  overflow-hidden bg-gray-50">
       {post.image ? (
         <Image
           src={post.image}
@@ -194,7 +194,7 @@ const BlogDetailPage = () => {
       <ReadingProgressBar />
       <Navbar />
 
-      <main className="mx-auto max-w-5xl">
+      <main className="mx-auto max-w-5xl mt-35">
         {/* ── Loading ── */}
         {isLoading && (
           <div className="px-4 sm:px-6 lg:px-8 pt-10">
