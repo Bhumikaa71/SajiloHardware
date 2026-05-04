@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
+// Base API configuration for RTK Query. This will be extended by feature-specific APIs.
 export const baseApi = createApi({
   reducerPath: 'api', // The key in your Redux store
   keepUnusedDataFor: 300,        // ✅ Keep cache for 5 min globally
