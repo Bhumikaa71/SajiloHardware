@@ -235,7 +235,8 @@ export default function ProductSection({
                       {/* Original Price */}
                       {product.op_price > 0 && product.dp_price > 0 ? (
                         // Has both original and discount price
-                        <>
+                        <div>
+                          
                           <span className="text-gray-400 line-through text-sm">
                             Rs. {product?.op_price?.toLocaleString()}
                           </span>
