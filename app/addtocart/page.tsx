@@ -6,6 +6,7 @@ import Navbar from "@/components/navbar";
 import Image from "next/image";
 import Link from "next/link";
 import { useGetCartProductsMutation } from "@/services/productApi";
+import toast from "react-hot-toast";
 
 export default function AddToCart() {
     const [cart, setCart] = useState<string[]>([]);
@@ -60,7 +61,7 @@ export default function AddToCart() {
         );
 
         if (selectedProducts.length === 0) {
-            alert("Please select at least one product");
+            toast("Please select at least one product");
             return;
         }
 
@@ -99,7 +100,7 @@ export default function AddToCart() {
     }
 
     return (
-        <div className="bg-gray-50 text-primarys min-h-screen flex flex-col">
+        <div className="bg-gray-50 md:pt-35 text-primarys min-h-screen flex flex-col">
             <Navbar />
 
             <div className="max-w-7xl mx-auto w-full p-4 sm:p-6 flex-1">

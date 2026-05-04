@@ -218,16 +218,25 @@ const Footer = () => {
           </div>
         </div>
         {/* javtech links */}
-        <div className="text-center underline">
-          <a
-            href="https://javtechinfosys.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primarys text-lg italic font-semibold"
-          >
-            Developed by javtechinfosys
-          </a>
-        </div>
+      <div className="flex justify-center py-3">
+  
+   <a href="https://javtechinfosys.com/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="
+      inline-flex items-center gap-2 px-5 py-2
+      border border-gray-200 rounded-xl
+      bg-gray-50 text-gray-500 text-sm
+      hover:border-gray-400 hover:text-gray-800
+      transition-all duration-200
+    "
+  >
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+    </svg>
+    Developed by javtechinfosys
+  </a>
+</div>
       </div>
     </footer>
   );

@@ -24,6 +24,16 @@ export const productApi = baseApi.injectEndpoints({
             },
         }),
 
+        getAllProductsByBrand: builder.query<any, { page: number; limit: number; brand: string }>({
+            query: ({ page, limit, brand }) => {
+                const params = new URLSearchParams();
+                params.append("page", String(page));
+                params.append("limit", String(limit));
+                if (brand) params.append("brand", brand);
+                return `/api/v1/all-product-list?${params.toString()}`;
+            },
+        }),
+
         // Get Hot Deals
         getHotDeals: builder.query<any, void>({
             query: () =>

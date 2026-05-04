@@ -54,7 +54,7 @@ export default function FeaturedCategories() {
   };
 
   return (
-    <section ref={ref} className="px-6 py-16 max-w-7xl mx-auto overflow-hidden">
+    <section ref={ref} className="px-6  max-w-7xl mx-auto overflow-hidden">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, x: -30 }}
@@ -62,9 +62,9 @@ export default function FeaturedCategories() {
         transition={{ duration: 0.7 }}
         className="max-w-7xl mx-auto mb-12"
       >
-        <h3 className="text-2xl md:text-4xl lg:text-4xl font-black text-gray-900 tracking-tight">
+        <p className="text-2xl md:text-4xl lg:text-4xl font-black text-gray-900 tracking-tight">
           Featured Categories
-        </h3>
+        </p>
         <div className="h-2 w-20 bg-primarys rounded-full mt-3" />
       </motion.div>
 

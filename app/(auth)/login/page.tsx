@@ -91,7 +91,7 @@ const VendorLoginPage = () => {
                     Password
                   </label>
                   <Link
-                    href="#"
+                    href="/forgotpassword"
                     className="text-[10px] font-black text-green-500 hover:text-slate-900 tracking-widest transition-colors"
                   >
                     FORGOT?
@@ -134,7 +134,7 @@ const VendorLoginPage = () => {
 
           {/* Footer */}
           <p className="text-center mt-8 text-slate-400 text-[10px] font-bold tracking-widest uppercase">
-            Sajilo Vendor System v2.0
+            Sajilo Vendor System v1.0
           </p>
         </div>
       </div>
