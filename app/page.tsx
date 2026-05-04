@@ -20,7 +20,6 @@ function page() {
       <FeatureScroller />
       <BestSelling />
       <FeaturedCategories />
-      <Brand />
       <FeaturedProducts />
       <NewArrivals />
       <Footer />

@@ -15,6 +15,7 @@ import {
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 
+
 const AboutPage = () => {
   const stats = [
     { label: "Years of Excellence", value: "15+" },
@@ -54,10 +55,10 @@ const AboutPage = () => {
   const storyInView = useInView(storyRef, { once: true, amount: 0.2 });
 
   return (
-    <div className="bg-linear-to-b from-white to-gray-50 min-h-screen overflow-x-hidden">
+    <div className="bg-linear-to-b md:pt-20 from-white to-gray-50 min-h-screen overflow-x-hidden">
       <Navbar />
       <main className="mx-auto max-w-7xl">
-        
+
         {/* ================= HERO ================= */}
         <section className="relative pt-16 md:pt-24 pb-20 md:pb-28 px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-10 md:gap-16 items-center">
@@ -68,11 +69,11 @@ const AboutPage = () => {
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
               <div className="flex items-center gap-3 mb-5">
-                <motion.span 
+                <motion.span
                   initial={{ width: 0 }}
                   animate={{ width: 40 }}
                   transition={{ delay: 0.5, duration: 0.8 }}
-                  className="bg-primarys h-1 rounded-full" 
+                  className="bg-primarys h-1 rounded-full"
                 />
                 <span className="text-primarys font-bold text-[10px] tracking-[0.3em] uppercase">
                   Since 2011
@@ -97,7 +98,7 @@ const AboutPage = () => {
                   EXPLORE INVENTORY
                 </Link>
 
-                <motion.div 
+                <motion.div
                   whileHover={{ scale: 1.05 }}
                   className="flex items-center gap-2 px-4 py-3 border rounded-xl bg-white shadow-sm"
                 >
@@ -110,7 +111,7 @@ const AboutPage = () => {
             </motion.div>
 
             {/* IMAGE */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
@@ -125,13 +126,13 @@ const AboutPage = () => {
                 />
               </div>
 
-              <motion.div 
+              <motion.div
                 animate={{ rotate: [12, 15, 12] }}
                 transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                className="absolute -bottom-6 -left-6 w-32 h-32 md:w-48 md:h-48 bg-primarys/10 rounded-4xl" 
+                className="absolute -bottom-6 -left-6 w-32 h-32 md:w-48 md:h-48 bg-primarys/10 rounded-4xl"
               />
 
-              <motion.div 
+              <motion.div
                 animate={{ y: [0, -15, 0] }}
                 transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
                 className="absolute top-1/2 -right-5 w-12 h-12 md:w-14 md:h-14 bg-texts-dark text-white flex items-center justify-center rounded-xl shadow-lg"
@@ -144,14 +145,14 @@ const AboutPage = () => {
 
         {/* ================= STATS ================= */}
         <section ref={statsRef} className="px-4 sm:px-6 lg:px-8 mb-16">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={statsInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8 }}
             className="bg-texts-dark rounded-4xl md:rounded-[3rem] py-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-center shadow-xl"
           >
             {stats.map((stat, i) => (
-              <motion.div 
+              <motion.div
                 key={i}
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={statsInView ? { opacity: 1, scale: 1 } : {}}
@@ -171,12 +172,12 @@ const AboutPage = () => {
         {/* ================= VALUES ================= */}
         <section ref={valuesRef} className="px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <motion.h3 
+            <motion.h3
               initial={{ opacity: 0 }}
               animate={valuesInView ? { opacity: 1 } : {}}
               className="text-3xl md:text-4xl font-black text-texts-dark mb-4"
             >
-              Why Choose <span className="text-primarys">Sajilo</span>
+              Why Choose <span className="text-primarys">Sajilo Hardware</span>
             </motion.h3>
             <p className="text-texts-secondary">
               Built for professionals who demand reliability and performance.
@@ -211,7 +212,7 @@ const AboutPage = () => {
 
         {/* ================= STORY ================= */}
         <section ref={storyRef} className="px-4 sm:px-6 lg:px-8 pb-20">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={storyInView ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 0.8 }}
@@ -231,7 +232,7 @@ const AboutPage = () => {
 
             {/* IMAGES */}
             <div className="lg:w-1/2 grid grid-cols-2 gap-3 w-full">
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={storyInView ? { opacity: 1, x: 0 } : {}}
                 transition={{ delay: 0.4 }}
@@ -239,7 +240,7 @@ const AboutPage = () => {
               >
                 <Image src="/images/2.jpg" alt="" fill className="object-cover" />
               </motion.div>
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={storyInView ? { opacity: 1, x: 0 } : {}}
                 transition={{ delay: 0.6 }}

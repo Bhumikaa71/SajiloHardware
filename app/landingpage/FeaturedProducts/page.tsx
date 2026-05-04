@@ -1,24 +1,3 @@
-// "use client";
-
-// import products from "@/data/products.json";
-// import ProductSection from "@/components/reusable/ProductSection";
-// import { useGetFeaturedProductsQuery } from "@/services/productApi";
-
-// export default function FeaturedProducts() {
-//   const featuredProducts = products.featured_products.filter(
-//     (item) => item.featured === true,
-//   );
-//   const { data: featuredProductData } = useGetFeaturedProductsQuery();
-
-//   return (
-//     <ProductSection title="Featured Products" products={featuredProducts} />
-//   );
-// }
-
-
-
-
-
 "use client";
 
 import ProductSection from "@/components/reusable/ProductSection";

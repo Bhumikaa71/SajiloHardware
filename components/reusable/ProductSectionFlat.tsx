@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback, useState } from "react";
 import {
   Heart,
   ShoppingCart,
@@ -9,8 +9,6 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useAnimation, useInView, type Variants } from "framer-motion";
-import { useWishlist } from "@/context/WishlistContext";
-import { useCart } from "@/context/CartContext";
 import toast from "react-hot-toast";
 import no_image_available from "@/public/images/no-image-available.png";
 
@@ -40,8 +38,25 @@ export default function ProductSectionFlat({
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.1 });
 
-  const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
-  const { cart, addToCart } = useCart();
+
+    const [cart, setCart] = useState<number[]>(() => {
+      if (typeof window === "undefined") return [];
+      try {
+        const stored = localStorage.getItem("cart");
+        return stored ? JSON.parse(stored) : [];
+      } catch {
+        return [];
+      }
+    });
+  
+    const addToCart = (id: number) => {
+      setCart((prev) => {
+        if (prev.includes(id)) return prev;
+        const updated = [...prev, id];
+        localStorage.setItem("cart", JSON.stringify(updated));
+        return updated;
+      });
+    };
 
   useEffect(() => {
     if (inView) controls.start("visible");
@@ -97,10 +112,11 @@ export default function ProductSectionFlat({
 
   if (!products || products.length === 0) return null;
 
+
   return (
     <section
       ref={ref}
-      className="py-10 px-4 sm:px-6 max-w-7xl mx-auto bg-white"
+      className="py-7 px-4 sm:px-6 max-w-7xl mx-auto bg-white"
     >
       {/* HEADER */}
       <div className="mb-6 flex items-center justify-between px-1">
@@ -127,8 +143,7 @@ export default function ProductSectionFlat({
         className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5"
       >
         {products.map((product: any, index: number) => {
-          const isInWishlist = wishlist.some((item) => item.id === product.id);
-          const isInCart = cart.some((item) => item.id === product.id);
+         const isInCart = cart.includes(product._id);
           const whatsappUrl = `https://wa.me/9845526696?text=Interested in: ${encodeURIComponent(product.name)} (Price: Rs. ${product.op_price})`;
 
           return (
@@ -139,7 +154,7 @@ export default function ProductSectionFlat({
               onClick={() => (window.location.href = `/product/${product.slug}`)}
             >
               <div className="bg-white rounded-2xl p-3 shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 flex flex-col h-full relative group/card">
-         
+
                 {/* IMAGE */}
                 <div className="relative w-full aspect-square overflow-hidden rounded-lg sm:rounded-xl bg-gray-50">
                   <Image
@@ -156,21 +171,26 @@ export default function ProductSectionFlat({
                   <h3 className="text-sm font-bold text-gray-800 line-clamp-2 leading-tight group-hover/card:text-primarys transition-colors">
                     {product?.name}
                   </h3>
-
-                  <div className="flex items-center gap-2 mt-1">
+                  {/* PRICE */}
+                  <div className="flex items-center gap-2 mt-1 min-h-[28px]">
                     {product.op_price > 0 && product.dp_price > 0 ? (
+                      // Has both original and discount price
                       <>
                         <span className="text-gray-400 line-through text-sm">
                           Rs. {product?.op_price?.toLocaleString()}
                         </span>
                         <span className="text-primarys font-bold">
-                          Rs. {product.dp_price.toLocaleString()}
+                          Rs. {product?.dp_price?.toLocaleString()}
                         </span>
                       </>
-                    ) : (
+                    ) : product.op_price > 0 ? (
+                      // Has only original price
                       <span className="text-primarys font-bold">
-                        {product.op_price ? `Rs. ${product?.op_price?.toLocaleString()}` : ""}
+                        Rs. {product?.op_price?.toLocaleString()}
                       </span>
+                    ) : (
+                      // No price at all — placeholder to preserve height
+                      <span className="text-gray-300 text-sm">Price not available</span>
                     )}
                   </div>
                 </div>
@@ -182,22 +202,21 @@ export default function ProductSectionFlat({
                     onClick={(e) => {
                       e.stopPropagation();
                       if (!isInCart) {
-                        addToCart(product);
+                        addToCart(product._id);
                         toast.success("Added to Cart 🛒");
                       }
                     }}
-                    className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[10px] font-black tracking-widest transition-all ${
-                      isInCart
+                    className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[10px] font-black tracking-widest transition-all ${isInCart
                         ? "bg-gray-100 text-gray-400"
                         : "bg-gray-900 text-white hover:bg-primarys"
-                    }`}
+                      }`}
                   >
                     <ShoppingCart size={14} />
                     {isInCart ? "IN CART" : "ADD TO CART"}
                   </motion.button>
 
-                  
-                   <a href={whatsappUrl}
+
+                  <a href={whatsappUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
