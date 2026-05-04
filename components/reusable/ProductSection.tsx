@@ -113,11 +113,7 @@ export default function ProductSection({
 
   const itemVariants: Variants = {
     hidden: { x: 40, opacity: 0 },
-    visible: {
-      x: 0,
-      opacity: 1,
-      transition: { duration: 0.6, ease: "easeOut" },
-    },
+    visible: { x: 0, opacity: 1, transition: { duration: 0.6, ease: "easeOut" } },
   };
 
   // SKELETON
@@ -130,10 +126,7 @@ export default function ProductSection({
         </div>
         <div className="flex gap-4">
           {[...Array(4)].map((_, i) => (
-            <div
-              key={i}
-              className="shrink-0 w-[80%] sm:w-[48%] md:w-[32%] lg:w-[23%]"
-            >
+            <div key={i} className="shrink-0 w-[80%] sm:w-[48%] md:w-[32%] lg:w-[23%]">
               <div className="rounded-2xl border border-gray-100 p-3 flex flex-col gap-3">
                 <div className="w-full aspect-square bg-gray-200 rounded-xl animate-pulse" />
                 <div className="h-4 bg-gray-200 rounded animate-pulse" />
@@ -196,25 +189,19 @@ export default function ProductSection({
           className="flex gap-4 sm:gap-5 overflow-x-auto no-scrollbar pb-6 pt-1"
         >
           {products.map((product: any, index: number) => {
-            const isInWishlist = wishlist.some(
-              (item) => item.id === product.id,
-            );
-            const isInCart = cart.some((item) => item.id === product.id);
-            const phone = process.env.NEXT_PUBLIC_PHONE_NUMBER;
-            const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(
-              `Interested in: ${product.name} (Price: Rs. ${product.op_price})`,
-            )}`;
+            const isInWishlist = wishlist.some((item) => item.id === product.id);
+            const isInCart = cart.includes(product._id);
+            const whatsappUrl = `https://wa.me/9845526696?text=Interested in: ${encodeURIComponent(product.name)} (Price: Rs. ${product.op_price})`;
 
             return (
               <motion.div
                 key={product._id ?? index}
                 variants={itemVariants}
                 className="shrink-0 w-[80%] sm:w-[48%] md:w-[32%] lg:w-[23%] cursor-pointer"
-                onClick={() =>
-                  (window.location.href = `/product/${product.slug}`)
-                }
+                onClick={() => (window.location.href = `/product/${product.slug}`)}
               >
                 <div className="bg-white rounded-2xl p-3 shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 flex flex-col h-full relative group/card">
+
                   <div className="relative w-full aspect-square overflow-hidden rounded-lg sm:rounded-xl bg-gray-50">
                     <Image
                       src={product?.image?.[0] || no_image_available}
@@ -231,30 +218,13 @@ export default function ProductSection({
                     </h3>
 
                     {/* PRICE */}
-                    <div className="flex items-center gap-2 mt-1">
-                      {/* Original Price */}
+                    <div className="flex items-center gap-2 mt-1 min-h-[28px]">
                       {product.op_price > 0 && product.dp_price > 0 ? (
                         // Has both original and discount price
-                        <div>
-                          
+                        <>
                           <span className="text-gray-400 line-through text-sm">
                             Rs. {product?.op_price?.toLocaleString()}
                           </span>
-                        </div>
-                      ) : (
-                        <div className="flex gap-2 mt-1 items-center">
-                          <span className="text-primarys font-bold">
-                            {product.op_price
-                              ? `Rs. ${product?.op_price?.toLocaleString()}`
-                              : ""}
-                          </span>
-                        </div>
-                      )}
-
-                      {/* Discount Price */}
-                      {product.op_price > 0 && product.dp_price > 0 && (
-                        <div className="flex gap-2 mt-1 items-center">
-                          {/*error solving  */}
                           <span className="text-primarys font-bold">
                             Rs. {product?.dp_price?.toLocaleString()}
                           </span>
@@ -281,18 +251,15 @@ export default function ProductSection({
                           toast.success("Added to Cart 🛒");
                         }
                       }}
-                      className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[10px] font-black tracking-widest transition-all ${
-                        isInCart
-                          ? "bg-gray-100 text-gray-400"
-                          : "bg-gray-900 text-white hover:bg-primarys"
-                      }`}
+                      className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[10px] font-black tracking-widest transition-all ${isInCart ? "bg-gray-100 text-gray-400" : "bg-gray-900 text-white hover:bg-primarys"
+                        }`}
                     >
                       <ShoppingCart size={14} />
                       {isInCart ? "IN CART" : "ADD TO CART"}
                     </motion.button>
 
-                    <a
-                      href={whatsappUrl}
+
+                    <a href={whatsappUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
