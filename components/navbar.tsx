@@ -380,7 +380,7 @@ return (
                       </div>
 
                       {cat.children?.length > 0 && (
-                        <div className="invisible opacity-0 group-hover/item:visible group-hover/item:opacity-100 absolute left-full top-0 ml-1 w-64 bg-white shadow-2xl rounded-3xl py-6 border border-gray-100 transition-all duration-300 z-50">
+                        <div className="invisible opacity-0 group-hover/item:visible group-hover/item:opacity-100 absolute left-full top-0 ml-1 w-80 bg-white shadow-2xl rounded-3xl py-6 border border-gray-100 transition-all duration-300 z-50">
                           {cat.children.map((sub: any) => (
                             <Link key={sub._id} href={`/shop/${sub.slug}`}>
                               <span className="flex items-center gap-3 px-8 py-2 text-sm text-texts-dark hover:text-primarys hover:pl-10 transition-all font-medium border-l-4 border-transparent hover:border-primarys">
