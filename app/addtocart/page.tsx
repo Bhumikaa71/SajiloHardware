@@ -54,36 +54,42 @@ export default function AddToCart() {
   };
 
   const handleOrder = () => {
-    if (!cartProducts.length) return;
+    if (!cartProducts || cartProducts.length === 0) return;
 
     const selectedProducts = cartProducts.filter((item: any) =>
-      selectedItems.includes(item._id),
+      selectedItems.includes(item._id)
     );
 
     if (selectedProducts.length === 0) {
-      toast("Please select at least one product");
+      // You can use your custom toast here
+      alert("Please select at least one product");
       return;
     }
 
-    const baseUrl = window.location.origin;
-    const phoneNumber = "9779845526696";
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "";
+    const phone = process.env.NEXT_PUBLIC_PHONE_NUMBER || "";
 
-    const message = selectedProducts
+    // 1. Generate multi-product message
+    const messageText = selectedProducts
       .map((item: any, index: number) => {
         const price = item.dp_price > 0 ? item.dp_price : item.op_price;
+
+        // Kept clean with minimal leading whitespace for rendering formatting
         return `🛒 Product ${index + 1}
-                    Name: ${item.name}
-                    Price: Rs. ${price}
-                    🔗 Product Link: ${baseUrl}/product/${item.slug}
-                    🖼️ Image: ${item.image?.[0] ?? ""}`;
+          Name: ${item.name}
+          Price: Rs. ${price}
+          🔗 Product Link: ${baseUrl}/product/${item.slug}
+          🖼️ Image: ${item.image?.[0] ?? ""}`;
       })
       .join("\n\n━━━━━━━━━━━━━━━━━━━━\n\n");
 
-    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-      "Order Details:\n\n" + message,
+    // Format the full URI encoding
+    const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(
+      `I am interested in the following products:\n\n${messageText}`
     )}`;
 
-    window.open(url, "_blank");
+    // Open the final encoded URL in a new window
+    window.open(whatsappUrl, "_blank");
   };
 
   if (!mounted) {
