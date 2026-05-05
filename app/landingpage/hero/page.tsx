@@ -212,7 +212,7 @@ export default function HeroCarousel() {
                   alt={slide.title}
                   fill
                   priority={i === 0}
-                  className="object-cover"
+                  className="object-cover hidden md:block"
                   sizes="100vw"
                   quality={75}
                 />
