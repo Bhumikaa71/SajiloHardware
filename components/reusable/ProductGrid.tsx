@@ -205,6 +205,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
     });
   };
 
+
   return (
     <div className="max-w-7xl mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
@@ -215,8 +216,11 @@ export default function ProductGrid({ products }: { products: Product[] }) {
           const isInWishlist = wishlist.some((item) => item.id === id);
           const isInCart = cart.includes(id);
 
-          const whatsappUrl = `https://wa.me/9845526696?text=${encodeURIComponent(
-            `Interested in: ${product.name} (Price: Rs. ${product.price})`,
+          const phone = process.env.NEXT_PUBLIC_PHONE_NUMBER;
+          const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+          const productLink = `${baseUrl}/product/${product?.slug}`;
+          const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(
+            `Interested in: ${product?.name} \n\nOriginal Price: Rs. ${product?.op_price?.toLocaleString()} \nDiscount Price: Rs. ${product?.dp_price?.toLocaleString()} \n\nLink: ${productLink}`
           )}`;
 
           return (
@@ -278,7 +282,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
                 </Link>
 
                 {/* Buttons */}
-                <div className="flex gap-2 mt-4">
+                <div className="flex text-sm gap-2 mt-4">
                   {/* 🛒 Add to Cart */}
                   <button
                     onClick={(e) => {
@@ -288,11 +292,10 @@ export default function ProductGrid({ products }: { products: Product[] }) {
                       toast.success("Added to cart 🛒");
                     }}
                     disabled={isInCart}
-                    className={`w-1/2 text-sm flex items-center justify-center gap-2 py-2 rounded-xl transition ${
-                      isInCart
+                    className={`w-1/2 text-sm flex items-center justify-center gap-2 py-2 rounded-xl transition ${isInCart
                         ? "bg-green-100 text-green-600"
                         : "bg-gray-100 text-gray-400"
-                    }`}
+                      }`}
                   >
                     <ShoppingCart size={18} />
                     {isInCart ? "IN CART" : ""}

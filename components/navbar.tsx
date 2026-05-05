@@ -107,7 +107,7 @@ const Navbar = () => {
     setSearch("");
   };
 
-  return (
+return (
     <>
       <div className="h-24  mb-10 lg:hidden bg-transparent" />
 
@@ -156,10 +156,10 @@ const Navbar = () => {
               </div>
             </div>
 
-            {/* Bottom Row: Search */}
+            {/* Bottom Row: Search - Redesigned */}
             <form
               onSubmit={handleSearch}
-              className="flex items-center bg-gray-100 rounded-xl px-3 py-2"
+              className="flex items-center bg-white border border-gray-200 rounded-xl px-3 py-2 shadow-sm mb-3 focus-within:ring-2 focus-within:ring-orange-200 focus-within:border-primarys transition-all"
             >
               <Search size={18} className="text-gray-400" />
 
@@ -168,12 +168,12 @@ const Navbar = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search products..."
-                className="w-full bg-transparent text-black px-2 text-sm outline-none"
+                className="w-full bg-transparent text-black px-2.5 text-sm outline-none py-1.5"
               />
 
               <button
                 type="submit"
-                className="text-orange-500 font-bold text-sm"
+                className="text-white bg-primarys font-bold text-sm px-4 py-1.5 rounded-lg hover:bg-orange-600 transition-colors"
               >
                 Go
               </button>
@@ -182,7 +182,6 @@ const Navbar = () => {
         </div>
 
         {/* ================= DESKTOP TOP HEADER (Logo + Icons) ================= */}
-        {/* ✅ FIX 4: Replaced max-h transition with transform+opacity (GPU only, no reflow) */}
         <div
           className="hidden lg:block bg-white border-b border-gray-100"
           style={{
@@ -207,27 +206,30 @@ const Navbar = () => {
                 />
               </div>
             </Link>
+
+            {/* Desktop Search - Redesigned */}
             <form
               onSubmit={handleSearch}
-              className="hidden lg:flex items-center bg-white rounded-xl overflow-hidden w-[320px] mx-4"
+              className="hidden lg:flex items-center bg-white border border-gray-200 rounded-xl overflow-hidden w-[420px] mx-4 shadow-sm focus-within:ring-2 focus-within:ring-orange-200 focus-within:border-primarys transition-all"
             >
-              <Search size={22} className="ml-3 text-gray-400" />
+              <Search size={20} className="ml-3 text-gray-400" />
 
               <input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search products..."
-                className="w-full px-6 py-2 text-sm text-black outline-none"
+                className="w-full px-3 py-2.5 text-sm text-black outline-none bg-transparent"
               />
 
               <button
                 type="submit"
-                className="bg-white text-primarys px-4 text-sm font-bold hover:bg-gray-100"
+                className="bg-primarys text-white font-bold text-sm px-6 py-2.5 hover:bg-orange-600 transition-colors"
               >
                 Search
               </button>
             </form>
+
             <div className="flex items-center gap-2 md:gap-4">
               <Link href={`https://wa.me/${phone}`} className="hidden md:flex">
                 <div className="flex items-center gap-2 bg-[#25D366] text-white p-2.5 md:px-5 md:py-2.5 rounded-2xl shadow-md hover:shadow-lg transition-all">
@@ -312,7 +314,6 @@ const Navbar = () => {
         </div>
 
         {/* ================= DESKTOP MAIN NAV (Orange Bar) ================= */}
-        {/* ✅ FIX 5: Height transition via inline style (GPU friendly) */}
         <div
           className="hidden lg:block bg-primarys text-white shadow-lg"
           style={{

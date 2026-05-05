@@ -33,8 +33,26 @@ export default function Page() {
   const images: string[] = productDetails?.image || [];
   const currentImage = activeImage || images[0] || "";
 
-  const { addToCart, cart } = useCart();
   const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
+
+  const [cart, setCart] = useState<number[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const stored = localStorage.getItem("cart");
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const addToCart = (id: number) => {
+    setCart((prev) => {
+      if (prev.includes(id)) return prev;
+      const updated = [...prev, id];
+      localStorage.setItem("cart", JSON.stringify(updated));
+      return updated;
+    });
+  };
 
   const cartProduct = {
     id: productDetails?._id,
@@ -43,8 +61,16 @@ export default function Page() {
     image_url: images[0],
   };
 
-  const isInCart = cart.some((item) => item._id === productDetails?._id);
+
+  // 1. Calculate if the product is in the cart
+  const isInCart = cart.includes(productDetails?._id);
+  // Note: If cart stores objects, use: const isInCart = cart.some(item => item.id === productDetails?._id);
+
+
+  // const isInCart = cart.some((item:any) => item._id === productDetails?._id);
   const isInWishlist = wishlist.some((item) => item.id === productDetails?._id);
+
+
 
   const handleMouseMove = (e: any) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -56,9 +82,12 @@ export default function Page() {
   };
 
   const phone = process.env.NEXT_PUBLIC_PHONE_NUMBER;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const productLink = `${baseUrl}/product/${productDetails?.slug}`;
 
   const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(
-    `Interested in: ${productDetails?.name} (Price: Rs. ${productDetails?.dp_price || productDetails?.op_price})`,
+    `Interested in: ${productDetails?.name} (Price: Rs. ${productDetails?.dp_price || productDetails?.op_price
+    })\n\nLink: ${productLink}`
   )}`;
 
   if (isLoading) {
@@ -184,11 +213,10 @@ export default function Page() {
                   <div
                     key={i}
                     onClick={() => setActiveImage(img)}
-                    className={`border rounded-lg p-2 cursor-pointer transition ${
-                      currentImage === img
-                        ? "border-[var(--primarys)]"
-                        : "border-gray-200"
-                    }`}
+                    className={`border rounded-lg p-2 cursor-pointer transition ${currentImage === img
+                      ? "border-[var(--primarys)]"
+                      : "border-gray-200"
+                      }`}
                   >
                     <Image
                       src={img}
@@ -271,11 +299,10 @@ export default function Page() {
 
             {/* AVAILABILITY */}
             <span
-              className={`text-sm  font-medium ${
-                productDetails.availability === "Available"
-                  ? "text-green-600"
-                  : "text-red-500"
-              }`}
+              className={`text-sm  font-medium ${productDetails.availability === "Available"
+                ? "text-green-600"
+                : "text-red-500"
+                }`}
             >
               {productDetails.availability === "Available"
                 ? "✅ In Stock"
@@ -293,42 +320,25 @@ export default function Page() {
                   Enquiry on Whatsapp
                 </button>
               </Link>
-
               <button
                 onClick={() => {
                   if (isInCart) {
                     toast.error("Already in cart");
                     return;
                   }
-                  addToCart(productDetails._id);
+                  addToCart(productDetails?._id);
                   toast.success("Added to cart 🛒");
                 }}
-                disabled={isInCart}
-                className={`w-full sm:w-auto px-10 py-3 rounded-xl font-medium transition ${
-                  isInCart
-                    ? "bg-[var(--primarys)] text-white"
-                    : "border border-[var(--primarys)] text-[var(--primarys)] hover:bg-[var(--primarys)] hover:text-white"
-                }`}
+                className={`w-full sm:w-auto px-10 py-3 rounded-xl font-medium transition ${isInCart
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed" // Or use your primary color class
+                  : "border border-[var(--primarys)] text-[var(--primarys)] hover:bg-[var(--primarys)] hover:text-white"
+                  }`}
               >
                 {isInCart ? "In Cart" : "Add to Cart"}
               </button>
             </div>
 
-            {/* WISHLIST */}
-            <button
-              onClick={() => {
-                if (isInWishlist) {
-                  removeFromWishlist(productDetails._id);
-                  toast("Removed from Wishlist ❌");
-                } else {
-                  addToWishlist(cartProduct);
-                  toast.success("Added to Wishlist ❤️");
-                }
-              }}
-              className="text-[var(--primarys)] text-sm hover:underline"
-            >
-              {isInWishlist ? "💔 Remove from Wishlist" : "❤️ Add to Wishlist"}
-            </button>
+
 
             {/* INQUIRY */}
             <div>
