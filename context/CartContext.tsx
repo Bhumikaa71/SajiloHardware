@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // /* eslint-disable react-hooks/set-state-in-effect */
 // "use client";
 
@@ -94,11 +95,6 @@
 //   return context;
 // };
 
-
-
-
-
-
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
@@ -140,11 +136,10 @@ const setStoredIds = (ids: string[]) => {
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
 
-
   // ✅ Add: Save ONLY ID to localStorage
   const addToCart = async (id: string) => {
     const ids = getStoredIds();
-    
+
     // If already in cart, don't add duplicate ID
     if (ids.includes(id)) return;
 
@@ -175,21 +170,30 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   const updateQuantity = (id: string, type: "inc" | "dec") => {
     setCart((prev) =>
-      prev
-        .map((item) =>
-          item._id !== id
-            ? item
-            : {
-                ...item,
-                quantity: type === "inc" ? item.quantity + 1 : Math.max(1, item.quantity - 1),
-              }
-        )
+      prev.map((item) =>
+        item._id !== id
+          ? item
+          : {
+              ...item,
+              quantity:
+                type === "inc"
+                  ? item.quantity + 1
+                  : Math.max(1, item.quantity - 1),
+            },
+      ),
     );
   };
 
   return (
     <CartContext.Provider
-      value={{ cart, cartCount: cart.length, addToCart, removeFromCart, clearCart, updateQuantity }}
+      value={{
+        cart,
+        cartCount: cart.length,
+        addToCart,
+        removeFromCart,
+        clearCart,
+        updateQuantity,
+      }}
     >
       {children}
     </CartContext.Provider>

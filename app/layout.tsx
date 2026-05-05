@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-const phone = process.env.NEXT_PUBLIC_PHONE_NUMBER; 
+const phone = process.env.NEXT_PUBLIC_PHONE_NUMBER;
 
 export const metadata: Metadata = {
   title: {

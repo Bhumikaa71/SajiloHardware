@@ -207,7 +207,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
 
   return (
     <div className="max-w-7xl mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
         {products.map((product, index) => {
           const id =
             product.id ?? (product as any)._id ?? (product as any).product_id;
