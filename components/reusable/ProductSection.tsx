@@ -71,12 +71,12 @@ export default function ProductSection({
     if (!scrollRef.current) return;
     const el = scrollRef.current;
     const scrollAmount = 280;
-    
+
     if (direction === "right") {
       const isNearEnd = el.scrollLeft + el.offsetWidth >= el.scrollWidth - 300;
       if (isNearEnd && hasMore) onLoadMore?.();
     }
-    
+
     el.scrollBy({
       left: direction === "left" ? -scrollAmount : scrollAmount,
       behavior: "smooth",
@@ -114,7 +114,7 @@ export default function ProductSection({
   useEffect(() => {
     startAutoScroll();
     return () => stopAutoScroll();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasMore, onLoadMore]);
 
   const containerVariants: Variants = {
@@ -210,9 +210,12 @@ export default function ProductSection({
           {products.map((product: any, index: number) => {
             const isInCart = cart.includes(product._id);
             const phone = process.env.NEXT_PUBLIC_PHONE_NUMBER;
+            const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+            const productLink = `${baseUrl}/product/${product?.slug}`;
             const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(
-              `Interested in: ${product.name} (Price: Rs. ${product.op_price})`,
+              `Interested in: ${product?.name} \n\nOriginal Price: Rs. ${product?.op_price?.toLocaleString()} \nDiscount Price: Rs. ${product?.dp_price?.toLocaleString()} \n\nLink: ${productLink}`
             )}`;
+
 
             return (
               <motion.div
@@ -267,11 +270,10 @@ export default function ProductSection({
                           toast.success("Added to Cart 🛒");
                         }
                       }}
-                      className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[10px] font-black tracking-widest transition-all ${
-                        isInCart
+                      className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[10px] font-black tracking-widest transition-all ${isInCart
                           ? "bg-gray-100 text-gray-400"
                           : "bg-gray-900 text-white hover:bg-primarys"
-                      }`}
+                        }`}
                     >
                       <ShoppingCart size={14} />
                       {isInCart ? "IN CART" : "ADD TO CART"}

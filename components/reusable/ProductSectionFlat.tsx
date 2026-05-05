@@ -39,24 +39,24 @@ export default function ProductSectionFlat({
   const inView = useInView(ref, { once: true, amount: 0.1 });
 
 
-    const [cart, setCart] = useState<number[]>(() => {
-      if (typeof window === "undefined") return [];
-      try {
-        const stored = localStorage.getItem("cart");
-        return stored ? JSON.parse(stored) : [];
-      } catch {
-        return [];
-      }
+  const [cart, setCart] = useState<number[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const stored = localStorage.getItem("cart");
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const addToCart = (id: number) => {
+    setCart((prev) => {
+      if (prev.includes(id)) return prev;
+      const updated = [...prev, id];
+      localStorage.setItem("cart", JSON.stringify(updated));
+      return updated;
     });
-  
-    const addToCart = (id: number) => {
-      setCart((prev) => {
-        if (prev.includes(id)) return prev;
-        const updated = [...prev, id];
-        localStorage.setItem("cart", JSON.stringify(updated));
-        return updated;
-      });
-    };
+  };
 
   useEffect(() => {
     if (inView) controls.start("visible");
@@ -143,8 +143,13 @@ export default function ProductSectionFlat({
         className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5"
       >
         {products.map((product: any, index: number) => {
-         const isInCart = cart.includes(product._id);
-          const whatsappUrl = `https://wa.me/9845526696?text=Interested in: ${encodeURIComponent(product.name)} (Price: Rs. ${product.op_price})`;
+          const isInCart = cart.includes(product._id);
+          const phone = process.env.NEXT_PUBLIC_PHONE_NUMBER;
+          const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+          const productLink = `${baseUrl}/product/${product?.slug}`;
+          const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(
+            `Interested in: ${product?.name} \n\nOriginal Price: Rs. ${product?.op_price?.toLocaleString()} \nDiscount Price: Rs. ${product?.dp_price?.toLocaleString()} \n\nLink: ${productLink}`
+          )}`;
 
           return (
             <motion.div
@@ -207,8 +212,8 @@ export default function ProductSectionFlat({
                       }
                     }}
                     className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[10px] font-black tracking-widest transition-all ${isInCart
-                        ? "bg-gray-100 text-gray-400"
-                        : "bg-gray-900 text-white hover:bg-primarys"
+                      ? "bg-gray-100 text-gray-400"
+                      : "bg-gray-900 text-white hover:bg-primarys"
                       }`}
                   >
                     <ShoppingCart size={14} />

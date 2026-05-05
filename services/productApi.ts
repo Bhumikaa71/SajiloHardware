@@ -79,6 +79,13 @@ export const productApi = baseApi.injectEndpoints({
             }),
         }),
 
+        // SEARCH PRODUCTS
+        searchProducts: builder.query<any, { query: string; page?: number; limit?: number }>({
+            query: ({ query, page = 1, limit = 10 }) =>
+                `/api/v1/product/search/${encodeURIComponent(query)}?page=${page}&limit=${limit}`,
+            providesTags: ['Product'],
+        }),
+
     }),
 });
 
@@ -91,4 +98,5 @@ export const {
     useGetFeaturedProductsQuery,
     useGetNewArrivalsQuery,
     useGetCartProductsMutation,
+    useSearchProductsQuery,
 } = productApi;
