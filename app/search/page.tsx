@@ -1,47 +1,13 @@
-// "use client";
-
-// import Footer from "@/components/footer";
-// import Navbar from "@/components/navbar";
-// import { useSearchParams } from "next/navigation";
-
-// export default function SearchPage() {
-//   const searchParams = useSearchParams();
-//   const query = searchParams.get("query");
-
-//   return (
-//     <>
-//       <Navbar />
-
-//       <div className="bg-white min-h-screen -mt-14">
-//         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 mt-16 sm:mt-0 lg:mt-24 pt-20 lg:pt-38">
-//           <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-black">
-//             Search Results for:{" "}
-//             <span className="text-primarys break-words">{query}</span>
-//           </h1>
-//         </div>
-//       </div>
-
-//       <Footer />
-//     </>
-//   );
-// }
-
-
-
-
-
-
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
-import ProductSection from "@/components/reusable/ProductSection";
-import { useSearchProductsQuery } from "@/services/productApi";
 import ProductSectionFlat from "@/components/reusable/ProductSectionFlat";
+import { useSearchProductsQuery } from "@/services/productApi";
 
-export default function SearchPage() {
+function SearchContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get("query") || "";
 
@@ -66,19 +32,18 @@ export default function SearchPage() {
   useEffect(() => {
     if (!data) return;
 
-    // 1. Read the correct data key based on your response payload (Array inside data)
+    // Read the correct data key based on your response payload (Array inside data)
     const responseData = (data as any)?.data || [];
     const newProducts = Array.isArray(responseData) ? responseData : [];
 
     setProducts((prev) => {
       const next = page === 1 ? newProducts : [...prev, ...newProducts];
       
-      // 2. Safely compute hasMore
+      // Safely compute hasMore
       setHasMore(newProducts.length > 0 && next.length < (data as any)?.results);
 
       return next;
     });
-  // Added page and data to the dependency array to correctly trigger updates when new pages are fetched
   }, [data, page]);
 
   const handleLoadMore = () => {
@@ -88,45 +53,55 @@ export default function SearchPage() {
   };
 
   return (
+    <div className="bg-white min-h-screen -mt-14">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 mt-10 sm:mt-0 lg:mt-24 pt-10 lg:pt-25">
+        {/* Product Section Display */}
+        {isLoading && products.length === 0 ? (
+          <div className="flex gap-4 overflow-hidden">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="shrink-0 w-[48%] md:w-[32%] lg:w-[23%]">
+                <div className="rounded-2xl border border-gray-100 p-3 flex flex-col gap-3">
+                  <div className="w-full aspect-square bg-gray-200 rounded-xl animate-pulse" />
+                  <div className="h-4 bg-gray-200 rounded animate-pulse" />
+                  <div className="h-9 bg-gray-200 rounded-xl animate-pulse" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : products.length > 0 ? (
+          <ProductSectionFlat
+            title={`Found results for "${query}"`}
+            products={products}
+            onLoadMore={handleLoadMore}
+            hasMore={hasMore}
+            isLoading={isFetching}
+          />
+        ) : (
+          // Empty State
+          !isLoading && (
+            <div className="text-center py-20 text-gray-500">
+              No products found for the search term. Try a different term.
+            </div>
+          )
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default function SearchPage() {
+  return (
     <>
       <Navbar />
-
-      <div className="bg-white min-h-screen -mt-14">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 mt-10 sm:mt-0 lg:mt-24 pt-10 lg:pt-25">
-        
-
-          {/* Product Section Display */}
-          {isLoading && products.length === 0 ? (
-            <div className="flex gap-4 overflow-hidden">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="shrink-0 w-[48%] md:w-[32%] lg:w-[23%]">
-                  <div className="rounded-2xl border border-gray-100 p-3 flex flex-col gap-3">
-                    <div className="w-full aspect-square bg-gray-200 rounded-xl animate-pulse" />
-                    <div className="h-4 bg-gray-200 rounded animate-pulse" />
-                    <div className="h-9 bg-gray-200 rounded-xl animate-pulse" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : products.length > 0 ? (
-            <ProductSectionFlat
-              title={`Found results for "${query}"`}
-              products={products}
-              onLoadMore={handleLoadMore}
-              hasMore={hasMore}
-              isLoading={isFetching}
-            />
-          ) : (
-            // Empty State
-            !isLoading && (
-              <div className="text-center py-20 text-gray-500">
-                No products found for the search term. Try a different term.
-              </div>
-            )
-          )}
-        </div>
-      </div>
-
+      <Suspense
+        fallback={
+          <div className="min-h-screen flex items-center justify-center bg-white">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500" />
+          </div>
+        }
+      >
+        <SearchContent />
+      </Suspense>
       <Footer />
     </>
   );
