@@ -194,10 +194,10 @@ const BlogDetailPage = () => {
       <ReadingProgressBar />
       <Navbar />
 
-      <main className="mx-auto max-w-5xl mt-35">
+      <main className="mx-auto max-w-5xl">
         {/* ── Loading ── */}
         {isLoading && (
-          <div className="px-4 sm:px-6 lg:px-8 pt-10">
+          <div className="px-4 sm:px-6 lg:px-8">
             <BlogDetailSkeleton />
           </div>
         )}
@@ -220,7 +220,7 @@ const BlogDetailPage = () => {
         {blog && (
           <>
             {/* ── Hero Banner ── */}
-            <section className="px-4 mt-20 sm:px-6 lg:px-8 pt-8 pb-0">
+            <section className="px-4 lg:mt-40 sm:px-6 lg:px-8 pb-0">
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}

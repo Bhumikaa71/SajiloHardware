@@ -77,7 +77,7 @@ const BlogPage = () => {
       <Navbar />
       <main className="mx-auto max-w-7xl">
         {/* ================= HERO ================= */}
-        <section className="relative px-4 sm:px-6 lg:px-8 pt-16  pb-20">
+        <section className="relative px-4 sm:px-6 lg:px-8 lg:pt-10  pb-20">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}

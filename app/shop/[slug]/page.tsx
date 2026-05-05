@@ -35,48 +35,50 @@ function Shop() {
 
   return (
     <>
-      <Navbar />
-      <div className="mt-30">
-        <HotDeals />
-      </div>
+      <div className="bg-white">
+        <Navbar />
+        <div className="lg:mt-30">
+          <HotDeals />
+        </div>
 
-      <div className="bg-gray-50 text-primarys">
-        <div className="max-w-7xl mx-auto px-4">
-          {/* MOBILE TOP BAR */}
-          <div className="md:hidden flex justify-between items-center py-3">
-            <h1 className="font-semibold text-lg">Shop</h1>
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="px-3 py-1 border rounded bg-white"
-            >
-              Filters
-            </button>
-          </div>
+        <div className="bg-gray-50 text-primarys">
+          <div className="max-w-7xl mx-auto px-4">
+            {/* MOBILE TOP BAR */}
+            <div className="md:hidden flex justify-between items-center">
+              <h1 className="font-semibold text-lg">Shop</h1>
+              <button
+                onClick={() => setSidebarOpen(true)}
+                className="px-3 py-1 border rounded bg-white"
+              >
+                Filters
+              </button>
+            </div>
 
-          <div className="flex flex-col md:flex-row gap-6 py-4 md:py-6 items-start">
-            {sidebarOpen && (
-              <div
-                className="fixed inset-0 bg-black/40 z-40 md:hidden"
-                onClick={() => setSidebarOpen(false)}
-              />
-            )}
+            <div className="flex flex-col md:flex-row gap-6 py-4 md:py-6 items-start">
+              {sidebarOpen && (
+                <div
+                  className="fixed inset-0 bg-black/40 z-40 md:hidden"
+                  onClick={() => setSidebarOpen(false)}
+                />
+              )}
 
-            {/* PRODUCTS */}
-            <div className="flex-1 min-w-0 w-full">
-              <AllProducts
-                priceRange={priceRange}
-                productList={categoryProducts?.data || []}
-                isLoading={isLoading}
-                currentPage={currentPage}
-                totalPages={categoryProducts?.totalPages || 1} // ← from backend
-                onPageChange={(page) => setCurrentPage(page)}
-              />
+              {/* PRODUCTS */}
+              <div className="flex-1 min-w-0 w-full">
+                <AllProducts
+                  priceRange={priceRange}
+                  productList={categoryProducts?.data || []}
+                  isLoading={isLoading}
+                  currentPage={currentPage}
+                  totalPages={categoryProducts?.totalPages || 1} // ← from backend
+                  onPageChange={(page) => setCurrentPage(page)}
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <Footer />
+        <Footer />
+      </div>
     </>
   );
 }

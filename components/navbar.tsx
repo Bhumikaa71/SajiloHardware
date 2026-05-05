@@ -30,6 +30,7 @@ import {
 import { useWishlist } from "@/context/WishlistContext";
 import { useCart } from "@/context/CartContext";
 import { useGetCategoryTreeQuery } from "@/services/categoryApi";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
   const { wishlist } = useWishlist();
@@ -40,13 +41,14 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const { data: categoryTree } = useGetCategoryTreeQuery();
+  const phone = process.env.NEXT_PUBLIC_PHONE_NUMBER;
 
   // ✅ FIX 1: Added { passive: true } to prevent scroll blocking
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);  
+  }, []);
 
   const [token, setToken] = useState<string | null>(null);
 
@@ -93,19 +95,28 @@ const Navbar = () => {
 
   const isActive = (href: string) => pathname === href;
 
+  const router = useRouter();
+  const [search, setSearch] = useState("");
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!search.trim()) return;
+
+    router.push(`/search?query=${encodeURIComponent(search.trim())}`);
+    setSearch("");
+  };
+
   return (
     <>
-      {/* ✅ FIX 2: Mobile spacer only - no desktop spacer needed since header is fixed */}
-      <div className="h-28 lg:hidden bg-transparent" />
+      <div className="h-24  mb-10 lg:hidden bg-transparent" />
 
-      {/* ✅ FIX 3: Single fixed header - removed sticky + nested fixed conflict */}
       <header className="w-full fixed top-0 left-0 right-0 z-50 bg-white">
-
         {/* ================= MOBILE HEADER ================= */}
         <div className="lg:hidden bg-white shadow-sm">
           <div className="mx-auto max-w-7xl px-4">
             {/* Top Row: Menu, Logo, Icons */}
-            <div className="flex items-center justify-between py-3 gap-3">
+            <div className="flex items-center justify-between py-4 gap-3">
               <button
                 onClick={() => setIsMobileMenuOpen(true)}
                 className="p-2 bg-orange-50 hover:bg-orange-100 rounded-xl text-primarys transition-colors"
@@ -146,11 +157,27 @@ const Navbar = () => {
             </div>
 
             {/* Bottom Row: Search */}
-            <div className="pb-3">
-              <div className="relative w-full">
-             
-              </div>
-            </div>
+            <form
+              onSubmit={handleSearch}
+              className="flex items-center bg-gray-100 rounded-xl px-3 py-2"
+            >
+              <Search size={18} className="text-gray-400" />
+
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search products..."
+                className="w-full bg-transparent text-black px-2 text-sm outline-none"
+              />
+
+              <button
+                type="submit"
+                className="text-orange-500 font-bold text-sm"
+              >
+                Go
+              </button>
+            </form>
           </div>
         </div>
 
@@ -163,7 +190,8 @@ const Navbar = () => {
             opacity: scrolled ? 0 : 1,
             maxHeight: scrolled ? 0 : "80px",
             overflow: "hidden",
-            transition: "transform 0.3s ease, opacity 0.3s ease, max-height 0.3s ease",
+            transition:
+              "transform 0.3s ease, opacity 0.3s ease, max-height 0.3s ease",
             pointerEvents: scrolled ? "none" : "auto",
           }}
         >
@@ -179,9 +207,29 @@ const Navbar = () => {
                 />
               </div>
             </Link>
+            <form
+              onSubmit={handleSearch}
+              className="hidden lg:flex items-center bg-white rounded-xl overflow-hidden w-[320px] mx-4"
+            >
+              <Search size={22} className="ml-3 text-gray-400" />
 
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search products..."
+                className="w-full px-6 py-2 text-sm text-black outline-none"
+              />
+
+              <button
+                type="submit"
+                className="bg-white text-primarys px-4 text-sm font-bold hover:bg-gray-100"
+              >
+                Search
+              </button>
+            </form>
             <div className="flex items-center gap-2 md:gap-4">
-              <Link href="https://wa.me/9845526696" className="hidden md:flex">
+              <Link href={`https://wa.me/${phone}`} className="hidden md:flex">
                 <div className="flex items-center gap-2 bg-[#25D366] text-white p-2.5 md:px-5 md:py-2.5 rounded-2xl shadow-md hover:shadow-lg transition-all">
                   <MessageCircle size={20} fill="white" />
                   <span className="font-bold text-sm">WhatsApp</span>
@@ -273,7 +321,6 @@ const Navbar = () => {
           }}
         >
           <div className="mx-auto max-w-7xl flex items-center justify-between h-full px-8 relative">
-
             {/* Scroll Logo - appears when scrolled */}
             <div
               className="absolute left-8"
@@ -360,7 +407,7 @@ const Navbar = () => {
               {[
                 { href: "/", label: "HOME" },
                 { href: "/aboutpage", label: "ABOUT" },
-                { href: "/shop", label: "SHOP" },
+                { href: "/shop", label: "All PRODUCTS" },
                 { href: "/blogpage/bloghero", label: "BLOG" },
               ].map(({ href, label }) => (
                 <Link
@@ -386,7 +433,7 @@ const Navbar = () => {
                 <Flame size={16} className="text-yellow-300" /> HOT DEALS
               </Link>
               <Link
-                href="https://wa.me/9845526696"
+                href={`https://wa.me/${phone}`}
                 className="flex items-center gap-2 bg-white text-primarys px-5 py-2 rounded-xl text-xs font-black tracking-widest shadow-lg hover:bg-orange-50 transition-all hover:scale-105"
               >
                 <CreditCard size={16} /> BUY NOW
@@ -419,8 +466,12 @@ const Navbar = () => {
           {/* Panel Header */}
           <div className="flex items-center justify-between px-5 py-4 bg-primarys shrink-0">
             <div>
-              <p className="text-white font-black text-sm tracking-widest">MENU</p>
-              <p className="text-orange-200 text-[10px] mt-0.5">Sajilo Hardware</p>
+              <p className="text-white font-black text-sm tracking-widest">
+                MENU
+              </p>
+              <p className="text-orange-200 text-[10px] mt-0.5">
+                Sajilo Hardware
+              </p>
             </div>
             <button
               onClick={() => setIsMobileMenuOpen(false)}
@@ -436,7 +487,7 @@ const Navbar = () => {
               {[
                 { label: "Home", href: "/", Icon: Home },
                 { label: "About", href: "/aboutpage", Icon: Info },
-                { label: "Shop", href: "/shop", Icon: ShoppingBag },
+                { label: "All Products", href: "/shop", Icon: ShoppingBag },
                 { label: "Blog", href: "/blogpage/bloghero", Icon: BookOpen },
               ].map(({ label, href, Icon }) => (
                 <Link

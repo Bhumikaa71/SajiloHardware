@@ -22,8 +22,6 @@
 //     brand: brandName || undefined,
 //   });
 
-
-
 //   return (
 //     <>
 //       <Navbar />
@@ -107,9 +105,6 @@
 
 // export default Shop;
 
-
-
-
 "use client";
 
 import { useState } from "react";
@@ -134,12 +129,9 @@ function Shop() {
     brand: brandName || undefined,
   });
 
-
-
   return (
     <>
-
-      <section className="md:pt-30">
+      <section className="md:pt-30 bg-white">
         <Navbar />
         <HotDeals />
 
@@ -167,7 +159,7 @@ function Shop() {
               {/* SIDEBAR */}
               <div
                 className={`
-                fixed md:static top-16 left-0 z-40
+                fixed md:static  top-16 left-0 z-40
                 w-72 h-[calc(100vh-64px)] md:h-auto
                 bg-white md:bg-transparent
                 transform transition-transform duration-300
@@ -206,7 +198,7 @@ function Shop() {
                   productList={allProducts?.data || []}
                   isLoading={isLoading}
                   currentPage={currentPage}
-                  totalPages={allProducts?.totalPages || 1}   // ← from backend
+                  totalPages={allProducts?.totalPages || 1} // ← from backend
                   onPageChange={(page) => setCurrentPage(page)}
                 />
               </div>
