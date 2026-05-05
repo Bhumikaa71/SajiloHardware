@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/refs */
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
@@ -88,14 +89,24 @@ function AnimatedWords({
 }
 
 /* ─── Animated accent line ─── */
-function AnimatedLine({ animKey, delay = 0 }: { animKey: number | string; delay?: number }) {
+function AnimatedLine({
+  animKey,
+  delay = 0,
+}: {
+  animKey: number | string;
+  delay?: number;
+}) {
   return (
     <div className="overflow-hidden h-[3px]" key={animKey}>
       <motion.div
         className="h-full rounded-full bg-gradient-to-r from-orange-500 via-amber-400 to-orange-500"
         initial={{ width: "0px" }}
         animate={{ width: "96px" }}
-        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: delay / 1000 }}
+        transition={{
+          duration: 0.9,
+          ease: [0.22, 1, 0.36, 1],
+          delay: delay / 1000,
+        }}
       />
     </div>
   );
@@ -118,7 +129,11 @@ function Reveal({
       <motion.div
         initial={{ translateY: y, opacity: 0 }}
         animate={{ translateY: 0, opacity: 1 }}
-        transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1], delay: delay / 1000 }}
+        transition={{
+          duration: 0.75,
+          ease: [0.22, 1, 0.36, 1],
+          delay: delay / 1000,
+        }}
       >
         {children}
       </motion.div>
@@ -131,16 +146,27 @@ export default function HeroCarousel() {
   const [progress, setProgress] = useState(0);
   const isLocked = useRef(false);
 
-  const goTo = useCallback((nextIdx: number) => {
-    if (isLocked.current || nextIdx === index) return;
-    isLocked.current = true;
-    setIndex(nextIdx);
-    setProgress(0);
-    setTimeout(() => { isLocked.current = false; }, 1000);
-  }, [index]);
+  const goTo = useCallback(
+    (nextIdx: number) => {
+      if (isLocked.current || nextIdx === index) return;
+      isLocked.current = true;
+      setIndex(nextIdx);
+      setProgress(0);
+      setTimeout(() => {
+        isLocked.current = false;
+      }, 1000);
+    },
+    [index],
+  );
 
-  const next = useCallback(() => goTo((index + 1) % slides.length), [index, goTo]);
-  const prev = useCallback(() => goTo((index - 1 + slides.length) % slides.length), [index, goTo]);
+  const next = useCallback(
+    () => goTo((index + 1) % slides.length),
+    [index, goTo],
+  );
+  const prev = useCallback(
+    () => goTo((index - 1 + slides.length) % slides.length),
+    [index, goTo],
+  );
 
   /* ─── progress timer ─── */
   useEffect(() => {
@@ -164,9 +190,21 @@ export default function HeroCarousel() {
     return () => window.removeEventListener("keydown", handler);
   }, [next, prev]);
 
+  const arrowButtons = [
+    {
+      onClick: () => prev(),
+      d: "M5 15l7-7 7 7",
+      label: "Previous",
+    },
+    {
+      onClick: () => next(),
+      d: "M19 9l-7 7-7-7",
+      label: "Next",
+    },
+  ];
+
   return (
     <section className="relative h-screen w-full overflow-hidden bg-neutral-950 select-none">
-
       {/* ═══════════ SLIDES ═══════════ */}
       <AnimatePresence mode="wait">
         {slides.map((slide, i) => {
@@ -212,12 +250,21 @@ export default function HeroCarousel() {
               {/* Decorative rings */}
               <motion.div
                 animate={{ y: [0, -14, 0], opacity: [0.04, 0.07, 0.04] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
                 className="absolute top-[14%] right-[9%] w-80 h-80 rounded-full border border-white/5 z-[6] hidden lg:block"
               />
               <motion.div
                 animate={{ y: [0, 14, 0], opacity: [0.07, 0.13, 0.07] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: 1,
+                }}
                 className="absolute top-[17%] right-[12%] w-60 h-60 rounded-full border border-orange-500/10 z-[6] hidden lg:block"
               />
 
@@ -247,7 +294,11 @@ export default function HeroCarousel() {
 
                     {/* Title */}
                     <h1 className="text-[2.6rem] sm:text-5xl md:text-[3.6rem] lg:text-6xl font-black text-white leading-[0.93] tracking-tight mb-5">
-                      <AnimatedWords text={slide.title} animKey={`title-${i}`} delay={320} />
+                      <AnimatedWords
+                        text={slide.title}
+                        animKey={`title-${i}`}
+                        delay={320}
+                      />
                     </h1>
 
                     {/* Accent line */}
@@ -280,7 +331,11 @@ export default function HeroCarousel() {
                                 stroke="currentColor"
                                 strokeWidth={2.5}
                               >
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                                />
                               </svg>
                             </span>
                             {/* Hover overlay — must sit BELOW z-10 content */}
@@ -290,7 +345,9 @@ export default function HeroCarousel() {
 
                         <Link href="/aboutpage">
                           <motion.button
-                            whileHover={{ backgroundColor: "rgba(255,255,255,0.12)" }}
+                            whileHover={{
+                              backgroundColor: "rgba(255,255,255,0.12)",
+                            }}
                             transition={{ duration: 0.2 }}
                             className="w-full sm:w-auto bg-white/6 backdrop-blur-md text-white px-9 py-3.5 rounded-full font-bold text-sm tracking-wide border border-white/18 transition-colors duration-200"
                           >
@@ -309,19 +366,25 @@ export default function HeroCarousel() {
 
       {/* ═══════════ SIDE ARROWS ═══════════ */}
       <div className="absolute right-6 md:right-10 top-1/2 -translate-y-1/2 z-30 hidden md:flex flex-col gap-2.5">
-        {[
-          { fn: prev, d: "M5 15l7-7 7 7", label: "Previous" },
-          { fn: next, d: "M19 9l-7 7-7-7", label: "Next" },
-        ].map((btn, i) => (
+        {arrowButtons.map((btn, i) => (
           <motion.button
             key={i}
-            whileHover={{ scale: 1.1, backgroundColor: "rgba(255,255,255,0.13)" }}
+            whileHover={{
+              scale: 1.1,
+              backgroundColor: "rgba(255,255,255,0.13)",
+            }}
             whileTap={{ scale: 0.9 }}
-            onClick={btn.fn}
+            onClick={btn.onClick}
             aria-label={btn.label}
             className="w-11 h-11 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm flex items-center justify-center text-white/40 hover:text-white transition-colors duration-200"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
               <path strokeLinecap="round" strokeLinejoin="round" d={btn.d} />
             </svg>
           </motion.button>
@@ -332,7 +395,6 @@ export default function HeroCarousel() {
       <div className="absolute bottom-0  left-0 right-0 z-30 bg-gradient-to-t from-black/75 to-transparent">
         <div className="max-w-7xl mx-auto px-5 sm:px-10 py-7">
           <div className="flex items-end justify-between gap-6">
-
             {/* Slide label */}
             <div className="hidden md:block min-w-[120px]">
               <p className="text-orange-500 text-[9px] tracking-[0.3em] uppercase font-black mb-1.5">
@@ -403,7 +465,6 @@ export default function HeroCarousel() {
                 0{slides.length}
               </span>
             </div>
-
           </div>
         </div>
       </div>

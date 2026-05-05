@@ -100,7 +100,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 type CartItem = {
-  id: any;
+  // id: any;
   _id: string;
   name: string;
   op_price: number;
@@ -140,16 +140,17 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const addToCart = async (id: string) => {
     const ids = getStoredIds();
 
-    // If already in cart, don't add duplicate ID
     if (ids.includes(id)) return;
 
-    // Update LocalStorage (Only IDs)
     setStoredIds([...ids, id]);
 
-    // Update State (Full Object)
     try {
       const res = await fetch(`/api/products/${id}`);
-      const product: CartItem = await res.json();
+      const result = await res.json();
+
+      // ✅ FIX: extract correct data
+      const product = result.data || result;
+
       setCart((prev) => [...prev, { ...product, quantity: 1 }]);
     } catch (err) {
       console.error("Failed to fetch product:", err);
