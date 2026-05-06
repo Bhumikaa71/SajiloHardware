@@ -13,6 +13,7 @@ type Brand = {
   logo: string;
 };
 
+
 const brands: Brand[] = [
   { name: "Bosch", logo: "/images/brand1.png" },
   { name: "Ingco", logo: "/images/brand2.png" },
