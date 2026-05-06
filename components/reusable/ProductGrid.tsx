@@ -219,9 +219,19 @@ export default function ProductGrid({ products }: { products: Product[] }) {
           const phone = process.env.NEXT_PUBLIC_PHONE_NUMBER;
           const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
           const productLink = `${baseUrl}/product/${product?.slug}`;
-          const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(
-            `Interested in: ${product?.name} \n\nOriginal Price: Rs. ${product?.op_price?.toLocaleString()} \nDiscount Price: Rs. ${product?.dp_price?.toLocaleString()} \n\nLink: ${productLink}`
-          )}`;
+          const message = `Interested in: ${product?.name}
+                          ${product?.op_price
+                                        ? `\nOriginal Price: Rs. ${product.op_price.toLocaleString()}`
+                                        : ""
+                                      }
+                          ${product?.dp_price
+                                        ? `\nDiscount Price: Rs. ${product.dp_price.toLocaleString()}`
+                                        : ""
+                                      }
+
+                          Link: ${productLink}`;
+
+          const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 
           return (
             <div key={`${id}-${index}`} className="cursor-pointer">
@@ -293,8 +303,8 @@ export default function ProductGrid({ products }: { products: Product[] }) {
                     }}
                     disabled={isInCart}
                     className={`w-1/2 text-sm flex items-center justify-center gap-2 py-2 rounded-xl transition ${isInCart
-                        ? "bg-green-100 text-green-600"
-                        : "bg-gray-100 text-gray-400"
+                      ? "bg-green-100 text-green-600"
+                      : "bg-gray-100 text-gray-400"
                       }`}
                   >
                     <ShoppingCart size={18} />
