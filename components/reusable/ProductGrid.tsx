@@ -224,12 +224,11 @@ export default function ProductGrid({ products }: { products: Product[] }) {
               ? `\nOriginal Price: Rs. ${product.op_price.toLocaleString()}`
               : ""
             }
-                          ${product?.dp_price
+              ${product?.dp_price
               ? `\nDiscount Price: Rs. ${product.dp_price.toLocaleString()}`
               : ""
             }
-
-                          Link: ${productLink}`;
+            Link: ${productLink}`;
 
           const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 
@@ -266,9 +265,8 @@ export default function ProductGrid({ products }: { products: Product[] }) {
 
                     <div className="flex gap-x-2">
                       {product.op_price == null && product.dp_price == null ? (
-                        // ❌ Price छैन
-                        <span className="text-red-500 pt-1 text-sm font-medium">
-                          Price not available
+                        <span className=" pt-1 text-sm font-medium">
+                          Contact us for pricing
                         </span>
                       ) : product.op_price > 0 && product.dp_price > 0 ? (
                         // ✅ Discount price case
