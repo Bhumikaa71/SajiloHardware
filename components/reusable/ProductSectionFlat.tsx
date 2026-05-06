@@ -195,7 +195,7 @@ export default function ProductSectionFlat({
                       </span>
                     ) : (
                       // No price at all — placeholder to preserve height
-                      <span className="text-orange-500 text-sm">Price not available</span>
+                      <span className="text-orange-500 text-sm">Contact us for pricing</span>
                     )}
                   </div>
                 </div>
