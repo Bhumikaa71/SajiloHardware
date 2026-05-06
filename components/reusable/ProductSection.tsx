@@ -255,7 +255,7 @@ export default function ProductSection({
                           Rs. {product?.op_price?.toLocaleString()}
                         </span>
                       ) : (
-                        <span className="text-gray-300 text-sm">Price not available</span>
+                        <span className="text-orange-500 text-sm">Contact us for pricing</span>
                       )}
                     </div>
                   </div>
