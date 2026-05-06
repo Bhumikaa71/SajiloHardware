@@ -221,13 +221,13 @@ export default function ProductGrid({ products }: { products: Product[] }) {
           const productLink = `${baseUrl}/product/${product?.slug}`;
           const message = `Interested in: ${product?.name}
                           ${product?.op_price
-                                        ? `\nOriginal Price: Rs. ${product.op_price.toLocaleString()}`
-                                        : ""
-                                      }
+              ? `\nOriginal Price: Rs. ${product.op_price.toLocaleString()}`
+              : ""
+            }
                           ${product?.dp_price
-                                        ? `\nDiscount Price: Rs. ${product.dp_price.toLocaleString()}`
-                                        : ""
-                                      }
+              ? `\nDiscount Price: Rs. ${product.dp_price.toLocaleString()}`
+              : ""
+            }
 
                           Link: ${productLink}`;
 
@@ -263,29 +263,28 @@ export default function ProductGrid({ products }: { products: Product[] }) {
                     <h3 className="text-lg font-semibold text-gray-800 line-clamp-2">
                       {product?.name}
                     </h3>
-                    <div className="flex gap-x-2">
-                      {product.op_price > 0 && product.dp_price > 0 ? (
-                        <div className="flex gap-2 mt-1 items-center">
-                          <span className="text-gray-400 line-through text-sm">
-                            Rs. {product?.op_price?.toLocaleString()}
-                          </span>
-                        </div>
-                      ) : (
-                        <div className="flex gap-2 mt-1 items-center">
-                          <span className="text-primarys font-bold">
-                            {product.op_price
-                              ? `Rs. ${product?.op_price?.toLocaleString()}`
-                              : ""}
-                          </span>
-                        </div>
-                      )}
 
-                      {product.op_price > 0 && product.dp_price > 0 && (
-                        <div className="flex gap-2 mt-1 items-center">
+                    <div className="flex gap-x-2">
+                      {product.op_price == null && product.dp_price == null ? (
+                        // ❌ Price छैन
+                        <span className="text-red-500 pt-1 text-sm font-medium">
+                          Price not available
+                        </span>
+                      ) : product.op_price > 0 && product.dp_price > 0 ? (
+                        // ✅ Discount price case
+                        <>
+                          <span className="text-gray-400 line-through text-sm">
+                            Rs. {product.op_price.toLocaleString()}
+                          </span>
                           <span className="text-primarys font-bold">
                             Rs. {product.dp_price.toLocaleString()}
                           </span>
-                        </div>
+                        </>
+                      ) : (
+                        // ✅ Only original price
+                        <span className="text-primarys font-bold">
+                          Rs. {product.op_price?.toLocaleString()}
+                        </span>
                       )}
                     </div>
                   </div>
