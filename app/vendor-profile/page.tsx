@@ -2,6 +2,7 @@
 
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
+import { useVendorAuth } from "@/hooks/useVendorAuth/useVendorAuth";
 import { useGetVendorProfileQuery, useUpdatePasswordMutation, useUpdateProfileMutation } from "@/services/vendorApi";
 import { useState, useEffect } from "react";
 import toast, { Toaster } from 'react-hot-toast';
@@ -29,6 +30,7 @@ const LoadingSkeleton = () => (
 );
 
 export default function VendorProfile() {
+ const { isVendorLoading } = useVendorAuth(); 
   const { data: response, isLoading } = useGetVendorProfileQuery();
   const vendorData = response?.data;
   const [updateProfile] = useUpdateProfileMutation();
@@ -80,9 +82,10 @@ export default function VendorProfile() {
   // --- Using the Skeleton ---
   if (isLoading) return <LoadingSkeleton />;
 
-  return (
+ return (
     <>
       <Navbar />
+      <div className="md:mt-30"></div>
       <div className="min-h-screen bg-white p-6">
         {/* ... rest of your existing JSX code ... */}
         <div className="max-w-7xl mx-auto px-12">

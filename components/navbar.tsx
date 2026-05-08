@@ -107,7 +107,7 @@ const Navbar = () => {
     setSearch("");
   };
 
-return (
+  return (
     <>
       <div className="h-24  mb-10 lg:hidden bg-transparent" />
 
@@ -249,66 +249,6 @@ return (
                 </button>
               </Link>
 
-              {/* PROFILE DROPDOWN */}
-              {token && (
-                <div
-                  className="relative z-50"
-                  onMouseEnter={() => setIsProfileOpen(true)}
-                  onMouseLeave={() => setIsProfileOpen(false)}
-                >
-                  <button className="p-2.5 text-primarys hover:bg-orange-50 rounded-xl transition-colors">
-                    <User size={24} />
-                  </button>
-
-                  <div
-                    className={`absolute right-0 top-full w-56 transition-all duration-300 ${
-                      isProfileOpen
-                        ? "opacity-100 visible translate-y-0"
-                        : "opacity-0 invisible -translate-y-2"
-                    }`}
-                  >
-                    <div className="h-2 w-full" />
-                    <div className="bg-white shadow-[0_10px_40px_rgba(0,0,0,0.15)] rounded-2xl border border-gray-100 py-2 overflow-hidden">
-                      <div className="px-4 py-2 border-b border-gray-50 mb-1">
-                        <p className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">
-                          Account
-                        </p>
-                      </div>
-                      <Link
-                        href="/vendor-profile"
-                        onClick={() => setIsProfileOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
-                      >
-                        My Profile
-                      </Link>
-                      <Link
-                        href="/vendor-orders"
-                        onClick={() => setIsProfileOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
-                      >
-                        My Orders
-                      </Link>
-                      <Link
-                        href="/vendor-order-history"
-                        onClick={() => setIsProfileOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
-                      >
-                        Order History
-                      </Link>
-                      <button
-                        onClick={() => {
-                          localStorage.removeItem("vn-sh-token");
-                          setToken(null);
-                          setIsProfileOpen(false);
-                        }}
-                        className="w-full flex items-center gap-3 text-left px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50 transition-colors border-t border-gray-50 mt-1"
-                      >
-                        Logout
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>
@@ -414,11 +354,10 @@ return (
                 <Link
                   key={href}
                   href={href}
-                  className={`px-5 text-sm font-bold tracking-wide transition-colors h-full flex items-center ${
-                    isActive(href)
-                      ? "text-white border-b-2 border-orange-300"
-                      : "hover:text-orange-300"
-                  }`}
+                  className={`px-5 text-sm font-bold tracking-wide transition-colors h-full flex items-center ${isActive(href)
+                    ? "text-white border-b-2 border-orange-300"
+                    : "hover:text-orange-300"
+                    }`}
                 >
                   {label}
                 </Link>
@@ -439,6 +378,67 @@ return (
               >
                 <CreditCard size={16} /> BUY NOW
               </Link>
+
+              {/* ✅ PROFILE - always visible, scroll ma pani kaam garcha */}
+              {token && (
+                <div
+                  className="relative"
+                  onMouseEnter={() => setIsProfileOpen(true)}
+                  onMouseLeave={() => setIsProfileOpen(false)}
+                >
+                  <button className="p-2.5 text-white hover:bg-white/20 rounded-xl transition-colors">
+                    <User size={22} />
+                  </button>
+
+                  <div
+                    className={`absolute right-0 top-full pt-2 w-56 z-[999] transition-all duration-300 ${isProfileOpen
+                      ? "opacity-100 visible translate-y-0"
+                      : "opacity-0 invisible -translate-y-2"
+                      }`}
+                  >
+                    <div className="bg-white shadow-[0_10px_40px_rgba(0,0,0,0.15)] rounded-2xl border border-gray-100 py-2 overflow-hidden">
+                      <div className="px-4 py-2 border-b border-gray-50 mb-1">
+                        <p className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">
+                          Account
+                        </p>
+                      </div>
+                      <Link
+                        href="/vendor-profile"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
+                      >
+                        My Profile
+                      </Link>
+                      <Link
+                        href="/vendor-orders"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
+                      >
+                        My Orders
+                      </Link>
+                      <Link
+                        href="/vendor-order-history"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
+                      >
+                        Order History
+                      </Link>
+                      <button
+                        onClick={() => {
+                          localStorage.removeItem("vn-sh-token");
+                          document.cookie = "vn-sh-token=; path=/; max-age=0";
+                          setToken(null);
+                          setIsProfileOpen(false);
+                          router.push("/login"); // ✅ login page ma redirect
+                        }}
+                        className="w-full flex items-center gap-3 text-left px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50 transition-colors border-t border-gray-50 mt-1"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -446,23 +446,20 @@ return (
 
       {/* ================= MOBILE MENU (Slide Over) ================= */}
       <div
-        className={`fixed inset-0 z-[200] lg:hidden transition-all duration-500 ${
-          isMobileMenuOpen ? "visible" : "invisible"
-        }`}
+        className={`fixed inset-0 z-[200] lg:hidden transition-all duration-500 ${isMobileMenuOpen ? "visible" : "invisible"
+          }`}
       >
         {/* Backdrop */}
         <div
-          className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-500 ${
-            isMobileMenuOpen ? "opacity-100" : "opacity-0"
-          }`}
+          className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-500 ${isMobileMenuOpen ? "opacity-100" : "opacity-0"
+            }`}
           onClick={() => setIsMobileMenuOpen(false)}
         />
 
         {/* Slide Panel */}
         <div
-          className={`absolute left-0 top-0 bottom-0 w-[82%] max-w-xs bg-white shadow-2xl transition-transform duration-500 ease-out flex flex-col ${
-            isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+          className={`absolute left-0 top-0 bottom-0 w-[82%] max-w-xs bg-white shadow-2xl transition-transform duration-500 ease-out flex flex-col ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+            }`}
         >
           {/* Panel Header */}
           <div className="flex items-center justify-between px-5 py-4 bg-primarys shrink-0">
@@ -495,11 +492,10 @@ return (
                   key={label}
                   href={href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`flex items-center gap-2 p-3 rounded-xl text-sm font-semibold transition-colors border ${
-                    isActive(href)
-                      ? "bg-primarys text-white border-primarys shadow-md"
-                      : "bg-gray-50 text-gray-700 hover:bg-orange-50 hover:text-primarys hover:border-orange-100"
-                  }`}
+                  className={`flex items-center gap-2 p-3 rounded-xl text-sm font-semibold transition-colors border ${isActive(href)
+                    ? "bg-primarys text-white border-primarys shadow-md"
+                    : "bg-gray-50 text-gray-700 hover:bg-orange-50 hover:text-primarys hover:border-orange-100"
+                    }`}
                 >
                   <Icon size={14} className="shrink-0" />
                   {label}
