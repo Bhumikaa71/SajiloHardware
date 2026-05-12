@@ -9,6 +9,7 @@ export const baseApi = createApi({
   refetchOnMountOrArgChange: false, // ✅ MUST be false - this is your skeleton cause
   baseQuery: fetchBaseQuery({
     // baseUrl: process.env.NEXT_PUBLIC_BASE_URL || 'https://sajilo-hardware.onrender.com', //baseUrl: 'https://sajilo-hardware.onrender.com
+    
     baseUrl: process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000',
     // baseUrl: 'http://localhost:3000',
     prepareHeaders: (headers) => {
