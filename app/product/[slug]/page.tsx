@@ -14,6 +14,9 @@ import { FaWhatsapp } from "react-icons/fa";
 import { useParams } from "next/dist/client/components/navigation";
 import { useGetProductDetailsQuery } from "@/services/productApi";
 
+
+export const dynamic = "force-static";
+
 export default function Page() {
   const descriptionRef = useRef<HTMLDivElement | null>(null);
   const [qty, setQty] = useState(1);

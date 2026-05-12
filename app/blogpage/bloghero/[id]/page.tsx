@@ -19,6 +19,13 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { useGetBlogByIdQuery, useGetAllBlogsQuery } from "@/services/blogApi";
 
+
+// 🔥 REQUIRED for static export
+export const dynamic = "force-static";
+
+
+
+
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 const stripHtml = (html: string): string =>

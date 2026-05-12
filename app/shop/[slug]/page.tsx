@@ -13,6 +13,8 @@ import {
 import { get } from "http";
 import { useParams } from "next/dist/client/components/navigation";
 
+export const dynamic = "force-static";
+
 function Shop() {
   const [currentPage, setCurrentPage] = useState(1);
   const [priceRange, setPriceRange] = useState("all");
