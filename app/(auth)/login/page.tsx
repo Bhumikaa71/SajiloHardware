@@ -16,24 +16,49 @@ const VendorLoginPage = () => {
   const router = useRouter();
   const [loginVendor, { isLoading }] = useLoginVendorMutation();
 
+  // const handleLogin = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+
+  //   if (!email || !password) {
+  //     toast.error("Email and password are required");
+  //     return;
+  //   }
+
+  //   try {
+  //     const res = await loginVendor({ email, password }).unwrap();
+  //     // ✅ Save token to localStorage
+  //     localStorage.setItem("vn-sh-token", res.token);
+  //     toast.success("Login successful!");
+  //     router.push("/");
+  //   } catch (err: any) {
+  //     toast.error(err?.data?.message ?? "Invalid email or password");
+  //   }
+  // };
+
+
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!email || !password) {
-      toast.error("Email and password are required");
-      return;
-    }
+  if (!email || !password) {
+    toast.error("Email and password are required");
+    return;
+  }
 
-    try {
-      const res = await loginVendor({ email, password }).unwrap();
-      // ✅ Save token to localStorage
-      localStorage.setItem("vn-sh-token", res.token);
-      toast.success("Login successful!");
-      router.push("/");
-    } catch (err: any) {
-      toast.error(err?.data?.message ?? "Invalid email or password");
-    }
-  };
+  try {
+    const res = await loginVendor({ email, password }).unwrap();
+    
+    // ✅ localStorage ma save (navbar ko lagi)
+    localStorage.setItem("vn-sh-token", res.token);
+    
+    // ✅ Cookie ma pani save (middleware ko lagi)
+    document.cookie = `vn-sh-token=${res.token}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax`;
+    
+    toast.success("Login successful!");
+    router.push("/");
+  } catch (err: any) {
+    toast.error(err?.data?.message ?? "Invalid email or password");
+  }
+};
 
   return (
     <>

@@ -413,6 +413,67 @@ const Navbar = () => {
               >
                 <CreditCard size={16} /> BUY NOW
               </Link>
+
+              {/* ✅ PROFILE - always visible, scroll ma pani kaam garcha */}
+              {token && (
+                <div
+                  className="relative"
+                  onMouseEnter={() => setIsProfileOpen(true)}
+                  onMouseLeave={() => setIsProfileOpen(false)}
+                >
+                  <button className="p-2.5 text-white hover:bg-white/20 rounded-xl transition-colors">
+                    <User size={22} />
+                  </button>
+
+                  <div
+                    className={`absolute right-0 top-full pt-2 w-56 z-[999] transition-all duration-300 ${isProfileOpen
+                      ? "opacity-100 visible translate-y-0"
+                      : "opacity-0 invisible -translate-y-2"
+                      }`}
+                  >
+                    <div className="bg-white shadow-[0_10px_40px_rgba(0,0,0,0.15)] rounded-2xl border border-gray-100 py-2 overflow-hidden">
+                      <div className="px-4 py-2 border-b border-gray-50 mb-1">
+                        <p className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">
+                          Account
+                        </p>
+                      </div>
+                      <Link
+                        href="/vendor-profile"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
+                      >
+                        My Profile
+                      </Link>
+                      <Link
+                        href="/vendor-orders"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
+                      >
+                        My Orders
+                      </Link>
+                      <Link
+                        href="/vendor-order-history"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
+                      >
+                        Order History
+                      </Link>
+                      <button
+                        onClick={() => {
+                          localStorage.removeItem("vn-sh-token");
+                          document.cookie = "vn-sh-token=; path=/; max-age=0";
+                          setToken(null);
+                          setIsProfileOpen(false);
+                          router.push("/login"); // ✅ login page ma redirect
+                        }}
+                        className="w-full flex items-center gap-3 text-left px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50 transition-colors border-t border-gray-50 mt-1"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

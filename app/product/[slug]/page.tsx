@@ -350,7 +350,7 @@ export default function Page() {
               </p>
               <div className="flex gap-3">
                 <a
-                  href={`https://tel/${phone}`}
+                  href={`tel:${phone}`}
                   className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center"
                 >
                   <Phone size={24} />
