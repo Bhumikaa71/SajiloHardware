@@ -65,33 +65,7 @@ const Navbar = () => {
     return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
-  const categories = [
-    {
-      name: "Power Tools",
-      icon: <Zap size={18} />,
-      items: ["Drills", "Angle Grinders", "Circular Saws", "Impact Drivers"],
-    },
-    {
-      name: "Hand Tools",
-      icon: <Hammer size={18} />,
-      items: ["Wrenches", "Pliers", "Screwdrivers", "Measuring Tapes"],
-    },
-    {
-      name: "Plumbing",
-      icon: <Droplets size={18} />,
-      items: ["PVC Pipes", "CPVC Fittings", "Faucets", "Water Pumps"],
-    },
-    {
-      name: "Electrical",
-      icon: <Lightbulb size={18} />,
-      items: ["MCBs", "LED Bulbs", "Modular Switches", "Wires"],
-    },
-    {
-      name: "Safety Gear",
-      icon: <ShieldCheck size={18} />,
-      items: ["Helmets", "Gloves", "Safety Shoes", "Vests"],
-    },
-  ];
+
 
   const isActive = (href: string) => pathname === href;
 
@@ -249,6 +223,65 @@ const Navbar = () => {
                 </button>
               </Link>
 
+              {/* PROFILE DROPDOWN */}
+              {token && (
+                <div
+                  className="relative z-50"
+                  onMouseEnter={() => setIsProfileOpen(true)}
+                  onMouseLeave={() => setIsProfileOpen(false)}
+                >
+                  <button className="p-2.5 text-primarys hover:bg-orange-50 rounded-xl transition-colors">
+                    <User size={24} />
+                  </button>
+
+                  <div
+                    className={`absolute right-0 top-full w-56 transition-all duration-300 ${isProfileOpen
+                      ? "opacity-100 visible translate-y-0"
+                      : "opacity-0 invisible -translate-y-2"
+                      }`}
+                  >
+                    <div className="h-2 w-full" />
+                    <div className="bg-white shadow-[0_10px_40px_rgba(0,0,0,0.15)] rounded-2xl border border-gray-100 py-2 overflow-hidden">
+                      <div className="px-4 py-2 border-b border-gray-50 mb-1">
+                        <p className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">
+                          Account
+                        </p>
+                      </div>
+                      <Link
+                        href="/vendor-profile"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
+                      >
+                        My Profile
+                      </Link>
+                      <Link
+                        href="/vendor-orders"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
+                      >
+                        My Orders
+                      </Link>
+                      <Link
+                        href="/vendor-order-history"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
+                      >
+                        Order History
+                      </Link>
+                      <button
+                        onClick={() => {
+                          localStorage.removeItem("vn-sh-token");
+                          setToken(null);
+                          setIsProfileOpen(false);
+                        }}
+                        className="w-full flex items-center gap-3 text-left px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50 transition-colors border-t border-gray-50 mt-1"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -306,16 +339,18 @@ const Navbar = () => {
                   {categoryTree?.data?.map((cat: any) => (
                     <div key={cat._id} className="group/item px-4 relative">
                       <div className="flex items-center justify-between py-3 px-4 rounded-xl hover:bg-primarys hover:text-white transition-all cursor-pointer">
-                        <div className="flex items-center gap-4 font-bold">
-                          <Image
-                            src={cat.image}
-                            alt={cat.name}
-                            width={24}
-                            height={24}
-                            className="object-contain"
-                          />
-                          {cat.name}
-                        </div>
+                        <Link href={`/category/${cat.slug}`} className="flex-1">
+                          <div className="flex items-center gap-4 font-bold">
+                            <Image
+                              src={cat.image}
+                              alt={cat.name}
+                              width={24}
+                              height={24}
+                              className="object-contain"
+                            />
+                            {cat.name}
+                          </div>
+                        </Link>
                         <ChevronRight size={16} />
                       </div>
 
@@ -517,27 +552,80 @@ const Navbar = () => {
                 Categories
               </p>
               <div className="flex flex-col gap-1.5">
-                {categories.map((cat, i) => (
+                {/* {categoryTree?.data?.map((cat:any, i:number) => (
                   <details key={i} className="group">
                     <summary className="list-none flex items-center justify-between px-3 py-3 rounded-xl hover:bg-orange-50 cursor-pointer transition-colors border border-transparent hover:border-orange-100">
-                      <div className="flex items-center gap-3 font-semibold text-sm text-gray-700">
-                        <span className="text-primarys">{cat.icon}</span>
-                        {cat.name}
-                      </div>
+                      <Link href={`/category/${cat.slug}`} className="flex-1">
+                        <div className="flex items-center gap-3 font-semibold text-sm text-gray-700">
+                          <span className="text-primarys">{cat.icon}</span>
+                          {cat.name}
+                        </div>
+                      </Link>
                       <ChevronDown
                         size={15}
                         className="text-gray-400 transition-transform duration-200 group-open:rotate-180 shrink-0"
                       />
                     </summary>
                     <div className="mt-1 ml-9 pl-3 border-l-2 border-orange-100 flex flex-col gap-2 pb-2">
-                      {cat.items.map((sub, j) => (
+                      {cat?.items?.map((sub:any, j:number) => (
                         <Link
                           key={j}
-                          href="/category/subcategory"
+                          href={`/category/${cat.slug}/${sub.slug}`}
                           onClick={() => setIsMobileMenuOpen(false)}
                           className="text-sm text-gray-600 hover:text-primarys font-medium transition-colors py-0.5"
                         >
-                          {sub}
+                          {sub.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </details>
+                ))} */}
+
+                {categoryTree?.data?.map((cat: any, i: number) => (
+                  <details key={i} className="group">
+                    <summary className="list-none flex items-center justify-between px-3 py-3 rounded-xl hover:bg-orange-50 transition-colors border border-transparent hover:border-orange-100">
+
+
+                      <div className="flex items-center gap-3 font-semibold text-sm text-gray-700">
+                        {/* Category Name → Redirect */}
+                        <Link
+                          href={`/category/${cat.slug}`}
+                          className="flex-1"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <span className="text-primarys">{cat.icon}</span>
+                          {cat.name}
+                        </Link>
+                      </div>
+
+                      {/* Arrow → Open Dropdown */}
+                      <div
+                        className="cursor-pointer"
+                        onClick={(e) => {
+                          e.preventDefault();
+
+                          const details = e.currentTarget.closest("details");
+                          if (details) {
+                            details.open = !details.open;
+                          }
+                        }}
+                      >
+                        <ChevronDown
+                          size={15}
+                          className="text-gray-400 transition-transform duration-200 group-open:rotate-180 shrink-0"
+                        />
+                      </div>
+                    </summary>
+
+                    <div className="mt-1 ml-9 pl-3 border-l-2 border-orange-100 flex flex-col gap-2 pb-2">
+                      {cat?.children?.map((sub: any, j: number) => (
+                        <Link
+                          key={j}
+                          href={`/category/${cat.slug}/${sub.slug}`}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="text-sm text-gray-600 hover:text-primarys font-medium transition-colors py-0.5"
+                        >
+                          {sub.name}
                         </Link>
                       ))}
                     </div>
