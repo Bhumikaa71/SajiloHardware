@@ -65,33 +65,7 @@ const Navbar = () => {
     return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
-  const categories = [
-    {
-      name: "Power Tools",
-      icon: <Zap size={18} />,
-      items: ["Drills", "Angle Grinders", "Circular Saws", "Impact Drivers"],
-    },
-    {
-      name: "Hand Tools",
-      icon: <Hammer size={18} />,
-      items: ["Wrenches", "Pliers", "Screwdrivers", "Measuring Tapes"],
-    },
-    {
-      name: "Plumbing",
-      icon: <Droplets size={18} />,
-      items: ["PVC Pipes", "CPVC Fittings", "Faucets", "Water Pumps"],
-    },
-    {
-      name: "Electrical",
-      icon: <Lightbulb size={18} />,
-      items: ["MCBs", "LED Bulbs", "Modular Switches", "Wires"],
-    },
-    {
-      name: "Safety Gear",
-      icon: <ShieldCheck size={18} />,
-      items: ["Helmets", "Gloves", "Safety Shoes", "Vests"],
-    },
-  ];
+
 
   const isActive = (href: string) => pathname === href;
 
@@ -156,10 +130,10 @@ const Navbar = () => {
               </div>
             </div>
 
-            {/* Bottom Row: Search */}
+            {/* Bottom Row: Search - Redesigned */}
             <form
               onSubmit={handleSearch}
-              className="flex items-center bg-gray-100 rounded-xl px-3 py-2"
+              className="flex items-center bg-white border border-gray-200 rounded-xl px-3 py-2 shadow-sm mb-3 focus-within:ring-2 focus-within:ring-orange-200 focus-within:border-primarys transition-all"
             >
               <Search size={18} className="text-gray-400" />
 
@@ -168,12 +142,12 @@ const Navbar = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search products..."
-                className="w-full bg-transparent text-black px-2 text-sm outline-none"
+                className="w-full bg-transparent text-black px-2.5 text-sm outline-none py-1.5"
               />
 
               <button
                 type="submit"
-                className="text-orange-500 font-bold text-sm"
+                className="text-white bg-primarys font-bold text-sm px-4 py-1.5 rounded-lg hover:bg-orange-600 transition-colors"
               >
                 Go
               </button>
@@ -182,7 +156,6 @@ const Navbar = () => {
         </div>
 
         {/* ================= DESKTOP TOP HEADER (Logo + Icons) ================= */}
-        {/* ✅ FIX 4: Replaced max-h transition with transform+opacity (GPU only, no reflow) */}
         <div
           className="hidden lg:block bg-white border-b border-gray-100"
           style={{
@@ -207,27 +180,30 @@ const Navbar = () => {
                 />
               </div>
             </Link>
+
+            {/* Desktop Search - Redesigned */}
             <form
               onSubmit={handleSearch}
-              className="hidden lg:flex items-center bg-white rounded-xl overflow-hidden w-[320px] mx-4"
+              className="hidden lg:flex items-center bg-white border border-gray-200 rounded-xl overflow-hidden w-[420px] mx-4 shadow-sm focus-within:ring-2 focus-within:ring-orange-200 focus-within:border-primarys transition-all"
             >
-              <Search size={22} className="ml-3 text-gray-400" />
+              <Search size={20} className="ml-3 text-gray-400" />
 
               <input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search products..."
-                className="w-full px-6 py-2 text-sm text-black outline-none"
+                className="w-full px-3 py-2.5 text-sm text-black outline-none bg-transparent"
               />
 
               <button
                 type="submit"
-                className="bg-white text-primarys px-4 text-sm font-bold hover:bg-gray-100"
+                className="bg-primarys text-white font-bold text-sm px-6 py-2.5 hover:bg-orange-600 transition-colors"
               >
                 Search
               </button>
             </form>
+
             <div className="flex items-center gap-2 md:gap-4">
               <Link href={`https://wa.me/${phone}`} className="hidden md:flex">
                 <div className="flex items-center gap-2 bg-[#25D366] text-white p-2.5 md:px-5 md:py-2.5 rounded-2xl shadow-md hover:shadow-lg transition-all">
@@ -259,11 +235,10 @@ const Navbar = () => {
                   </button>
 
                   <div
-                    className={`absolute right-0 top-full w-56 transition-all duration-300 ${
-                      isProfileOpen
-                        ? "opacity-100 visible translate-y-0"
-                        : "opacity-0 invisible -translate-y-2"
-                    }`}
+                    className={`absolute right-0 top-full w-56 transition-all duration-300 ${isProfileOpen
+                      ? "opacity-100 visible translate-y-0"
+                      : "opacity-0 invisible -translate-y-2"
+                      }`}
                   >
                     <div className="h-2 w-full" />
                     <div className="bg-white shadow-[0_10px_40px_rgba(0,0,0,0.15)] rounded-2xl border border-gray-100 py-2 overflow-hidden">
@@ -312,7 +287,6 @@ const Navbar = () => {
         </div>
 
         {/* ================= DESKTOP MAIN NAV (Orange Bar) ================= */}
-        {/* ✅ FIX 5: Height transition via inline style (GPU friendly) */}
         <div
           className="hidden lg:block bg-primarys text-white shadow-lg"
           style={{
@@ -365,21 +339,23 @@ const Navbar = () => {
                   {categoryTree?.data?.map((cat: any) => (
                     <div key={cat._id} className="group/item px-4 relative">
                       <div className="flex items-center justify-between py-3 px-4 rounded-xl hover:bg-primarys hover:text-white transition-all cursor-pointer">
-                        <div className="flex items-center gap-4 font-bold">
-                          <Image
-                            src={cat.image}
-                            alt={cat.name}
-                            width={24}
-                            height={24}
-                            className="object-contain"
-                          />
-                          {cat.name}
-                        </div>
+                        <Link href={`/category/${cat.slug}`} className="flex-1">
+                          <div className="flex items-center gap-4 font-bold">
+                            <Image
+                              src={cat.image}
+                              alt={cat.name}
+                              width={24}
+                              height={24}
+                              className="object-contain"
+                            />
+                            {cat.name}
+                          </div>
+                        </Link>
                         <ChevronRight size={16} />
                       </div>
 
                       {cat.children?.length > 0 && (
-                        <div className="invisible opacity-0 group-hover/item:visible group-hover/item:opacity-100 absolute left-full top-0 ml-1 w-64 bg-white shadow-2xl rounded-3xl py-6 border border-gray-100 transition-all duration-300 z-50">
+                        <div className="invisible opacity-0 group-hover/item:visible group-hover/item:opacity-100 absolute left-full top-0 ml-1 w-80 bg-white shadow-2xl rounded-3xl py-6 border border-gray-100 transition-all duration-300 z-50">
                           {cat.children.map((sub: any) => (
                             <Link key={sub._id} href={`/shop/${sub.slug}`}>
                               <span className="flex items-center gap-3 px-8 py-2 text-sm text-texts-dark hover:text-primarys hover:pl-10 transition-all font-medium border-l-4 border-transparent hover:border-primarys">
@@ -413,11 +389,10 @@ const Navbar = () => {
                 <Link
                   key={href}
                   href={href}
-                  className={`px-5 text-sm font-bold tracking-wide transition-colors h-full flex items-center ${
-                    isActive(href)
-                      ? "text-white border-b-2 border-orange-300"
-                      : "hover:text-orange-300"
-                  }`}
+                  className={`px-5 text-sm font-bold tracking-wide transition-colors h-full flex items-center ${isActive(href)
+                    ? "text-white border-b-2 border-orange-300"
+                    : "hover:text-orange-300"
+                    }`}
                 >
                   {label}
                 </Link>
@@ -438,6 +413,67 @@ const Navbar = () => {
               >
                 <CreditCard size={16} /> BUY NOW
               </Link>
+
+              {/* ✅ PROFILE - always visible, scroll ma pani kaam garcha */}
+              {token && (
+                <div
+                  className="relative"
+                  onMouseEnter={() => setIsProfileOpen(true)}
+                  onMouseLeave={() => setIsProfileOpen(false)}
+                >
+                  <button className="p-2.5 text-white hover:bg-white/20 rounded-xl transition-colors">
+                    <User size={22} />
+                  </button>
+
+                  <div
+                    className={`absolute right-0 top-full pt-2 w-56 z-[999] transition-all duration-300 ${isProfileOpen
+                      ? "opacity-100 visible translate-y-0"
+                      : "opacity-0 invisible -translate-y-2"
+                      }`}
+                  >
+                    <div className="bg-white shadow-[0_10px_40px_rgba(0,0,0,0.15)] rounded-2xl border border-gray-100 py-2 overflow-hidden">
+                      <div className="px-4 py-2 border-b border-gray-50 mb-1">
+                        <p className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">
+                          Account
+                        </p>
+                      </div>
+                      <Link
+                        href="/vendor-profile"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
+                      >
+                        My Profile
+                      </Link>
+                      <Link
+                        href="/vendor-orders"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
+                      >
+                        My Orders
+                      </Link>
+                      <Link
+                        href="/vendor-order-history"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
+                      >
+                        Order History
+                      </Link>
+                      <button
+                        onClick={() => {
+                          localStorage.removeItem("vn-sh-token");
+                          document.cookie = "vn-sh-token=; path=/; max-age=0";
+                          setToken(null);
+                          setIsProfileOpen(false);
+                          router.push("/login"); // ✅ login page ma redirect
+                        }}
+                        className="w-full flex items-center gap-3 text-left px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50 transition-colors border-t border-gray-50 mt-1"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -445,23 +481,20 @@ const Navbar = () => {
 
       {/* ================= MOBILE MENU (Slide Over) ================= */}
       <div
-        className={`fixed inset-0 z-[200] lg:hidden transition-all duration-500 ${
-          isMobileMenuOpen ? "visible" : "invisible"
-        }`}
+        className={`fixed inset-0 z-[200] lg:hidden transition-all duration-500 ${isMobileMenuOpen ? "visible" : "invisible"
+          }`}
       >
         {/* Backdrop */}
         <div
-          className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-500 ${
-            isMobileMenuOpen ? "opacity-100" : "opacity-0"
-          }`}
+          className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-500 ${isMobileMenuOpen ? "opacity-100" : "opacity-0"
+            }`}
           onClick={() => setIsMobileMenuOpen(false)}
         />
 
         {/* Slide Panel */}
         <div
-          className={`absolute left-0 top-0 bottom-0 w-[82%] max-w-xs bg-white shadow-2xl transition-transform duration-500 ease-out flex flex-col ${
-            isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+          className={`absolute left-0 top-0 bottom-0 w-[82%] max-w-xs bg-white shadow-2xl transition-transform duration-500 ease-out flex flex-col ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+            }`}
         >
           {/* Panel Header */}
           <div className="flex items-center justify-between px-5 py-4 bg-primarys shrink-0">
@@ -494,11 +527,10 @@ const Navbar = () => {
                   key={label}
                   href={href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`flex items-center gap-2 p-3 rounded-xl text-sm font-semibold transition-colors border ${
-                    isActive(href)
-                      ? "bg-primarys text-white border-primarys shadow-md"
-                      : "bg-gray-50 text-gray-700 hover:bg-orange-50 hover:text-primarys hover:border-orange-100"
-                  }`}
+                  className={`flex items-center gap-2 p-3 rounded-xl text-sm font-semibold transition-colors border ${isActive(href)
+                    ? "bg-primarys text-white border-primarys shadow-md"
+                    : "bg-gray-50 text-gray-700 hover:bg-orange-50 hover:text-primarys hover:border-orange-100"
+                    }`}
                 >
                   <Icon size={14} className="shrink-0" />
                   {label}
@@ -520,27 +552,80 @@ const Navbar = () => {
                 Categories
               </p>
               <div className="flex flex-col gap-1.5">
-                {categories.map((cat, i) => (
+                {/* {categoryTree?.data?.map((cat:any, i:number) => (
                   <details key={i} className="group">
                     <summary className="list-none flex items-center justify-between px-3 py-3 rounded-xl hover:bg-orange-50 cursor-pointer transition-colors border border-transparent hover:border-orange-100">
-                      <div className="flex items-center gap-3 font-semibold text-sm text-gray-700">
-                        <span className="text-primarys">{cat.icon}</span>
-                        {cat.name}
-                      </div>
+                      <Link href={`/category/${cat.slug}`} className="flex-1">
+                        <div className="flex items-center gap-3 font-semibold text-sm text-gray-700">
+                          <span className="text-primarys">{cat.icon}</span>
+                          {cat.name}
+                        </div>
+                      </Link>
                       <ChevronDown
                         size={15}
                         className="text-gray-400 transition-transform duration-200 group-open:rotate-180 shrink-0"
                       />
                     </summary>
                     <div className="mt-1 ml-9 pl-3 border-l-2 border-orange-100 flex flex-col gap-2 pb-2">
-                      {cat.items.map((sub, j) => (
+                      {cat?.items?.map((sub:any, j:number) => (
                         <Link
                           key={j}
-                          href="/category/subcategory"
+                          href={`/category/${cat.slug}/${sub.slug}`}
                           onClick={() => setIsMobileMenuOpen(false)}
                           className="text-sm text-gray-600 hover:text-primarys font-medium transition-colors py-0.5"
                         >
-                          {sub}
+                          {sub.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </details>
+                ))} */}
+
+                {categoryTree?.data?.map((cat: any, i: number) => (
+                  <details key={i} className="group">
+                    <summary className="list-none flex items-center justify-between px-3 py-3 rounded-xl hover:bg-orange-50 transition-colors border border-transparent hover:border-orange-100">
+
+
+                      <div className="flex items-center gap-3 font-semibold text-sm text-gray-700">
+                        {/* Category Name → Redirect */}
+                        <Link
+                          href={`/category/${cat.slug}`}
+                          className="flex-1"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <span className="text-primarys">{cat.icon}</span>
+                          {cat.name}
+                        </Link>
+                      </div>
+
+                      {/* Arrow → Open Dropdown */}
+                      <div
+                        className="cursor-pointer"
+                        onClick={(e) => {
+                          e.preventDefault();
+
+                          const details = e.currentTarget.closest("details");
+                          if (details) {
+                            details.open = !details.open;
+                          }
+                        }}
+                      >
+                        <ChevronDown
+                          size={15}
+                          className="text-gray-400 transition-transform duration-200 group-open:rotate-180 shrink-0"
+                        />
+                      </div>
+                    </summary>
+
+                    <div className="mt-1 ml-9 pl-3 border-l-2 border-orange-100 flex flex-col gap-2 pb-2">
+                      {cat?.children?.map((sub: any, j: number) => (
+                        <Link
+                          key={j}
+                          href={`/category/${cat.slug}/${sub.slug}`}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="text-sm text-gray-600 hover:text-primarys font-medium transition-colors py-0.5"
+                        >
+                          {sub.name}
                         </Link>
                       ))}
                     </div>

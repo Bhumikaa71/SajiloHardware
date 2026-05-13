@@ -22,23 +22,27 @@ export const vendorApi = baseApi.injectEndpoints({
 
         // UPDATE VENDOR PASSWORD
         updateProfile: builder.mutation({
-            query: (body) => ({ url: "/api/v1/vendor/profile", method: "PUT", body }),
+            query: (body) => ({
+                url: "/api/v1/vendor/profile",
+                method: "PUT",
+                body,
+            }),
         }),
 
         // UPDATE VENDOR PASSWORD
         updatePassword: builder.mutation({
-            query: (body) => ({ url: "/api/v1/vendor/password", method: "PUT", body }),
+            query: (body) => ({ url: "/api/v1/vendor/password", method: "PUT", body , }),
         }),
 
         // GET VENDOR ORDERS HISTORY
         getVendorOrdersHistory: builder.query<any, void>({
-            query: () => ({ url: "/api/v1/vendor/order-history", method: "GET" }),
+            query: () => ({ url: "/api/v1/vendor/order-history", method: "GET", }),
         }),
 
 
         // GET VENDOR ACTIVE ORDERS
         getVendorActiveOrders: builder.query<any, void>({
-            query: () => ({ url: "/api/v1/vendor/orders", method: "GET" }),
+            query: () => ({ url: "/api/v1/vendor/orders", method: "GET" ,}),
         }),
 
         // Send Otp

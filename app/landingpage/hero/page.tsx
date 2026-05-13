@@ -22,7 +22,7 @@ const slides: Slide[] = [
     subtitle: "Power Tools Collection",
     description:
       "Experience the next generation of professional power tools designed for ultimate durability and performance.",
-    image: "/images/website1.jpeg",
+    image: "/images/website1.avif",
     tag: "New Arrival",
   },
   {
@@ -31,7 +31,7 @@ const slides: Slide[] = [
     subtitle: "Heavy Duty Series",
     description:
       "Heavy-duty machinery built to withstand the toughest job site conditions across the globe.",
-    image: "/images/ba.jpeg",
+    image: "/images/ba.avif",
     tag: "Best Seller",
   },
   {
@@ -40,7 +40,7 @@ const slides: Slide[] = [
     subtitle: "Workshop Solutions",
     description:
       "The complete workshop solution for modern artisans and industrial professionals alike.",
-    image: "/images/abc.jpeg",
+    image: "/images/abc.avif",
     tag: "Limited Edition",
   },
   {
@@ -49,7 +49,7 @@ const slides: Slide[] = [
     subtitle: "Smart Equipment",
     description:
       "Stay ahead with our latest range of smart, efficient, and ergonomic shop equipment.",
-    image: "/images/d.jpeg",
+    image: "/images/d.avif",
     tag: "2026 Release",
   },
 ];
@@ -75,9 +75,9 @@ function AnimatedWords({
             initial={{ translateY: "115%", opacity: 0 }}
             animate={{ translateY: "0%", opacity: 1 }}
             transition={{
-              duration: 0.75,
+              duration: 0.5, // Reduced from 0.75 for better mobile performance
               ease: [0.22, 1, 0.36, 1],
-              delay: (delay + i * 80) / 1000,
+              delay: (delay + i * 50) / 1000,
             }}
           >
             {word}
@@ -102,11 +102,7 @@ function AnimatedLine({
         className="h-full rounded-full bg-gradient-to-r from-orange-500 via-amber-400 to-orange-500"
         initial={{ width: "0px" }}
         animate={{ width: "96px" }}
-        transition={{
-          duration: 0.9,
-          ease: [0.22, 1, 0.36, 1],
-          delay: delay / 1000,
-        }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: delay / 1000 }}
       />
     </div>
   );
@@ -116,7 +112,7 @@ function AnimatedLine({
 function Reveal({
   animKey,
   delay = 0,
-  y = 28,
+  y = 16, // Reduced distance to prevent Android CPU jank
   children,
 }: {
   animKey: number | string;
@@ -129,11 +125,7 @@ function Reveal({
       <motion.div
         initial={{ translateY: y, opacity: 0 }}
         animate={{ translateY: 0, opacity: 1 }}
-        transition={{
-          duration: 0.75,
-          ease: [0.22, 1, 0.36, 1],
-          delay: delay / 1000,
-        }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: delay / 1000 }}
       >
         {children}
       </motion.div>
@@ -154,9 +146,9 @@ export default function HeroCarousel() {
       setProgress(0);
       setTimeout(() => {
         isLocked.current = false;
-      }, 1000);
+      }, 800);
     },
-    [index],
+    [index]
   );
 
   const next = useCallback(
@@ -168,19 +160,23 @@ export default function HeroCarousel() {
     [index, goTo],
   );
 
-  /* ─── progress timer ─── */
+  /* ─── progress timer optimized for mobile rendering ─── */
   useEffect(() => {
     setProgress(0);
-    const t0 = Date.now();
-    const tick = setInterval(() => {
-      const pct = Math.min(((Date.now() - t0) / DURATION) * 100, 100);
-      setProgress(pct);
-      if (pct >= 100) next();
-    }, 20);
-    return () => clearInterval(tick);
-  }, [index]); // intentionally omit next to avoid re-creating interval
+    const interval = setInterval(() => {
+      setProgress((old) => {
+        if (old >= 100) {
+          next();
+          return 0;
+        }
+        return old + 2; // Increments smoothly in 50 steps
+      });
+    }, DURATION / 50);
 
-  /* ─── keyboard nav ─── */
+    return () => clearInterval(interval);
+  }, [index, next]);
+
+  /* ─── keyboard & swipe nav ─── */
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") next();
@@ -204,7 +200,19 @@ export default function HeroCarousel() {
   ];
 
   return (
-    <section className="relative h-screen w-full overflow-hidden bg-neutral-950 select-none">
+    <section
+      className="relative h-[550px] md:h-screen w-full overflow-hidden bg-neutral-950 select-none"
+      // Added light-touch swipe listener for better UX on Android browsers
+      onTouchStart={(e) => {
+        (e.currentTarget as any)._startX = e.touches[0].clientX;
+      }}
+      onTouchEnd={(e) => {
+        const startX = (e.currentTarget as any)._startX;
+        const endX = e.changedTouches[0].clientX;
+        if (startX - endX > 50) next();
+        if (endX - startX > 50) prev();
+      }}
+    >
       {/* ═══════════ SLIDES ═══════════ */}
       <AnimatePresence mode="wait">
         {slides.map((slide, i) => {
@@ -215,23 +223,24 @@ export default function HeroCarousel() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 1.1, ease: [0.65, 0, 0.35, 1] }}
+              transition={{ duration: 0.6, ease: [0.65, 0, 0.35, 1] }}
               className="absolute inset-0 z-10"
             >
-              {/* Ken Burns image */}
+              {/* Ken Burns image – scaled down to prevent memory leaks on low-end Androids */}
               <motion.div
                 className="absolute inset-[-4%]"
-                initial={{ scale: 1.05 }}
-                animate={{ scale: 1.18 }}
-                transition={{ duration: 8, ease: "linear" }}
+                initial={{ scale: 1.02 }}
+                animate={{ scale: 1.06 }}
+                transition={{ duration: 6, ease: "linear" }}
               >
                 <Image
                   src={slide.image}
                   alt={slide.title}
                   fill
                   priority={i === 0}
-                  className="object-cover"
+                  className="object-cover hidden md:block"
                   sizes="100vw"
+                  quality={75}
                 />
               </motion.div>
 
