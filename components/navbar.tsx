@@ -341,9 +341,9 @@ const Navbar = () => {
                       <div className="flex items-center justify-between py-3 px-4 rounded-xl hover:bg-primarys hover:text-white transition-all cursor-pointer">
                         <Link href={`/category/${cat.slug}`} className="flex-1">
                           <div className="flex items-center gap-4 font-bold">
-                            <Image
-                              src={cat.image}
-                              alt={cat.name}
+                            <img
+                              src={cat?.image}
+                              alt={cat?.name}
                               width={24}
                               height={24}
                               className="object-contain"
@@ -359,7 +359,7 @@ const Navbar = () => {
                           {cat.children.map((sub: any) => (
                             <Link key={sub._id} href={`/shop/${sub.slug}`}>
                               <span className="flex items-center gap-3 px-8 py-2 text-sm text-texts-dark hover:text-primarys hover:pl-10 transition-all font-medium border-l-4 border-transparent hover:border-primarys">
-                                <Image
+                                <img
                                   src={sub.image}
                                   alt={sub.name}
                                   width={20}

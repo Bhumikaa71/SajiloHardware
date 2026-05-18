@@ -56,7 +56,7 @@ const BlogPage = () => {
     excerpt: stripHtml(blog.content).slice(0, 120) + "...",
     date: formatDate(blog.createdAt),
     readTime: estimateReadTime(blog.content),
-    image: extractFirstImage(blog.content) ?? FALLBACK_IMAGE,
+    image: blog?.image || extractFirstImage(blog.content),
   }));
 
   const featured = blogs[0];
@@ -75,7 +75,9 @@ const BlogPage = () => {
   return (
     <div className="bg-white md:pt-30 min-h-screen overflow-x-hidden">
       <Navbar />
+
       <main className="mx-auto max-w-7xl">
+        
         {/* ================= HERO ================= */}
         <section className="relative px-4 sm:px-6 lg:px-8 lg:pt-10  pb-20">
           <motion.div
@@ -151,11 +153,10 @@ const BlogPage = () => {
             >
               {/* Image */}
               <div className="relative min-h-64 md:min-h-96 h-full w-full overflow-hidden bg-gray-100">
-                <Image
+                <img
                   src={featured.image}
                   alt={featured.title}
-                  fill
-                  className="object-cover hover:scale-105 transition-transform duration-700"
+                  className="object-cover w-full hover:scale-105 transition-transform duration-700"
                 />
               </div>
 
@@ -231,41 +232,39 @@ const BlogPage = () => {
               animate={gridInView ? "visible" : "hidden"} // fixed: amount:0 ensures this fires
               className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
             >
-              {rest.map((post: any) => (
+              {rest.map((post: any, index: number) => (
+
                 <motion.article
-                  key={post.id}
+                  key={index}
                   variants={itemVariants}
                   className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
                 >
-                  <div className="relative h-48  w-full overflow-hidden bg-gray-100">
-                    <Image
-                      src={post.image}
-                      alt={post.title}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                  </div>
-
-                  <div className="p-5">
-                    <div className="text-xs text-gray-500 mb-2 flex items-center gap-2">
-                      <Clock size={12} /> {post.date} • {post.readTime}
+                  <Link
+                    href={`/blogpage/bloghero/${post.id}`}
+                  >
+                    <div className="relative h-48 w-full overflow-hidden bg-gray-100 group">
+                      <img
+                        src={post.image}
+                        alt={post.title} // Use title for better SEO/Accessibility
+                        referrerPolicy="no-referrer"
+                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
                     </div>
+                    <div className="p-5">
+                      <div className="text-xs text-gray-500 mb-2 flex items-center gap-2">
+                        <Clock size={12} /> {post.date} • {post.readTime}
+                      </div>
 
-                    <h4 className="text-lg font-bold mb-2 text-texts-dark group-hover:text-primarys transition-colors line-clamp-2">
-                      {post.title}
-                    </h4>
+                      <h4 className="text-lg font-bold mb-2 text-texts-dark group-hover:text-primarys transition-colors line-clamp-2">
+                        {post.title}
+                      </h4>
 
-                    <p className="text-sm text-texts-secondary mb-4 line-clamp-2">
-                      {post.excerpt}
-                    </p>
-
-                    <Link
-                      href={`/blogpage/bloghero/${post.id}`}
-                      className="text-xs font-bold flex items-center gap-1 group-hover:gap-2 transition-all text-primarys"
-                    >
-                      Read More <ArrowRight size={14} />
-                    </Link>
-                  </div>
+                      <p className="text-sm text-texts-secondary mb-4 line-clamp-2">
+                        {post.excerpt}
+                      </p>
+                      <p className="flex justify-center mb-2 items-center float-left gap-x-1">    Read More <ArrowRight size={14} /></p>
+                    </div>
+                  </Link>
                 </motion.article>
               ))}
             </motion.div>

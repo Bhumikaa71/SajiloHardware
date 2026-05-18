@@ -1,0 +1,421 @@
+/*
+  blocknote-blog.css
+  ─────────────────────────────────────────────────────────────────────────────
+  Font: Plus Jakarta Sans (closest to Wix Madefor Text)
+  ─────────────────────────────────────────────────────────────────────────────
+  In layout.tsx add:
+    import { Plus_Jakarta_Sans } from "next/font/google";
+
+    const plusJakarta = Plus_Jakarta_Sans({
+      variable: "--font-jakarta",
+      subsets: ["latin"],
+      weight: ["400", "500", "600", "700", "800"],
+    });
+
+    <html className={`... ${plusJakarta.variable}`}>
+  ─────────────────────────────────────────────────────────────────────────────
+*/
+
+/* ── Wrapper reset ── */
+.bn-block-group {
+  all: unset;
+  display: block;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
+}
+
+/* ── Catch-all: any content inside .blocknote-content ── */
+.blocknote-content {
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
+  font-size: 17px;
+  line-height: 1.85;
+  color: #3d3d3d;
+}
+
+.blocknote-content * {
+  font-family: inherit;
+}
+
+.bn-block-outer {
+  display: block;
+}
+
+.bn-block {
+  display: block;
+}
+
+/* ── CRITICAL: Force all inline-content to block ── */
+.bn-inline-content {
+  display: block;
+}
+
+/* Exception: actual inline formatting stays inline */
+.bn-inline-content a,
+.bn-inline-content strong,
+.bn-inline-content b,
+.bn-inline-content em,
+.bn-inline-content i,
+.bn-inline-content u,
+.bn-inline-content s,
+.bn-inline-content code,
+.bn-inline-content span {
+  display: inline;
+}
+
+/* ── Spacing between ALL blocks ── */
+.bn-block-outer + .bn-block-outer {
+  margin-top: 0.6rem;
+}
+
+/* Extra breathing room before headings */
+.bn-block-outer:has([data-content-type="heading"]) {
+  margin-top: 2rem;
+}
+
+/* ── Paragraph ── */
+.bn-block-content[data-content-type="paragraph"] {
+  display: block;
+  margin-bottom: 0;
+}
+
+/* ── Updated Paragraph Style ── */
+.bn-block-content[data-content-type="paragraph"] p,
+.bn-block-content[data-content-type="paragraph"] .bn-inline-content {
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.85;
+  color: #3d3d3d;
+  
+  /* CHANGE THIS */
+  text-align: justify; 
+  hyphens: auto; /* Optional: adds hyphens to prevent large gaps between words */
+  
+  display: block;
+  margin: 0;
+  letter-spacing: -0.003em;
+}
+
+/* ── Headings ── */
+.bn-block-content[data-content-type="heading"] {
+  display: block;
+}
+
+/* H1 */
+.bn-block-content[data-content-type="heading"][data-level="1"] h1,
+.bn-block-content[data-content-type="heading"][data-level="1"] .bn-inline-content {
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.25;
+  color: #1a1a1a;
+  letter-spacing: -0.03em;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* H2 */
+.bn-block-content[data-content-type="heading"][data-level="2"] h2,
+.bn-block-content[data-content-type="heading"][data-level="2"] .bn-inline-content {
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #1a1a1a;
+  letter-spacing: -0.02em;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0;
+  border-bottom: none;
+  display: block;
+}
+
+/* H3 */
+.bn-block-content[data-content-type="heading"][data-level="3"] h3,
+.bn-block-content[data-content-type="heading"][data-level="3"] .bn-inline-content {
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 1.2rem;
+  font-weight: 700;
+  font-style: normal;
+  line-height: 1.35;
+  color: #1a1a1a;
+  letter-spacing: -0.015em;
+  margin-top: 0;
+  margin-bottom: 0.4rem;
+  display: block;
+}
+
+/* Catch-all for headings rendered as plain HTML */
+.blocknote-content h1,
+.blocknote-content h2,
+.blocknote-content h3,
+.blocknote-content h4 {
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif !important;
+  font-weight: 700;
+  color: #1a1a1a;
+  letter-spacing: -0.02em;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+
+.blocknote-content p {
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 17px;
+  line-height: 1.85;
+  color: #3d3d3d;
+  margin-bottom: 1.5rem;
+  text-align: justify;        /* ← add this */
+  hyphens: auto;              /* ← add this */
+}
+
+/* ── Bullet list ── */
+.bn-block-content[data-content-type="bulletListItem"] {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.bn-block-content[data-content-type="bulletListItem"]::before {
+  content: "•";
+  color: #f97316;
+  font-weight: 900;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.bn-block-content[data-content-type="bulletListItem"] .bn-inline-content {
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 17px;
+  line-height: 1.75;
+  color: #3d3d3d;
+  display: block;
+}
+
+/* ── Numbered list ── */
+.bn-block-group .bn-block-outer:has([data-content-type="numberedListItem"]) {
+  counter-increment: bn-list-counter;
+}
+
+.bn-block-content[data-content-type="numberedListItem"] {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.bn-block-content[data-content-type="numberedListItem"] .bn-inline-content {
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 17px;
+  line-height: 1.75;
+  color: #3d3d3d;
+  display: block;
+}
+
+/* ── Blockquote / callout ── */
+.bn-block-content[data-content-type="quote"],
+.bn-block-content[data-content-type="callout"] {
+  display: block;
+  border-left: 4px solid #f97316;
+  background-color: #fff7ed;
+  border-radius: 0 0.75rem 0.75rem 0;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.bn-block-content[data-content-type="quote"] .bn-inline-content,
+.bn-block-content[data-content-type="callout"] .bn-inline-content {
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 17px;
+  font-style: italic;
+  line-height: 1.75;
+  color: #374151;
+}
+
+/* ── Code block ── */
+.bn-block-content[data-content-type="codeBlock"] {
+  display: block;
+  background-color: #030712;
+  border-radius: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+
+.bn-block-content[data-content-type="codeBlock"] code,
+.bn-block-content[data-content-type="codeBlock"] .bn-inline-content {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace !important;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #e5e7eb;
+}
+
+/* ── Inline code ── */
+.bn-inline-content code {
+  background-color: #f3f4f6;
+  color: #ea580c;
+  padding: 0.1em 0.35em;
+  border-radius: 0.25rem;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace !important;
+  font-size: 0.85em;
+}
+
+/* ── Images ── */
+.bn-block-content[data-content-type="image"] {
+  display: block;
+  margin: 2rem 0;
+}
+
+.bn-block-content[data-content-type="image"] img {
+  width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  border: 1px solid #f3f4f6;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  display: block;
+}
+
+/* ── Image caption ── */
+.bn-block-content[data-content-type="image"] figcaption {
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 13px;
+  color: #9ca3af;
+  text-align: center;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+/* ── Inline styles ── */
+.bn-inline-content strong,
+.bn-inline-content b {
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.bn-inline-content em,
+.bn-inline-content i {
+  font-style: italic;
+  color: inherit;
+}
+
+.bn-inline-content u {
+  text-decoration: underline;
+  text-decoration-color: #f97316;
+  text-underline-offset: 2px;
+}
+
+.bn-inline-content s {
+  text-decoration: line-through;
+  color: #9ca3af;
+}
+
+/* ── Links ── */
+.bn-inline-content a {
+  color: #ea580c;
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: 1px solid #fed7aa;
+  transition: border-color 0.15s;
+}
+
+.bn-inline-content a:hover {
+  border-color: #f97316;
+}
+
+/* ── Nested block indentation ── */
+.bn-block-group .bn-block-group {
+  padding-left: 1.5rem;
+  border-left: 2px solid #f3f4f6;
+  margin-left: 0.25rem;
+}
+
+/* ── Table ── */
+.bn-block-content[data-content-type="table"],
+.blocknote-content table {
+  display: block;
+  overflow-x: auto;
+  margin: 2rem 0;
+}
+
+.bn-block-content[data-content-type="table"] table,
+.blocknote-content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 15px;
+  border: 1px solid #fed7aa;
+}
+
+.bn-block-content[data-content-type="table"] th,
+.blocknote-content table th {
+  background-color: #fff7ed;
+  color: #ea580c;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif !important;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  text-align: left;
+  vertical-align: middle;
+  border: 1px solid #fed7aa;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.bn-block-content[data-content-type="table"] td,
+.blocknote-content table td {
+  padding: 0.5rem 1rem;
+  color: #3d3d3d;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif !important;
+  border: 1px solid #e5e7eb;
+  line-height: 1.5;
+  vertical-align: middle;
+}
+
+/* ── CRITICAL: kill block display inside table cells ── */
+.bn-block-content[data-content-type="table"] .bn-inline-content,
+.blocknote-content table .bn-inline-content {
+  display: inline !important;
+}
+
+/* Kill extra margin/padding on p tags inside cells */
+.bn-block-content[data-content-type="table"] p,
+.blocknote-content table p {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.5;
+}
+
+.bn-block-content[data-content-type="table"] tr:last-child td,
+.blocknote-content table tr:last-child td {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.bn-block-content[data-content-type="table"] tr:hover td,
+.blocknote-content table tr:hover td {
+  background-color: #fffbf7;
+}
+
+/* ── Divider / horizontal rule ── */
+.bn-block-content[data-content-type="horizontalRule"],
+.bn-block-content[data-content-type="separator"] {
+  display: block;
+  margin: 2.5rem 0;
+  border: none;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* ── Text color overrides ── */
+[data-text-color="orange"] .bn-inline-content { color: #ea580c; }
+[data-text-color="red"]    .bn-inline-content { color: #dc2626; }
+[data-text-color="blue"]   .bn-inline-content { color: #2563eb; }
+[data-text-color="green"]  .bn-inline-content { color: #16a34a; }
+[data-text-color="gray"]   .bn-inline-content { color: #6b7280; }
+
+/* ── Background color overrides ── */
+[data-background-color="orange"] .bn-block-content { background-color: #fff7ed; border-radius: 0.5rem; padding: 0.75rem 1rem; }
+[data-background-color="blue"]   .bn-block-content { background-color: #eff6ff; border-radius: 0.5rem; padding: 0.75rem 1rem; }
+[data-background-color="green"]  .bn-block-content { background-color: #f0fdf4; border-radius: 0.5rem; padding: 0.75rem 1rem; }
+[data-background-color="red"]    .bn-block-content { background-color: #fef2f2; border-radius: 0.5rem; padding: 0.75rem 1rem; }
