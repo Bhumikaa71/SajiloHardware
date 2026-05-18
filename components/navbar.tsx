@@ -31,6 +31,7 @@ import { useWishlist } from "@/context/WishlistContext";
 import { useCart } from "@/context/CartContext";
 import { useGetCategoryTreeQuery } from "@/services/categoryApi";
 import { useRouter } from "next/navigation";
+import NoImageAvailable from "@/public/images/no-image-available.png";
 
 const Navbar = () => {
   const { wishlist } = useWishlist();
@@ -342,7 +343,7 @@ const Navbar = () => {
                         <Link href={`/category/${cat.slug}`} className="flex-1">
                           <div className="flex items-center gap-4 font-bold">
                             <img
-                              src={cat?.image}
+                              src={cat?.image || NoImageAvailable.src}
                               alt={cat?.name}
                               width={24}
                               height={24}
@@ -360,7 +361,7 @@ const Navbar = () => {
                             <Link key={sub._id} href={`/shop/${sub.slug}`}>
                               <span className="flex items-center gap-3 px-8 py-2 text-sm text-texts-dark hover:text-primarys hover:pl-10 transition-all font-medium border-l-4 border-transparent hover:border-primarys">
                                 <img
-                                  src={sub.image}
+                                  src={sub.image || NoImageAvailable.src}
                                   alt={sub.name}
                                   width={20}
                                   height={20}

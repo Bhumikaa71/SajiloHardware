@@ -68,7 +68,73 @@
 
 /* Extra breathing room before headings */
 .bn-block-outer:has([data-content-type="heading"]) {
-  margin-top: 2rem;
+  margin-top: 0.5rem;
+}
+
+/* ── Global Content Spacing Fixes ── */
+
+/* Remove any weird rule targeting missing block wrappers */
+.bn-block-outer + .bn-block-outer,
+.bn-block-outer:has([data-content-type="heading"]) {
+  margin-top: 0;
+}
+
+/* Ensure clean, uniform paragraph gaps */
+.blocknote-content p {
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 17px;
+  line-height: 1.85;
+  color: #3d3d3d;
+  text-align: justify;
+  hyphens: auto;
+  
+  /* Reset top margin and use a tight, standard bottom margin */
+  margin-top: 0 !important;
+  margin-bottom: 1.25rem !important; 
+}
+
+/* Kill layout collapse on empty paragraphs (hitting enter in the editor) */
+.blocknote-content p:empty,
+.blocknote-content p:has(br) {
+  margin-bottom: 0.75rem !important;
+  height: 1em;
+}
+
+/* ── Global Content Spacing & Justification Fixes ── */
+.blocknote-content p {
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 17px;
+  line-height: 1.85;
+  color: #3d3d3d;
+  
+  /* ── JUSTIFY TEXT EDGE-TO-EDGE ── */
+  text-align: justify !important;
+  text-justify: inter-word !important; /* Optimizes spacing between words for cleaner alignment */
+  hyphens: auto !important;            /* Adds automatic hyphenation to prevent awkward large gaps */
+  
+  /* Spacing controls */
+  margin-top: 0 !important;
+  margin-bottom: 1.25rem !important; 
+}
+
+/* ── Heading Spacing Clean up ── */
+.blocknote-content h1,
+.blocknote-content h2,
+.blocknote-content h3,
+.blocknote-content h4 {
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif !important;
+  font-weight: 700;
+  color: #1a1a1a;
+  letter-spacing: -0.02em;
+  
+  /* Use explicit, controlled spacing before and after titles */
+  margin-top: 2.25rem !important;
+  margin-bottom: 0.75rem !important;
+}
+
+/* If a heading happens to be the absolute first element, remove its top margin */
+.blocknote-content > *:first-child {
+  margin-top: 0 !important;
 }
 
 /* ── Paragraph ── */
@@ -168,6 +234,8 @@
   text-align: justify;        /* ← add this */
   hyphens: auto;              /* ← add this */
 }
+
+
 
 /* ── Bullet list ── */
 .bn-block-content[data-content-type="bulletListItem"] {
@@ -332,6 +400,47 @@
   margin-left: 0.25rem;
 }
 
+
+
+/* ── Images ── */
+.bn-block-content[data-content-type="image"],
+.blocknote-content [data-content-type="image"],
+.blocknote-content .bn-file-block-wrapper {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important; /* Centers both the image and the caption */
+  justify-content: center !important;
+  margin: 2rem auto !important;
+  width: 100%;
+}
+
+/* Direct fallback wrapper catch for raw img tags inside paragraph structures */
+.blocknote-content img {
+  display: block !important;
+  max-width: 100%;
+  height: auto;
+  margin-left: auto !important;
+  margin-right: auto !important; /* Forces layout calculation to center the image */
+  border-radius: 0.75rem;
+  border: 1px solid #f3f4f6;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+
+
+/* ── Image caption ── */
+.bn-block-content[data-content-type="image"] figcaption,
+.blocknote-content figcaption {
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 13px;
+  color: #9ca3af;
+  text-align: center;
+  margin-top: 0.5rem;
+  font-style: italic;
+  width: 100%;
+}
+
+
 /* ── Table ── */
 .bn-block-content[data-content-type="table"],
 .blocknote-content table {
@@ -341,14 +450,33 @@
 }
 
 .bn-block-content[data-content-type="table"] table,
-.blocknote-content table {
+/* .blocknote-content table {
   width: 100%;
   border-collapse: collapse;
   font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif !important;
   font-size: 15px;
   border: 1px solid #fed7aa;
+} */
+
+.blocknote-content table {
+  display: table !important; /* Forces standard layout behavior instead of block warp */
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  border: 1px solid #e5e7eb !important;
 }
 
+.blocknote-content td {
+  border: 1px solid #e5e7eb !important; /* Assures clean visible grid borders on cells */
+  padding: 0.75rem 1rem !important;
+  min-width: 50px;
+}
+
+/* Fixes display problems with paragraphs collapsing spacing inside tables */
+.blocknote-content td p {
+  margin: 0 !important;
+  text-align: left !important;
+}
 .bn-block-content[data-content-type="table"] th,
 .blocknote-content table th {
   background-color: #fff7ed;
@@ -406,6 +534,40 @@
   border: none;
   border-top: 1px solid #e5e7eb;
 }
+
+
+/* ── Fallback/Standard HTML Bullet Lists ── */
+.blocknote-content ul {
+  list-style-type: disc !important;
+  padding-left: 1.5rem !important;
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.blocknote-content ul li {
+  display: list-item !important;
+  color: #3d3d3d;
+  font-size: 17px;
+  line-height: 1.85;
+  margin-bottom: 0.25rem;
+}
+
+/* ── Fallback/Standard HTML Numbered Lists ── */
+.blocknote-content ol {
+  list-style-type: decimal !important;
+  padding-left: 1.5rem !important;
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.blocknote-content ol li {
+  display: list-item !important;
+  color: #3d3d3d;
+  font-size: 17px;
+  line-height: 1.85;
+  margin-bottom: 0.25rem;
+}
+
 
 /* ── Text color overrides ── */
 [data-text-color="orange"] .bn-inline-content { color: #ea580c; }
