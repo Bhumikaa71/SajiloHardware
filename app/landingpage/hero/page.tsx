@@ -1,13 +1,15 @@
-/* eslint-disable react-hooks/refs */
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
+/* eslint-disable react-hooks/refs */
+
+import { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { useGetAllSlidersQuery } from "@/services/sliderApi";
 
 type Slide = {
-  id: number;
+  id: string;
   title: string;
   subtitle: string;
   description: string;
@@ -15,48 +17,9 @@ type Slide = {
   tag: string;
 };
 
-const slides: Slide[] = [
-  {
-    id: 1,
-    title: "Precision Engineering",
-    subtitle: "Power Tools Collection",
-    description:
-      "Experience the next generation of professional power tools designed for ultimate durability and performance.",
-    image: "/images/website1.avif",
-    tag: "New Arrival",
-  },
-  {
-    id: 2,
-    title: "Industrial Strength",
-    subtitle: "Heavy Duty Series",
-    description:
-      "Heavy-duty machinery built to withstand the toughest job site conditions across the globe.",
-    image: "/images/ba.avif",
-    tag: "Best Seller",
-  },
-  {
-    id: 3,
-    title: "Master Your Craft",
-    subtitle: "Workshop Solutions",
-    description:
-      "The complete workshop solution for modern artisans and industrial professionals alike.",
-    image: "/images/abc.avif",
-    tag: "Limited Edition",
-  },
-  {
-    id: 4,
-    title: "Innovation in Motion",
-    subtitle: "Smart Equipment",
-    description:
-      "Stay ahead with our latest range of smart, efficient, and ergonomic shop equipment.",
-    image: "/images/d.avif",
-    tag: "2026 Release",
-  },
-];
-
 const DURATION = 6000;
 
-/* ─── Word-by-word staggered reveal ─── */
+/* ───────────────── Animated Words ───────────────── */
 function AnimatedWords({
   text,
   animKey,
@@ -75,7 +38,7 @@ function AnimatedWords({
             initial={{ translateY: "115%", opacity: 0 }}
             animate={{ translateY: "0%", opacity: 1 }}
             transition={{
-              duration: 0.5, // Reduced from 0.75 for better mobile performance
+              duration: 0.5,
               ease: [0.22, 1, 0.36, 1],
               delay: (delay + i * 50) / 1000,
             }}
@@ -88,7 +51,7 @@ function AnimatedWords({
   );
 }
 
-/* ─── Animated accent line ─── */
+/* ───────────────── Animated Line ───────────────── */
 function AnimatedLine({
   animKey,
   delay = 0,
@@ -102,17 +65,21 @@ function AnimatedLine({
         className="h-full rounded-full bg-gradient-to-r from-orange-500 via-amber-400 to-orange-500"
         initial={{ width: "0px" }}
         animate={{ width: "96px" }}
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: delay / 1000 }}
+        transition={{
+          duration: 0.7,
+          ease: [0.22, 1, 0.36, 1],
+          delay: delay / 1000,
+        }}
       />
     </div>
   );
 }
 
-/* ─── Reveal wrapper (slide-up) ─── */
+/* ───────────────── Reveal ───────────────── */
 function Reveal({
   animKey,
   delay = 0,
-  y = 16, // Reduced distance to prevent Android CPU jank
+  y = 16,
   children,
 }: {
   animKey: number | string;
@@ -125,7 +92,11 @@ function Reveal({
       <motion.div
         initial={{ translateY: y, opacity: 0 }}
         animate={{ translateY: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: delay / 1000 }}
+        transition={{
+          duration: 0.5,
+          ease: [0.22, 1, 0.36, 1],
+          delay: delay / 1000,
+        }}
       >
         {children}
       </motion.div>
@@ -134,57 +105,108 @@ function Reveal({
 }
 
 export default function HeroCarousel() {
+  const { data, isLoading } = useGetAllSlidersQuery();
+
+  /* ───────────────── Dynamic Slides ───────────────── */
+  const slides: Slide[] = useMemo(() => {
+    return (
+      data?.data
+        ?.filter((item: any) => !item.isDraft && !item.isDeleted)
+        ?.map((item: any) => ({
+          id: item._id,
+          title: item.title,
+          subtitle: item.subtitle,
+          description: item.description,
+          image: item.image,
+          tag: item.tag || item.badge,
+        })) || []
+    );
+  }, [data]);
+
   const [index, setIndex] = useState(0);
   const [progress, setProgress] = useState(0);
+
   const isLocked = useRef(false);
 
   const goTo = useCallback(
     (nextIdx: number) => {
-      if (isLocked.current || nextIdx === index) return;
+      if (isLocked.current || nextIdx === index || slides.length === 0) return;
+
       isLocked.current = true;
+
       setIndex(nextIdx);
       setProgress(0);
+
       setTimeout(() => {
         isLocked.current = false;
       }, 800);
     },
-    [index]
+    [index, slides.length]
   );
 
-  const next = useCallback(
-    () => goTo((index + 1) % slides.length),
-    [index, goTo],
-  );
-  const prev = useCallback(
-    () => goTo((index - 1 + slides.length) % slides.length),
-    [index, goTo],
-  );
+  const next = useCallback(() => {
+    if (slides.length === 0) return;
+    goTo((index + 1) % slides.length);
+  }, [index, slides.length, goTo]);
 
-  /* ─── progress timer optimized for mobile rendering ─── */
+  const prev = useCallback(() => {
+    if (slides.length === 0) return;
+    goTo((index - 1 + slides.length) % slides.length);
+  }, [index, slides.length, goTo]);
+
+  /* ───────────────── Progress Timer ───────────────── */
   useEffect(() => {
+    if (slides.length === 0) return;
+
     setProgress(0);
+
     const interval = setInterval(() => {
       setProgress((old) => {
         if (old >= 100) {
           next();
           return 0;
         }
-        return old + 2; // Increments smoothly in 50 steps
+
+        return old + 2;
       });
     }, DURATION / 50);
 
     return () => clearInterval(interval);
-  }, [index, next]);
+  }, [index, next, slides.length]);
 
-  /* ─── keyboard & swipe nav ─── */
+  /* ───────────────── Keyboard Navigation ───────────────── */
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") next();
       else if (e.key === "ArrowLeft") prev();
     };
+
     window.addEventListener("keydown", handler);
+
     return () => window.removeEventListener("keydown", handler);
   }, [next, prev]);
+
+  /* ───────────────── Loading State ───────────────── */
+  if (isLoading) {
+    return (
+      <section className="relative h-[550px] md:h-screen bg-black flex items-center justify-center">
+        <div className="text-white text-lg font-semibold">
+        
+        </div>
+      </section>
+    );
+  }
+
+  /* ───────────────── Empty State ───────────────── */
+  if (!slides.length) {
+    return (
+      <section className="relative h-[550px] md:h-screen bg-black flex items-center justify-center">
+        <div className="text-white text-lg font-semibold">
+          No sliders available
+        </div>
+      </section>
+    );
+  }
 
   const arrowButtons = [
     {
@@ -202,91 +224,65 @@ export default function HeroCarousel() {
   return (
     <section
       className="relative h-[550px] md:h-screen w-full overflow-hidden bg-neutral-950 select-none"
-      // Added light-touch swipe listener for better UX on Android browsers
       onTouchStart={(e) => {
         (e.currentTarget as any)._startX = e.touches[0].clientX;
       }}
       onTouchEnd={(e) => {
         const startX = (e.currentTarget as any)._startX;
         const endX = e.changedTouches[0].clientX;
+
         if (startX - endX > 50) next();
         if (endX - startX > 50) prev();
       }}
     >
-      {/* ═══════════ SLIDES ═══════════ */}
+      {/* ───────────────── Slides ───────────────── */}
       <AnimatePresence mode="wait">
         {slides.map((slide, i) => {
           if (i !== index) return null;
+
           return (
             <motion.div
               key={slide.id}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.6, ease: [0.65, 0, 0.35, 1] }}
+              transition={{
+                duration: 0.6,
+                ease: [0.65, 0, 0.35, 1],
+              }}
               className="absolute inset-0 z-10"
             >
-              {/* Ken Burns image – scaled down to prevent memory leaks on low-end Androids */}
+              {/* Background Image */}
               <motion.div
                 className="absolute inset-[-4%]"
                 initial={{ scale: 1.02 }}
                 animate={{ scale: 1.06 }}
                 transition={{ duration: 6, ease: "linear" }}
               >
-                <Image
+                <img
                   src={slide.image}
                   alt={slide.title}
-                  fill
-                  priority={i === 0}
-                  className="object-cover hidden md:block"
-                  sizes="100vw"
-                  quality={75}
+                  className="object-cover w-full h-full"
                 />
               </motion.div>
 
-              {/* Gradient overlays */}
+              {/* Overlays */}
               <div className="absolute inset-0 bg-gradient-to-r from-black/88 via-black/45 to-transparent" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
 
-              {/* Grain texture */}
-              <div
-                className="absolute inset-0 z-[5] opacity-[0.04] mix-blend-overlay pointer-events-none"
-                style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-                }}
-              />
-
-              {/* Decorative rings */}
-              <motion.div
-                animate={{ y: [0, -14, 0], opacity: [0.04, 0.07, 0.04] }}
-                transition={{
-                  duration: 6,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="absolute top-[14%] right-[9%] w-80 h-80 rounded-full border border-white/5 z-[6] hidden lg:block"
-              />
-              <motion.div
-                animate={{ y: [0, 14, 0], opacity: [0.07, 0.13, 0.07] }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: 1,
-                }}
-                className="absolute top-[17%] right-[12%] w-60 h-60 rounded-full border border-orange-500/10 z-[6] hidden lg:block"
-              />
-
-              {/* ═══ CONTENT ═══ */}
+              {/* Content */}
               <div className="relative z-20 flex h-full items-center">
                 <div className="w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 md:-mt-10">
                   <motion.div
                     initial={{ x: -32, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
-                    transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{
+                      duration: 0.9,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
                     className="max-w-2xl"
                   >
-                    {/* Tag pill */}
+                    {/* Tag */}
                     <Reveal animKey={`tag-${i}`} delay={100}>
                       <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/25 text-orange-400 text-[10px] sm:text-[11px] font-bold tracking-[0.22em] uppercase mb-5">
                         <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
@@ -310,9 +306,12 @@ export default function HeroCarousel() {
                       />
                     </h1>
 
-                    {/* Accent line */}
+                    {/* Line */}
                     <div className="mb-7">
-                      <AnimatedLine animKey={`line-${i}`} delay={820} />
+                      <AnimatedLine
+                        animKey={`line-${i}`}
+                        delay={820}
+                      />
                     </div>
 
                     {/* Description */}
@@ -322,7 +321,7 @@ export default function HeroCarousel() {
                       </p>
                     </Reveal>
 
-                    {/* CTAs */}
+                    {/* Buttons */}
                     <Reveal animKey={`cta-${i}`} delay={760}>
                       <div className="flex flex-col sm:flex-row gap-3.5">
                         <Link href="/shop">
@@ -333,21 +332,8 @@ export default function HeroCarousel() {
                           >
                             <span className="relative z-10 flex items-center justify-center gap-2.5">
                               Shop Now
-                              <svg
-                                className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                strokeWidth={2.5}
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M13 7l5 5m0 0l-5 5m5-5H6"
-                                />
-                              </svg>
                             </span>
-                            {/* Hover overlay — must sit BELOW z-10 content */}
+
                             <span className="absolute inset-0 bg-gradient-to-r from-orange-600 to-amber-500 translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
                           </motion.button>
                         </Link>
@@ -373,106 +359,65 @@ export default function HeroCarousel() {
         })}
       </AnimatePresence>
 
-      {/* ═══════════ SIDE ARROWS ═══════════ */}
-      <div className="absolute right-6 md:right-10 top-1/2 -translate-y-1/2 z-30 hidden md:flex flex-col gap-2.5">
-        {arrowButtons.map((btn, i) => (
-          <motion.button
-            key={i}
-            whileHover={{
-              scale: 1.1,
-              backgroundColor: "rgba(255,255,255,0.13)",
-            }}
-            whileTap={{ scale: 0.9 }}
-            onClick={btn.onClick}
-            aria-label={btn.label}
-            className="w-11 h-11 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm flex items-center justify-center text-white/40 hover:text-white transition-colors duration-200"
-          >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d={btn.d} />
-            </svg>
-          </motion.button>
-        ))}
+       {/* ───────── NAV BUTTONS ───────── */}
+      <div className="absolute inset-0 z-30 flex items-center justify-between px-4 md:px-10 pointer-events-none">
+        {/* Prev */}
+        <button
+          onClick={prev}
+          className="pointer-events-auto w-12 h-12 rounded-full bg-black/40 backdrop-blur text-white flex items-center justify-center"
+        >
+          ←
+        </button>
+
+        {/* Next */}
+        <button
+          onClick={next}
+          className="pointer-events-auto w-12 h-12 rounded-full bg-black/40 backdrop-blur text-white flex items-center justify-center"
+        >
+          →
+        </button>
       </div>
 
-      {/* ═══════════ BOTTOM BAR ═══════════ */}
-      <div className="absolute bottom-0  left-0 right-0 z-30 bg-gradient-to-t from-black/75 to-transparent">
+     
+
+      {/* ───────────────── Bottom Bar ───────────────── */}
+      <div className="absolute bottom-0 left-0 right-0 z-30 bg-gradient-to-t from-black/75 to-transparent">
         <div className="max-w-7xl mx-auto px-5 sm:px-10 py-7">
-          <div className="flex items-end justify-between gap-6">
-            {/* Slide label */}
-            <div className="hidden md:block min-w-[120px]">
-              <p className="text-orange-500 text-[9px] tracking-[0.3em] uppercase font-black mb-1.5">
-                Explore
-              </p>
-              <AnimatePresence mode="wait">
-                <motion.p
-                  key={index}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.35 }}
-                  className="text-white/55 text-sm font-medium truncate"
-                >
-                  {slides[index].title}
-                </motion.p>
-              </AnimatePresence>
+          <div className="flex flex-col items-center gap-3.5">
+            {/* Progress */}
+            <div className="w-full max-w-md h-[2px] bg-white/10 rounded-full overflow-hidden">
+              <motion.div
+                className="h-full bg-gradient-to-r from-orange-500 to-amber-400 rounded-full"
+                style={{ width: `${progress}%` }}
+                transition={{ duration: 0 }}
+              />
             </div>
 
-            {/* Progress bar + dots */}
-            <div className="flex flex-col items-center gap-3.5 grow max-w-sm md:max-w-md">
-              <div className="w-full h-[2px] bg-white/10 rounded-full overflow-hidden">
-                <motion.div
-                  className="h-full bg-gradient-to-r from-orange-500 to-amber-400 rounded-full"
-                  style={{ width: `${progress}%` }}
-                  transition={{ duration: 0 }}
-                />
-              </div>
-
-              <div className="flex gap-2.5">
-                {slides.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => goTo(i)}
-                    aria-label={`Go to slide ${i + 1}`}
-                    className="group py-1.5 px-0.5"
-                  >
-                    <motion.div
-                      animate={{
-                        width: i === index ? 28 : 7,
-                        backgroundColor:
-                          i === index ? "#f97316" : "rgba(255,255,255,0.2)",
-                      }}
-                      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                      className="h-[7px] rounded-full"
-                    />
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Counter */}
-            <div className="hidden md:flex items-center gap-3 min-w-[80px] justify-end">
-              <AnimatePresence mode="wait">
-                <motion.span
-                  key={index}
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.3 }}
-                  className="text-white font-black text-[2rem] tabular-nums leading-none"
+            {/* Dots */}
+            <div className="flex gap-2.5">
+              {slides.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => goTo(i)}
+                  aria-label={`Go to slide ${i + 1}`}
+                  className="group py-1.5 px-0.5"
                 >
-                  0{index + 1}
-                </motion.span>
-              </AnimatePresence>
-              <div className="h-7 w-px bg-white/12" />
-              <span className="text-white/25 font-bold text-xl leading-none">
-                0{slides.length}
-              </span>
+                  <motion.div
+                    animate={{
+                      width: i === index ? 28 : 7,
+                      backgroundColor:
+                        i === index
+                          ? "#f97316"
+                          : "rgba(255,255,255,0.2)",
+                    }}
+                    transition={{
+                      duration: 0.35,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className="h-[7px] rounded-full"
+                  />
+                </button>
+              ))}
             </div>
           </div>
         </div>

@@ -1,10 +1,11 @@
+
 "use client";
 
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import toast from "react-hot-toast";
@@ -12,9 +13,18 @@ import { Phone } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import { useParams } from "next/dist/client/components/navigation";
 import { useGetProductDetailsQuery } from "@/services/productApi";
+import "@blocknote/core/fonts/inter.css";
+import "@blocknote/react/style.css";
 
-
-export const dynamic = "force-static";
+/* ───── HTML VIEWER COMPONENT FOR BLOCKNOTE HTMl OUTPUT ───── */
+function BlockNoteProductViewer({ content }: { content: string }) {
+  return (
+    <div
+      className="blocknote-content bn-container bn-editor"
+      dangerouslySetInnerHTML={{ __html: content }}
+    />
+  );
+}
 
 export default function Page() {
   const descriptionRef = useRef<HTMLDivElement | null>(null);
@@ -56,25 +66,11 @@ export default function Page() {
     });
   };
 
-  const cartProduct = {
-    id: productDetails?._id,
-    name: productDetails?.name,
-    price: productDetails?.dp_price || productDetails?.op_price,
-    image_url: images[0],
-  };
-
-
-  // 1. Calculate if the product is in the cart
+  // Calculate cart and wishlist states
   const isInCart = cart.includes(productDetails?._id);
-  // Note: If cart stores objects, use: const isInCart = cart.some(item => item.id === productDetails?._id);
-
-
-  // const isInCart = cart.some((item:any) => item._id === productDetails?._id);
   const isInWishlist = wishlist.some((item) => item.id === productDetails?._id);
 
-
-
-  const handleMouseMove = (e: any) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     let x = ((e.clientX - rect.left) / rect.width) * 100;
     let y = ((e.clientY - rect.top) / rect.height) * 100;
@@ -88,7 +84,8 @@ export default function Page() {
   const productLink = `${baseUrl}/product/${productDetails?.slug}`;
 
   const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(
-    `Interested in: ${productDetails?.name} (Price: Rs. ${productDetails?.dp_price || productDetails?.op_price
+    `Interested in: ${productDetails?.name} (Price: Rs. ${
+      productDetails?.dp_price || productDetails?.op_price || "Contact Us"
     })\n\nLink: ${productLink}`
   )}`;
 
@@ -215,10 +212,11 @@ export default function Page() {
                   <div
                     key={i}
                     onClick={() => setActiveImage(img)}
-                    className={`border rounded-lg p-2 cursor-pointer transition ${currentImage === img
-                      ? "border-[var(--primarys)]"
-                      : "border-gray-200"
-                      }`}
+                    className={`border rounded-lg p-2 cursor-pointer transition ${
+                      currentImage === img
+                        ? "border-[var(--primarys)]"
+                        : "border-gray-200"
+                    }`}
                   >
                     <Image
                       src={img}
@@ -301,10 +299,11 @@ export default function Page() {
 
             {/* AVAILABILITY */}
             <span
-              className={`text-sm  font-medium ${productDetails.availability === "Available"
-                ? "text-green-600"
-                : "text-red-500"
-                }`}
+              className={`text-sm font-medium ${
+                productDetails.availability === "Available"
+                  ? "text-green-600"
+                  : "text-red-500"
+              }`}
             >
               {productDetails.availability === "Available"
                 ? "✅ In Stock"
@@ -331,16 +330,15 @@ export default function Page() {
                   addToCart(productDetails?._id);
                   toast.success("Added to cart 🛒");
                 }}
-                className={`w-full sm:w-auto px-10 py-3 rounded-xl font-medium transition ${isInCart
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed" // Or use your primary color class
-                  : "border border-[var(--primarys)] text-[var(--primarys)] hover:bg-[var(--primarys)] hover:text-white"
-                  }`}
+                className={`w-full sm:w-auto px-10 py-3 rounded-xl font-medium transition ${
+                  isInCart
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "border border-[var(--primarys)] text-[var(--primarys)] hover:bg-[var(--primarys)] hover:text-white"
+                }`}
               >
                 {isInCart ? "In Cart" : "Add to Cart"}
               </button>
             </div>
-
-
 
             {/* INQUIRY */}
             <div>
@@ -404,17 +402,19 @@ export default function Page() {
           </div>
         </div>
 
-        {/* DESCRIPTION */}
+        {/* DESCRIPTION CONTAINER */}
         <div
           ref={descriptionRef}
-          className="max-w-6xl mx-auto bg-white border rounded-xl p-4 sm:p-6 mt-6 mx-4 sm:mx-auto scroll-mt-24 mb-10"
+          className="max-w-6xl mx-auto bg-white border rounded-xl p-6 mt-10 mx-4 sm:mx-auto mb-10 scroll-mt-24"
         >
-          <h2 className="text-lg sm:text-xl text-[var(--primarys)] font-semibold mb-3">
+          <h2 className="text-xl font-semibold mb-4 text-[var(--primarys)]">
             Product Description
           </h2>
-          <p className="text-[var(--texts-secondary)] leading-relaxed text-sm sm:text-base">
-            {productDetails.description || "No description available."}
-          </p>
+          {productDetails?.description ? (
+            <BlockNoteProductViewer content={productDetails.description} />
+          ) : (
+            <p className="text-gray-500">No description available.</p>
+          )}
         </div>
 
         <Footer />
