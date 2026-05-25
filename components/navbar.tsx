@@ -46,7 +46,7 @@ const Navbar = () => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);  
+  }, []);
 
   const [token, setToken] = useState<string | null>(null);
 
@@ -100,7 +100,6 @@ const Navbar = () => {
 
       {/* ✅ FIX 3: Single fixed header - removed sticky + nested fixed conflict */}
       <header className="w-full fixed top-0 left-0 right-0 z-50 bg-white">
-
         {/* ================= MOBILE HEADER ================= */}
         <div className="lg:hidden bg-white shadow-sm">
           <div className="mx-auto max-w-7xl px-4">
@@ -147,9 +146,7 @@ const Navbar = () => {
 
             {/* Bottom Row: Search */}
             <div className="pb-3">
-              <div className="relative w-full">
-             
-              </div>
+              <div className="relative w-full"></div>
             </div>
           </div>
         </div>
@@ -163,7 +160,8 @@ const Navbar = () => {
             opacity: scrolled ? 0 : 1,
             maxHeight: scrolled ? 0 : "80px",
             overflow: "hidden",
-            transition: "transform 0.3s ease, opacity 0.3s ease, max-height 0.3s ease",
+            transition:
+              "transform 0.3s ease, opacity 0.3s ease, max-height 0.3s ease",
             pointerEvents: scrolled ? "none" : "auto",
           }}
         >
@@ -206,9 +204,11 @@ const Navbar = () => {
                   onMouseEnter={() => setIsProfileOpen(true)}
                   onMouseLeave={() => setIsProfileOpen(false)}
                 >
-                  <button className="p-2.5 text-primarys hover:bg-orange-50 rounded-xl transition-colors">
-                    <User size={24} />
-                  </button>
+                  <Link href={token ? "/profile" : "/login"}>
+                    <button className="p-2.5 text-primarys hover:bg-orange-50 rounded-xl transition-colors">
+                      <User size={24} />
+                    </button>
+                  </Link>
 
                   <div
                     className={`absolute right-0 top-full w-56 transition-all duration-300 ${
@@ -273,7 +273,6 @@ const Navbar = () => {
           }}
         >
           <div className="mx-auto max-w-7xl flex items-center justify-between h-full px-8 relative">
-
             {/* Scroll Logo - appears when scrolled */}
             <div
               className="absolute left-8"
@@ -419,8 +418,12 @@ const Navbar = () => {
           {/* Panel Header */}
           <div className="flex items-center justify-between px-5 py-4 bg-primarys shrink-0">
             <div>
-              <p className="text-white font-black text-sm tracking-widest">MENU</p>
-              <p className="text-orange-200 text-[10px] mt-0.5">Sajilo Hardware</p>
+              <p className="text-white font-black text-sm tracking-widest">
+                MENU
+              </p>
+              <p className="text-orange-200 text-[10px] mt-0.5">
+                Sajilo Hardware
+              </p>
             </div>
             <button
               onClick={() => setIsMobileMenuOpen(false)}
@@ -455,7 +458,7 @@ const Navbar = () => {
               ))}
 
               <Link
-                href="/checkout"
+                href="https://wa.me/9845526696"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="col-span-2 flex items-center justify-center gap-2 p-3 bg-primarys hover:bg-orange-600 text-white rounded-xl text-sm font-bold tracking-wide transition-colors shadow-lg mt-2"
               >
