@@ -1,71 +1,130 @@
 "use client";
 
 import React from "react";
-import { FileText, Share2, Cookie, UserCheck} from "lucide-react";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import { useGetPrivacyPolicyQuery } from "@/services/termsAndPolicyApi";
+
+interface BlockStyle {
+  bold?: boolean;
+  italic?: boolean;
+}
+
+interface InlineContentNode {
+  type: "text" | "link";
+  text?: string;
+  href?: string;
+  styles?: BlockStyle;
+  content?: InlineContentNode[]; // For embedded text inside link wrappers
+}
+
+interface EditorBlock {
+  id: string;
+  type: "paragraph" | "bulletListItem" | "heading";
+  props?: {
+    level?: number;
+  };
+  content: InlineContentNode[];
+}
 
 export default function PrivacyPolicy() {
-  const sections = [
-    {
-      id: 1,
-      title: "Information We Collect",
-      icon: <FileText size={20} />,
-      content: [
-        {
-          label: "Identity Data",
-          text: "Name, address, and contact details for secure delivery.",
-        },
-        {
-          label: "Transaction Data",
-          text: "Payment details and order history.",
-        },
-      ],
-    },
-    {
-      id: 2,
-      title: "How We Use Your Information",
-      icon: <UserCheck size={20} />,
-      content: [
-        { text: "Process and deliver your orders efficiently." },
-        { text: "Send timely updates via SMS or email." },
-        { text: "Prevent fraud and improve overall site security." },
-      ],
-    },
-    {
-      id: 3,
-      title: "Data Sharing",
-      icon: <Share2 size={20} />,
-      content: [
-        {
-          label: "Payment Partners",
-          text: "Secure handling of financial transactions.",
-        },
-        {
-          label: "Delivery Services",
-          text: "Trusted couriers to deliver products to your location.",
-        },
-      ],
-    },
-    {
-      id: 4,
-      title: "Cookies & Tracking",
-      icon: <Cookie size={20} />,
-      content: [
-        {
-          text: "We use cookies to improve your experience, remember your preferences, and analyze site traffic.",
-        },
-      ],
-    },
-  ];
+  const { data: privacyPolicyData, isLoading } = useGetPrivacyPolicyQuery();
+
+  // Flattens mixed string text nodes and links into standardized styled React elements
+  const renderInlineContent = (contentNodes: InlineContentNode[]) => {
+    if (!contentNodes) return null;
+
+    return contentNodes.map((node, idx) => {
+      const isBold = node.styles?.bold;
+      const isItalic = node.styles?.italic;
+
+      const textClass = `${isBold ? "font-extrabold text-gray-900" : ""} ${isItalic ? "italic" : ""
+        }`;
+
+      if (node.type === "link") {
+        return (
+          <a
+            key={idx}
+            href={node.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primarys underline hover:text-orange-600 break-all transition-colors"
+          >
+            {node.content ? renderInlineContent(node.content) : node.text}
+          </a>
+        );
+      }
+
+      return (
+        <span key={idx} className={textClass}>
+          {node.text}
+        </span>
+      );
+    });
+  };
+
+  const renderBlocks = () => {
+    if (!privacyPolicyData?.data?.content) return null;
+
+    try {
+      const blocks: EditorBlock[] = JSON.parse(privacyPolicyData.data.content);
+
+      return blocks.map((block) => {
+        // Drop layout blocks that do not possess actual text payload metrics
+        if (!block.content || block.content.length === 0) return null;
+
+        const inlineElements = renderInlineContent(block.content);
+
+        // Map layout structures cleanly matching editor block variations
+        switch (block.type) {
+          case "heading":
+            const headingLevel = block.props?.level || 3;
+            if (headingLevel === 1) {
+              return <h2 key={block.id} className="text-2xl font-black text-gray-900 mt-8 mb-4 tracking-tight">{inlineElements}</h2>;
+            }
+            if (headingLevel === 2) {
+              return <h3 key={block.id} className="text-xl font-extrabold text-gray-900 mt-7 mb-3 tracking-tight">{inlineElements}</h3>;
+            }
+            return <h4 key={block.id} className="text-base font-extrabold text-gray-900 mt-6 mb-2 tracking-tight">{inlineElements}</h4>;
+
+          case "bulletListItem":
+            return (
+              <ul key={block.id} className="list-none pl-1 my-2">
+                <li className="flex items-start gap-3 text-gray-600 text-sm leading-relaxed">
+                  <span className="text-primarys text-xs mt-1 shrink-0">➔</span>
+                  <div className="flex-1">{inlineElements}</div>
+                </li>
+              </ul>
+            );
+
+          default:
+            // Check if the single text segment within paragraph indicates a sub-header setup
+            const isEmphasizedHeading = block.content[0]?.styles?.bold && block.content.length === 1;
+
+            return (
+              <p
+                key={block.id}
+                className={`text-gray-600 text-sm leading-relaxed ${isEmphasizedHeading ? "text-base font-extrabold text-gray-900 mt-8 mb-3 block" : "mb-4"
+                  }`}
+              >
+                {inlineElements}
+              </p>
+            );
+        }
+      });
+    } catch (error) {
+      console.error("Error formatting dynamic privacy payload:", error);
+      return <p className="text-sm text-red-500">Failed to render privacy metrics.</p>;
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-
+      <div className="lg:pt-20"></div>
       <main className="grow bg-linear-to-b from-white to-gray-50 py-16 px-4">
         <div className="max-w-3xl mx-auto">
-          
+
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
@@ -86,48 +145,20 @@ export default function PrivacyPolicy() {
             </p>
           </div>
 
-          {/* Policy Sections */}
-          <div className="space-y-6">
-            {sections.map((section) => (
-              <div
-                key={section.id}
-                className="group bg-white p-7 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300"
-              >
-                <div className="flex items-start gap-5">
-                  {/* Number Badge */}
-                  <div className="shrink-0 flex items-center justify-center w-10 h-10 rounded-full bg-primarys/10 text-primarys font-bold text-sm">
-                    0{section.id}
-                  </div>
-
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="p-2 bg-gray-50 rounded-lg text-primarys group-hover:scale-110 transition-transform">
-                        {section.icon}
-                      </div>
-                      <h2 className="text-xl font-bold text-gray-800">
-                        {section.title}
-                      </h2>
-                    </div>
-
-                    <div className="space-y-4">
-                      {section.content.map((item, idx) => (
-                        <div key={idx} className="text-sm leading-relaxed text-gray-600">
-                          {/* TypeScript safe check for label */}
-                          {"label" in item && (
-                            <span className="font-bold uppercase text-[10px] tracking-widest block mb-1 text-primarys">
-                              {item.label}
-                            </span>
-                          )}
-                          <p className="text-gray-700">{item.text}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+          {/* Dynamic Content Container */}
+          <div className="bg-white border border-gray-100 p-8 sm:p-12 rounded-3xl shadow-xs min-h-[200px]">
+            {isLoading ? (
+              <div className="space-y-4 animate-pulse py-6">
+                <div className="h-5 bg-gray-200 rounded-sm w-1/3" />
+                <div className="h-4 bg-gray-100 rounded-sm w-full" />
+                <div className="h-4 bg-gray-100 rounded-sm w-5/6" />
               </div>
-            ))}
+            ) : (
+              <div className="prose max-w-none">
+                {renderBlocks()}
+              </div>
+            )}
           </div>
-          
 
           {/* Footer Note */}
           <p className="text-center text-[10px] font-bold text-gray-400 mt-12 uppercase tracking-widest">

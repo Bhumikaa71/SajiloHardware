@@ -1,3 +1,5 @@
+
+
 "use client";
 
 import React, { useRef } from "react";
@@ -10,6 +12,7 @@ type Brand = {
   name: string;
   logo: string;
 };
+
 
 const brands: Brand[] = [
   { name: "Bosch", logo: "/images/brand1.png" },

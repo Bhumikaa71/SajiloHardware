@@ -8,15 +8,18 @@ export const baseApi = createApi({
   refetchOnReconnect: true,        // ✅ fixes reconnect re-fetch
   refetchOnMountOrArgChange: false, // ✅ MUST be false - this is your skeleton cause
   baseQuery: fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_API_URL || 'https://sajilo-hardware.onrender.com', //baseUrl: 'https://sajilo-hardware.onrender.com
-    // baseUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
+    // baseUrl: process.env.NEXT_PUBLIC_BASE_URL || 'https://sajilo-hardware.onrender.com', //baseUrl: 'https://sajilo-hardware.onrender.com
+    // baseUrl: process.env.NEXT_PUBLIC_BASE_URL || 'https://sajilo-hardware.onrender.com',
+    baseUrl: 'https://sajilo-hardware.onrender.com',
+    
+    // baseUrl: 'http://localhost:3000',
     prepareHeaders: (headers) => {
       const vn_sh_token = localStorage.getItem('vn-sh-token');
       if (vn_sh_token) headers.set('authorization', `Bearer ${vn_sh_token}`);
       return headers;
     },
   }),
-  tagTypes: ['User', 'Products', 'Vendors', 'Blogs', 'Vendor', 'Admin', 'Media', 'Category', 'Brand', 'Product', 'Orders', 'BestSelling', 'HotDeals'], // Used for smart caching
+  tagTypes: ['User', 'Products', 'Sliders', 'Service', 'SocialMedia', 'Vendors', 'Blogs', 'Vendor', 'Admin', 'Media', 'Category', 'Brand', 'Product', 'Orders', 'BestSelling', 'HotDeals'], // Used for smart caching
   endpoints: () => ({}), // Leave empty! Features will "inject" here.
 });
 

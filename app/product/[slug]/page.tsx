@@ -6,7 +6,7 @@ import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import toast from "react-hot-toast";
@@ -14,6 +14,18 @@ import { Phone } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import { useParams } from "next/dist/client/components/navigation";
 import { useGetProductDetailsQuery } from "@/services/productApi";
+import "@blocknote/core/fonts/inter.css";
+import "@blocknote/react/style.css";
+
+/* ───── HTML VIEWER COMPONENT FOR BLOCKNOTE HTMl OUTPUT ───── */
+function BlockNoteProductViewer({ content }: { content: string }) {
+  return (
+    <div
+      className="blocknote-content bn-container bn-editor"
+      dangerouslySetInnerHTML={{ __html: content }}
+    />
+  );
+}
 
 export default function Page() {
   const descriptionRef = useRef<HTMLDivElement | null>(null);
@@ -34,20 +46,32 @@ export default function Page() {
   const images: string[] = productDetails?.image || [];
   const currentImage = activeImage || images[0] || "";
 
-  const { addToCart, cart } = useCart();
   const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
 
-  const cartProduct = {
-    id: productDetails?._id,
-    name: productDetails?.name,
-    price: productDetails?.dp_price || productDetails?.op_price,
-    image_url: images[0],
+  const [cart, setCart] = useState<number[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const stored = localStorage.getItem("cart");
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const addToCart = (id: number) => {
+    setCart((prev) => {
+      if (prev.includes(id)) return prev;
+      const updated = [...prev, id];
+      localStorage.setItem("cart", JSON.stringify(updated));
+      return updated;
+    });
   };
 
-  const isInCart = cart.some((item) => item.id === productDetails?._id);
+  // Calculate cart and wishlist states
+  const isInCart = cart.includes(productDetails?._id);
   const isInWishlist = wishlist.some((item) => item.id === productDetails?._id);
 
-  const handleMouseMove = (e: any) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     let x = ((e.clientX - rect.left) / rect.width) * 100;
     let y = ((e.clientY - rect.top) / rect.height) * 100;
@@ -57,9 +81,13 @@ export default function Page() {
   };
 
   const phone = process.env.NEXT_PUBLIC_PHONE_NUMBER;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const productLink = `${baseUrl}/product/${productDetails?.slug}`;
 
   const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(
-    `Interested in: ${productDetails?.name} (Price: Rs. ${productDetails?.dp_price || productDetails?.op_price})`,
+    `Interested in: ${productDetails?.name} (Price: Rs. ${
+      productDetails?.dp_price || productDetails?.op_price || "Contact Us"
+    })\n\nLink: ${productLink}`
   )}`;
 
   if (isLoading) {
@@ -97,7 +125,7 @@ export default function Page() {
     <div className="bg-gray-50">
       <Navbar />
 
-      <div className="min-h-screen max-w-7xl mx-auto pt-35">
+      <div className="min-h-screen max-w-7xl mx-auto lg:pt-30">
         {/* HEADER */}
         <header className="bg-white border-b px-4 sm:px-6 py-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
           <h1 className="text-xl sm:text-2xl font-bold text-[var(--texts-dark)]">
@@ -272,7 +300,7 @@ export default function Page() {
 
             {/* AVAILABILITY */}
             <span
-              className={`text-sm  font-medium ${
+              className={`text-sm font-medium ${
                 productDetails.availability === "Available"
                   ? "text-green-600"
                   : "text-red-500"
@@ -294,42 +322,24 @@ export default function Page() {
                   Enquiry on Whatsapp
                 </button>
               </Link>
-
               <button
                 onClick={() => {
                   if (isInCart) {
                     toast.error("Already in cart");
                     return;
                   }
-                  addToCart(productDetails._id);
+                  addToCart(productDetails?._id);
                   toast.success("Added to cart 🛒");
                 }}
-                disabled={isInCart}
                 className={`w-full sm:w-auto px-10 py-3 rounded-xl font-medium transition ${
                   isInCart
-                    ? "bg-[var(--primarys)] text-white"
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                     : "border border-[var(--primarys)] text-[var(--primarys)] hover:bg-[var(--primarys)] hover:text-white"
                 }`}
               >
                 {isInCart ? "In Cart" : "Add to Cart"}
               </button>
             </div>
-
-            {/* WISHLIST */}
-            <button
-              onClick={() => {
-                if (isInWishlist) {
-                  removeFromWishlist(productDetails._id);
-                  toast("Removed from Wishlist ❌");
-                } else {
-                  addToWishlist(cartProduct);
-                  toast.success("Added to Wishlist ❤️");
-                }
-              }}
-              className="text-[var(--primarys)] text-sm hover:underline"
-            >
-              {isInWishlist ? "💔 Remove from Wishlist" : "❤️ Add to Wishlist"}
-            </button>
 
             {/* INQUIRY */}
             <div>
@@ -338,7 +348,7 @@ export default function Page() {
               </p>
               <div className="flex gap-3">
                 <a
-                  href={`https://tel/${phone}`}
+                  href={`tel:${phone}`}
                   className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center"
                 >
                   <Phone size={24} />
@@ -393,10 +403,10 @@ export default function Page() {
           </div>
         </div>
 
-        {/* DESCRIPTION */}
+        {/* DESCRIPTION CONTAINER */}
         <div
           ref={descriptionRef}
-          className="max-w-6xl mx-auto bg-white border rounded-xl p-4 sm:p-6 mt-6 mx-4 sm:mx-auto scroll-mt-24 mb-10"
+          className="max-w-6xl mx-auto bg-white border rounded-xl p-6 mt-10 mx-4 sm:mx-auto mb-10 scroll-mt-24"
         >
           <h2 className="text-lg sm:text-xl text-[var(--primarys)] font-semibold mb-3 text-black">
             Product Description

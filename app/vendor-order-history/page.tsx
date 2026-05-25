@@ -4,6 +4,7 @@ import Navbar from "@/components/navbar";
 import React, { useMemo, useState } from "react";
 import { User, AlertCircle, Loader2 } from "lucide-react";
 import { useGetVendorOrdersHistoryQuery } from "@/services/vendorApi";
+import { useVendorAuth } from "@/hooks/useVendorAuth/useVendorAuth";
 
 // --- Interfaces ---
 interface OrderItem {
@@ -25,6 +26,7 @@ interface Order {
 }
 
 function VendorOrderHistory() {
+  const { isVendorLoading } = useVendorAuth(); 
   const { data: response, isLoading, isError, error } = useGetVendorOrdersHistoryQuery();
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [filter, setFilter] = useState<"completed" | "cancelled">("completed");
@@ -70,6 +72,7 @@ function VendorOrderHistory() {
   return (
     <>
       <Navbar />
+      <div className="md:mt-30"></div>
       <div className="bg-white min-h-screen">
         <div className="max-w-7xl mx-auto px-10 py-10">
           <div className="mb-6">

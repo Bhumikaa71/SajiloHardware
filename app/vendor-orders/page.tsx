@@ -5,6 +5,7 @@ import Navbar from "@/components/navbar";
 import React, { useMemo, useState } from "react";
 import { User, Loader2, X } from "lucide-react";
 import { useGetVendorActiveOrdersQuery, useGetVendorOrdersHistoryQuery } from "@/services/vendorApi";
+import { useVendorAuth } from "@/hooks/useVendorAuth/useVendorAuth";
 
 // --- Types ---
 type OrderStatus = "pending" | "processing" | "shipped" | "delivered" | "cancelled" | string;
@@ -34,6 +35,7 @@ const statusStyles: Record<string, string> = {
 };
 
 function VendorOrders() {
+  const { isVendorLoading } = useVendorAuth(); 
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const { data: response, isLoading, isError } = useGetVendorActiveOrdersQuery();
 
@@ -68,10 +70,12 @@ function VendorOrders() {
     );
   }
 
-  return (
+
+
+   return (
     <>
       <Navbar />
-
+      <div className="md:mt-30"></div>
       <div className="bg-white">
         <div className="min-h-screen flex flex-col bg-white max-w-7xl mx-auto px-10 py-10">
           <div className="flex-1">

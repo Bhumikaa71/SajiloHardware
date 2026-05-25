@@ -86,12 +86,15 @@ export default function HotDeals() {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { duration: 0.5, ease: "easeOut" as const }
+      transition: { duration: 0.5, ease: "easeOut" as const },
     },
   };
 
   return (
-    <section ref={sectionRef} className="bg-gray-50 py-10 sm:py-12 px-4 sm:px-6 relative overflow-hidden">
+    <section
+      ref={sectionRef}
+      className="bg-gray-50  sm:py-12 px-4 sm:px-6 relative overflow-hidden"
+    >
       {/* Background Animated Glows */}
       <div className="absolute inset-0 pointer-events-none">
         <motion.div
@@ -168,7 +171,7 @@ export default function HotDeals() {
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
             className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {hotDeals?.data?.map((item: any, index: number) => (
               <motion.div

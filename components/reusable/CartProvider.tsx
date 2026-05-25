@@ -41,7 +41,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       body: JSON.stringify({ ids }),
     })
       .then((res) => res.json())
-      .then((data: CartItem[]) => setCart(data.map((p) => ({ ...p, quantity: 1 }))))
+      .then((data: CartItem[]) =>
+        setCart(data.map((p) => ({ ...p, quantity: 1 }))),
+      )
       .catch((err) => console.error("Failed to sync cart:", err));
   }, []);
 
@@ -55,7 +57,10 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     // Update State
     try {
       const res = await fetch(`/api/products/${id}`);
-      const product = await res.json();
+      const result = await res.json();
+
+      const product = result.data || result; // ✅ FIX
+
       setCart((prev) => [...prev, { ...product, quantity: 1 }]);
     } catch (err) {
       console.error("Error adding to cart:", err);
@@ -64,7 +69,10 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   const removeFromCart = (id: string) => {
     const existingIds = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(existingIds.filter((i: string) => i !== id)));
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(existingIds.filter((i: string) => i !== id)),
+    );
     setCart((prev) => prev.filter((item) => item._id !== id));
   };
 
@@ -77,14 +85,29 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     setCart((prev) =>
       prev.map((item) =>
         item._id === id
-          ? { ...item, quantity: Math.max(1, type === "inc" ? item.quantity + 1 : item.quantity - 1) }
-          : item
-      )
+          ? {
+              ...item,
+              quantity: Math.max(
+                1,
+                type === "inc" ? item.quantity + 1 : item.quantity - 1,
+              ),
+            }
+          : item,
+      ),
     );
   };
 
   return (
-    <CartContext.Provider value={{ cart, cartCount: cart.length, addToCart, removeFromCart, clearCart, updateQuantity }}>
+    <CartContext.Provider
+      value={{
+        cart,
+        cartCount: cart.length,
+        addToCart,
+        removeFromCart,
+        clearCart,
+        updateQuantity,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );

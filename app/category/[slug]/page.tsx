@@ -1,32 +1,37 @@
+
 "use client";
 
 import { useState } from "react";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import AllProducts from "@/components/reusable/AllProducts";
-import ShopSidebar from "@/components/reusable/AllProductSidebar";
 import HotDeals from "@/components/reusable/HotDeals";
 import {
   useGetAllProductsQuery,
   useGetProductByCategoriesQuery,
 } from "@/services/productApi";
-import { get } from "http";
-import { useParams } from "next/dist/client/components/navigation";
+import { useParams } from "next/navigation";
+
 
 function ProductsByCategory() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [priceRange, setPriceRange] = useState("all");
-  const [categoryName, setCategoryName] = useState("");
-  const [brandName, setBrandName] = useState("");
+  const [priceRange] = useState("all");
+  const [categoryName] = useState("");
+  const [brandName] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const subCategoriesName = useParams().slug as string;
-  const { data: categoryProducts } = useGetProductByCategoriesQuery({
-    categorySlug: subCategoriesName,
-    page: currentPage,
-    limit: 9,
-  });
 
-  const { data: allProducts, isLoading } = useGetAllProductsQuery({
+  // ✅ FIXED PARAMS
+  const params = useParams();
+  const subCategoriesName = params?.slug as string;
+
+  const { data: categoryProducts, isLoading } =
+    useGetProductByCategoriesQuery({
+      categorySlug: subCategoriesName,
+      page: currentPage,
+      limit: 9,
+    });
+
+  const { data: allProducts } = useGetAllProductsQuery({
     page: currentPage,
     limit: 9,
     category: categoryName || undefined,
@@ -34,9 +39,10 @@ function ProductsByCategory() {
   });
 
   return (
-    <>
+    <div className="bg-white">
       <Navbar />
-      <div className="pt-30">
+
+      <div className="lg:pt-30">
         <HotDeals />
       </div>
 
@@ -68,7 +74,7 @@ function ProductsByCategory() {
                 productList={categoryProducts?.data || []}
                 isLoading={isLoading}
                 currentPage={currentPage}
-                totalPages={categoryProducts?.totalPages || 1} // ← from backend
+                totalPages={categoryProducts?.totalPages || 1}
                 onPageChange={(page) => setCurrentPage(page)}
               />
             </div>
@@ -77,7 +83,7 @@ function ProductsByCategory() {
       </div>
 
       <Footer />
-    </>
+    </div>
   );
 }
 
