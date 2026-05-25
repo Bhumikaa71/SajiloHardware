@@ -32,6 +32,7 @@ import { useCart } from "@/context/CartContext";
 import { useGetCategoryTreeQuery } from "@/services/categoryApi";
 import { useRouter } from "next/navigation";
 import NoImageAvailable from "@/public/images/no-image-available.png";
+import { tr } from "framer-motion/client";
 
 const Navbar = () => {
   const { wishlist } = useWishlist();
@@ -123,11 +124,70 @@ const Navbar = () => {
                   </button>
                 </Link>
 
-                <Link href={token ? "/profile" : "/login"}>
-                  <button className="p-2 text-primarys hover:bg-orange-50 rounded-full transition-colors">
-                    <User size={22} />
-                  </button>
-                </Link>
+                {/* <Link href={token ? "/profile" : "/login"}> */}
+{/*                 
+        <button
+    onClick={() => setIsProfileOpen(!isProfileOpen)} // Changed true to !isProfileOpen to toggle open/close
+    className="p-2 text-primarys hover:bg-orange-50 rounded-full transition-colors"
+  >
+    <User size={22} />
+  </button> */}
+
+  {/* ✅ Wrap in a relative div so the absolute dropdown positions perfectly below the icon */}
+<div className="relative">
+  <button
+    onClick={() => setIsProfileOpen(!isProfileOpen)} // Changed true to !isProfileOpen to toggle open/close
+    className="p-2 text-primarys hover:bg-orange-50 rounded-full transition-colors"
+  >
+    <User size={22} />
+  </button>
+
+  {/* ✅ Mobile Profile Dropdown Menu */}
+  {isProfileOpen && (
+    <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50">
+      <div className="px-4 py-2 border-b border-gray-50">
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+          Account
+        </p>
+      </div>
+      
+      <Link 
+        href="/vendor-profile" 
+        onClick={() => setIsProfileOpen(false)} // Closes menu when a link is clicked
+        className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 transition-colors"
+      >
+        My Profile
+      </Link>
+      
+      <Link 
+        href="/vendor-orders" 
+        onClick={() => setIsProfileOpen(false)}
+        className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 transition-colors"
+      >
+        My Orders
+      </Link>
+      
+      <Link 
+        href="/vendor-order-history" 
+        onClick={() => setIsProfileOpen(false)}
+        className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 transition-colors"
+      >
+        Order History
+      </Link>
+      
+      <button 
+        onClick={() => {
+          // Add your logout logic here (e.g., localStorage.removeItem('vn-sh-token'))
+          setIsProfileOpen(false);
+        }}
+        className="w-full text-left block px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors font-medium"
+      >
+        Logout
+      </button>
+    </div>
+  )}
+</div>
+                {/* </Link> */}
               </div>
             </div>
 
@@ -207,66 +267,7 @@ const Navbar = () => {
               </Link>
 
               {/* PROFILE DROPDOWN */}
-              {token && (
-                <div
-                  className="relative z-50"
-                  onMouseEnter={() => setIsProfileOpen(true)}
-                  onMouseLeave={() => setIsProfileOpen(false)}
-                >
-                  <Link href={token ? "/profile" : "/login"}>
-                    <button className="p-2.5 text-primarys hover:bg-orange-50 rounded-xl transition-colors">
-                      <User size={24} />
-                    </button>
-                  </Link>
-
-                  <div
-                    className={`absolute right-0 top-full w-56 transition-all duration-300 ${isProfileOpen
-                      ? "opacity-100 visible translate-y-0"
-                      : "opacity-0 invisible -translate-y-2"
-                      }`}
-                  >
-                    <div className="h-2 w-full" />
-                    <div className="bg-white shadow-[0_10px_40px_rgba(0,0,0,0.15)] rounded-2xl border border-gray-100 py-2 overflow-hidden">
-                      <div className="px-4 py-2 border-b border-gray-50 mb-1">
-                        <p className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">
-                          Account
-                        </p>
-                      </div>
-                      <Link
-                        href="/vendor-profile"
-                        onClick={() => setIsProfileOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
-                      >
-                        My Profile
-                      </Link>
-                      <Link
-                        href="/vendor-orders"
-                        onClick={() => setIsProfileOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
-                      >
-                        My Orders
-                      </Link>
-                      <Link
-                        href="/vendor-order-history"
-                        onClick={() => setIsProfileOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-primarys transition-colors"
-                      >
-                        Order History
-                      </Link>
-                      <button
-                        onClick={() => {
-                          localStorage.removeItem("vn-sh-token");
-                          setToken(null);
-                          setIsProfileOpen(false);
-                        }}
-                        className="w-full flex items-center gap-3 text-left px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50 transition-colors border-t border-gray-50 mt-1"
-                      >
-                        Logout
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
+             
             </div>
           </div>
         </div>
