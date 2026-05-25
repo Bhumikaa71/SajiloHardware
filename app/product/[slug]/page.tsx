@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import Footer from "@/components/footer";
@@ -407,14 +408,12 @@ export default function Page() {
           ref={descriptionRef}
           className="max-w-6xl mx-auto bg-white border rounded-xl p-6 mt-10 mx-4 sm:mx-auto mb-10 scroll-mt-24"
         >
-          <h2 className="text-xl font-semibold mb-4 text-[var(--primarys)]">
+          <h2 className="text-lg sm:text-xl text-[var(--primarys)] font-semibold mb-3 text-black">
             Product Description
           </h2>
-          {productDetails?.description ? (
-            <BlockNoteProductViewer content={productDetails.description} />
-          ) : (
-            <p className="text-gray-500">No description available.</p>
-          )}
+          <p className="text-[var(--texts-secondary)] leading-relaxed text-sm sm:text-base text-black">
+            {productDetails.description || "No description available."}
+          </p>
         </div>
 
         <Footer />

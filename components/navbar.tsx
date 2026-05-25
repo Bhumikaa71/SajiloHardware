@@ -131,28 +131,10 @@ const Navbar = () => {
               </div>
             </div>
 
-            {/* Bottom Row: Search - Redesigned */}
-            <form
-              onSubmit={handleSearch}
-              className="flex items-center bg-white border border-gray-200 rounded-xl px-3 py-2 shadow-sm mb-3 focus-within:ring-2 focus-within:ring-orange-200 focus-within:border-primarys transition-all"
-            >
-              <Search size={18} className="text-gray-400" />
-
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search products..."
-                className="w-full bg-transparent text-black px-2.5 text-sm outline-none py-1.5"
-              />
-
-              <button
-                type="submit"
-                className="text-white bg-primarys font-bold text-sm px-4 py-1.5 rounded-lg hover:bg-orange-600 transition-colors"
-              >
-                Go
-              </button>
-            </form>
+            {/* Bottom Row: Search */}
+            <div className="pb-3">
+              <div className="relative w-full"></div>
+            </div>
           </div>
         </div>
 
@@ -231,9 +213,11 @@ const Navbar = () => {
                   onMouseEnter={() => setIsProfileOpen(true)}
                   onMouseLeave={() => setIsProfileOpen(false)}
                 >
-                  <button className="p-2.5 text-primarys hover:bg-orange-50 rounded-xl transition-colors">
-                    <User size={24} />
-                  </button>
+                  <Link href={token ? "/profile" : "/login"}>
+                    <button className="p-2.5 text-primarys hover:bg-orange-50 rounded-xl transition-colors">
+                      <User size={24} />
+                    </button>
+                  </Link>
 
                   <div
                     className={`absolute right-0 top-full w-56 transition-all duration-300 ${isProfileOpen
@@ -539,7 +523,7 @@ const Navbar = () => {
               ))}
 
               <Link
-                href="/checkout"
+                href="https://wa.me/9845526696"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="col-span-2 flex items-center justify-center gap-2 p-3 bg-primarys hover:bg-orange-600 text-white rounded-xl text-sm font-bold tracking-wide transition-colors shadow-lg mt-2"
               >
