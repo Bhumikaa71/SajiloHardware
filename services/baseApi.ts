@@ -19,7 +19,7 @@ export const baseApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['User', 'Products', 'Sliders', 'Service', 'SocialMedia', 'Vendors', 'Blogs', 'Vendor', 'Admin', 'Media', 'Category', 'Brand', 'Product', 'Orders', 'BestSelling', 'HotDeals'], // Used for smart caching
+  tagTypes: ['User', 'Products', 'Sliders', 'Service', 'SocialMedia', 'Vendors', 'Blogs', 'Vendor', 'Admin', 'Media', 'Category', 'Brand', 'Product', 'Orders', 'BestSelling', 'HotDeals', 'About'], // Used for smart caching
   endpoints: () => ({}), // Leave empty! Features will "inject" here.
 });
 
