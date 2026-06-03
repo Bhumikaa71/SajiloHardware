@@ -368,7 +368,7 @@ const Navbar = () => {
             <div className="flex items-center h-full">
               {[
                 { href: "/", label: "HOME" },
-                { href: "/aboutpage", label: "ABOUT" },
+                { href: "/about", label: "ABOUT" },
                 { href: "/shop", label: "All PRODUCTS" },
                 { href: "/blogpage/bloghero", label: "BLOG" },
               ].map(({ href, label }) => (
