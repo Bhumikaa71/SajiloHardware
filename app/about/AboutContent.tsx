@@ -257,6 +257,8 @@ function renderBlocks(blocks: Block[]): React.ReactNode {
   return result;
 }
 
+
+
 export default function AboutContent({ about }: AboutContentProps) {
   const blocks: Block[] = useMemo(() => {
     try {
